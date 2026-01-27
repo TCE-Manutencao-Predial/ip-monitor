@@ -1,7 +1,7 @@
 import json
 import os
 import logging
-from threading import Lock
+from threading import RLock
 from datetime import datetime
 from app.config_manager import config_manager
 from app.migration import get_data_file_path
@@ -14,7 +14,7 @@ class IPDeviceManager:
     
     def __init__(self, devices_file='ip_devices.json'):
         self.devices_file = get_data_file_path(devices_file)
-        self.devices_lock = Lock()
+        self.devices_lock = RLock()  # RLock permite reentrância (mesma thread pode adquirir múltiplas vezes)
         self.devices = self._load_devices()
     
     def _load_devices(self):
@@ -82,16 +82,18 @@ class IPDeviceManager:
             return False
     
     def get_devices_by_vlan(self, vlan):
-        """Obtém dispositivos de uma VLAN específica"""
+        """Obtém dispositivos de uma VLAN específica (retorna cópia para evitar deadlock)"""
         with self.devices_lock:
             devices = self.devices.get('vlans', {}).get(str(vlan), [])
-            logging.info(f"[DEVICE_MANAGER] get_devices_by_vlan({vlan}) - Encontrados {len(devices)} dispositivos")
-            dispositivos_com_tipo = [d for d in devices if d.get('tipo') and d['tipo'].strip()]
+            # Retorna uma cópia da lista para liberar o lock rapidamente
+            devices_copy = [d.copy() for d in devices]
+            logging.info(f"[DEVICE_MANAGER] get_devices_by_vlan({vlan}) - Encontrados {len(devices_copy)} dispositivos")
+            dispositivos_com_tipo = [d for d in devices_copy if d.get('tipo') and d['tipo'].strip()]
             logging.info(f"[DEVICE_MANAGER] VLAN {vlan} - {len(dispositivos_com_tipo)} dispositivos com tipo")
             if dispositivos_com_tipo:
                 exemplo = dispositivos_com_tipo[0]
                 logging.info(f"[DEVICE_MANAGER] Exemplo: IP={exemplo.get('ip')}, Desc={exemplo.get('descricao')}, Tipo='{exemplo.get('tipo')}'")
-            return devices
+            return devices_copy
     
     def add_device(self, vlan, ip, descricao, tipo=""):
         """Adiciona um novo dispositivo"""

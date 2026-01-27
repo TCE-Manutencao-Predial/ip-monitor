@@ -380,12 +380,14 @@ async function saveDevice() {
         const data = await response.json();
         
         if (response.ok && data.success) {
-            // Sucesso - fechar modal e atualizar tabela
+            // Sucesso - atualizar a linha na tabela diretamente (sem novo scan)
+            updateTableRow(currentEditDevice.ip, descricao, tipo);
+
+            // Fechar modal
             closeEditModal();
-            alert('✅ Dispositivo atualizado com sucesso!');
-            
-            // Recarregar a tabela
-            await searchByVlan();
+
+            // Feedback visual
+            showToast('✅ Dispositivo atualizado com sucesso!');
         } else {
             alert('❌ Erro ao salvar: ' + (data.error || 'Erro desconhecido'));
         }
@@ -431,3 +433,68 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 });
+
+// Atualiza uma linha específica na tabela sem recarregar tudo
+function updateTableRow(ip, descricao, tipo) {
+    const table = document.getElementById('table_id');
+    if (!table) return;
+
+    const rows = table.querySelectorAll('tbody tr');
+    for (const row of rows) {
+        const ipCell = row.cells[0];
+        if (ipCell && ipCell.textContent.trim() === ip) {
+            // Atualiza a célula de descrição (índice 2)
+            if (row.cells[2]) {
+                row.cells[2].textContent = descricao || '-';
+            }
+            // Atualiza a célula de tipo (índice 3)
+            if (row.cells[3]) {
+                row.cells[3].textContent = tipo || '-';
+            }
+
+            // Efeito visual de destaque
+            row.style.transition = 'background-color 0.3s';
+            row.style.backgroundColor = '#d4edda';
+            setTimeout(() => {
+                row.style.backgroundColor = '';
+            }, 1500);
+
+            break;
+        }
+    }
+}
+
+// Exibe um toast de notificação
+function showToast(message, duration = 3000) {
+    // Remove toast existente
+    const existingToast = document.querySelector('.toast-notification');
+    if (existingToast) {
+        existingToast.remove();
+    }
+
+    // Cria o toast
+    const toast = document.createElement('div');
+    toast.className = 'toast-notification';
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        background: #28a745;
+        color: white;
+        padding: 12px 24px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-size: 14px;
+        animation: slideIn 0.3s ease;
+    `;
+
+    document.body.appendChild(toast);
+
+    // Remove após duração
+    setTimeout(() => {
+        toast.style.animation = 'slideOut 0.3s ease';
+        setTimeout(() => toast.remove(), 300);
+    }, duration);
+}

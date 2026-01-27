@@ -87,14 +87,17 @@ API_BASE_URL_PRODUCTION = f"{BASE_URL_PRODUCTION}/api"
 # Raiz dos softwares TCE (lido de .env.deploy)
 BACKEND_ROOT = os.getenv('BACKEND_ROOT', '/var/softwaresTCE')
 FRONTEND_ROOT = os.getenv('FRONTEND_ROOT', f'/var/www/{DOMAIN_BASE}')
-DATA_ROOT = os.getenv('DATA_ROOT', '/var/softwaresTCE/dados')
-LOGS_ROOT = os.getenv('LOGS_ROOT', '/var/softwaresTCE/logs')
+# DATA_ROOT aponta para o diretório de dados no volume Docker
+# Definido em .env.deploy como /var/softwaresTCE/ip-monitor/dados
+DATA_ROOT = os.getenv('DATA_ROOT', '/var/softwaresTCE/ip-monitor/dados')
+LOGS_ROOT = os.getenv('LOGS_ROOT', '/var/softwaresTCE/ip-monitor/logs')
 
 # Caminhos derivados (calculados a partir das raízes)
 PROJECT_BACKEND_DEPLOY = os.path.join(BACKEND_ROOT, PROJECT_NAME)
 PROJECT_FRONTEND_DEPLOY = os.path.join(FRONTEND_ROOT, PROJECT_NAME)
-PROJECT_DATA_DEPLOY = os.path.join(DATA_ROOT, PROJECT_NAME)
-PROJECT_LOGS_DEPLOY = os.path.join(LOGS_ROOT, PROJECT_NAME)
+# DATA_ROOT já é o diretório final de dados (sem subpasta PROJECT_NAME)
+PROJECT_DATA_DEPLOY = DATA_ROOT
+PROJECT_LOGS_DEPLOY = LOGS_ROOT
 
 
 # ============================================================================
