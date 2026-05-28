@@ -1,0 +1,330 @@
+/* ====================================
+   CLPs Listing Page - Estilos
+   ==================================== */
+
+#clps-container {
+    max-width: 1400px;
+    margin: 20px auto;
+    padding: 0 20px;
+    font-family: Arial, sans-serif;
+}
+
+/* === Expand inline da tabela === */
+.clp-row.is-expanded {
+    background: #f0f7ff;
+}
+.clp-row.is-expanded td {
+    border-bottom: 0;
+}
+.clp-detalhe-row td {
+    box-shadow: inset 3px 0 0 var(--primary);
+}
+.btn-expand {
+    min-width: 32px;
+    padding: 0.35rem 0.55rem !important;
+}
+.btn-expand i {
+    transition: transform 0.2s ease;
+}
+.clp-row.is-expanded + .clp-detalhe-row {
+    animation: detalheFadeIn 0.18s ease-out;
+}
+@keyframes detalheFadeIn {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* Resumo geral */
+.clps-summary {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+}
+
+.summary-item {
+    flex: 1;
+    min-width: 140px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+    border: 1px solid #dee2e6;
+    border-radius: 12px;
+    padding: 16px 20px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.summary-item:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.summary-value {
+    display: block;
+    font-size: 2em;
+    font-weight: 700;
+    color: #2c5aa0;
+    line-height: 1.2;
+}
+
+.summary-item:nth-child(2) .summary-value {
+    color: #28a745;
+}
+
+.summary-item:nth-child(3) .summary-value {
+    color: #dc3545;
+}
+
+.summary-item:nth-child(4) .summary-value {
+    color: #6f42c1;
+}
+
+.summary-label {
+    display: block;
+    font-size: 0.85em;
+    color: #6c757d;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Controles */
+.clps-controls {
+    margin-bottom: 20px;
+}
+
+/* Grid de cards */
+.clps-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 20px;
+}
+
+/* Card individual */
+.clp-card {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 12px;
+    border: 2px solid #e9ecef;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    position: relative;
+}
+
+.clp-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #2c5aa0 0%, #4a90e2 100%);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.clp-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    border-color: rgba(44, 90, 160, 0.3);
+}
+
+.clp-card:hover::before {
+    opacity: 1;
+}
+
+.clp-card.online {
+    border-color: rgba(40, 167, 69, 0.3);
+}
+
+.clp-card.online::before {
+    background: linear-gradient(90deg, #28a745 0%, #20c997 100%);
+}
+
+.clp-card.offline {
+    border-color: rgba(220, 53, 69, 0.3);
+}
+
+.clp-card.offline::before {
+    background: linear-gradient(90deg, #dc3545 0%, #ff6b6b 100%);
+}
+
+/* Header do card */
+.clp-card-header {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 100%);
+    color: white;
+    padding: 16px 20px;
+}
+
+.clp-card-title {
+    font-size: 1.05em;
+    font-weight: 600;
+    margin: 0 0 6px 0;
+    line-height: 1.3;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.clp-card-title i { font-size: 0.85em; opacity: 0.9; }
+
+.clp-card-model {
+    font-size: 0.8em;
+    opacity: 0.85;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.clp-card-model i { font-size: 0.85em; }
+
+.clp-info-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+.clp-info-label i { color: var(--primary); font-size: 0.85em; }
+
+/* Body do card */
+.clp-card-body {
+    padding: 16px 20px;
+}
+
+.clp-card-info {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.clp-info-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.9em;
+}
+
+.clp-info-label {
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.clp-info-value {
+    font-weight: 600;
+    color: #333;
+}
+
+.clp-info-value.ip {
+    font-family: 'Courier New', monospace;
+    color: #2c5aa0;
+    background: rgba(44, 90, 160, 0.08);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+.clp-info-value.pontos {
+    color: #6f42c1;
+}
+
+/* Footer do card */
+.clp-card-footer {
+    padding: 12px 20px;
+    border-top: 1px solid #e9ecef;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.clp-status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.clp-status-badge.online {
+    background: rgba(40, 167, 69, 0.1);
+    color: #28a745;
+    border: 1px solid rgba(40, 167, 69, 0.3);
+}
+
+.clp-status-badge.offline {
+    background: rgba(220, 53, 69, 0.1);
+    color: #dc3545;
+    border: 1px solid rgba(220, 53, 69, 0.3);
+}
+
+.clp-status-badge.unknown {
+    background: rgba(108, 117, 125, 0.1);
+    color: #6c757d;
+    border: 1px solid rgba(108, 117, 125, 0.3);
+}
+
+.clp-status-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+}
+
+.clp-card-link {
+    font-size: 0.85em;
+    color: #2c5aa0;
+    font-weight: 600;
+    text-decoration: none;
+}
+
+.clp-card-link:hover {
+    text-decoration: underline;
+}
+
+/* Nenhum resultado */
+.clps-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+    font-size: 1.1em;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    #clps-container {
+        padding: 0 15px;
+    }
+
+    .clps-summary {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .summary-item {
+        min-width: auto;
+    }
+
+    .clps-grid {
+        grid-template-columns: 1fr;
+        gap: 16px;
+    }
+}
+
+@media (max-width: 480px) {
+    .summary-value {
+        font-size: 1.6em;
+    }
+
+    .clp-card-header {
+        padding: 12px 16px;
+    }
+
+    .clp-card-body {
+        padding: 12px 16px;
+    }
+}

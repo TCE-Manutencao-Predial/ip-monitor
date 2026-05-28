@@ -1,0 +1,361 @@
+/* ====================================
+   CLP Detalhes - Estilos
+   ==================================== */
+
+/* Header do CLP */
+.clp-header {
+    background: linear-gradient(135deg, #1a3a5c 0%, #2c5aa0 50%, #3d7cc9 100%);
+    color: white;
+    padding: 24px 30px;
+    margin: 0 0 20px 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.clp-header-info {
+    flex: 1;
+    min-width: 300px;
+}
+
+.clp-header h1 {
+    margin: 0 0 10px 0;
+    font-size: 1.5em;
+    font-weight: 600;
+}
+
+.clp-meta {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 8px;
+}
+
+.clp-meta-item {
+    background: rgba(255, 255, 255, 0.15);
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.85em;
+    white-space: nowrap;
+}
+
+.clp-status {
+    font-weight: 600;
+}
+
+.clp-status.online {
+    background: rgba(40, 167, 69, 0.3);
+    border: 1px solid rgba(40, 167, 69, 0.5);
+}
+
+.clp-status.offline {
+    background: rgba(220, 53, 69, 0.3);
+    border: 1px solid rgba(220, 53, 69, 0.5);
+}
+
+.clp-descricao {
+    margin: 8px 0 0 0;
+    font-size: 0.9em;
+    opacity: 0.85;
+}
+
+.clp-stats {
+    display: flex;
+    gap: 20px;
+}
+
+.clp-stat {
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 12px;
+    padding: 12px 20px;
+    text-align: center;
+    min-width: 80px;
+}
+
+.clp-stat-value {
+    display: block;
+    font-size: 1.8em;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.clp-stat-label {
+    display: block;
+    font-size: 0.75em;
+    opacity: 0.7;
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* Controles de filtro */
+.clp-controls {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 20px;
+    background: #f8f9fa;
+    border-bottom: 1px solid #dee2e6;
+    flex-wrap: wrap;
+}
+
+.clp-search {
+    flex: 1;
+    min-width: 200px;
+}
+
+.clp-search input {
+    width: 100%;
+    padding: 8px 14px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 0.9em;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+}
+
+.clp-search input:focus {
+    outline: none;
+    border-color: #2c5aa0;
+}
+
+/* Navegacao entre CLPs */
+.clp-nav-buttons {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.btn-nav {
+    padding: 8px 16px;
+    background: #2c5aa0;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85em;
+    font-weight: 600;
+    font-family: Arial, sans-serif;
+    transition: background 0.2s;
+    white-space: nowrap;
+}
+
+.btn-nav:hover:not(:disabled) {
+    background: #1a3a5c;
+}
+
+.btn-nav:disabled {
+    background: #ced4da;
+    color: #6c757d;
+    cursor: not-allowed;
+}
+
+.clp-nav-counter {
+    font-size: 0.85em;
+    font-weight: 600;
+    color: #6c757d;
+    white-space: nowrap;
+}
+
+.btn-voltar {
+    padding: 8px 16px;
+    background: #6c757d;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: background 0.2s;
+}
+
+.btn-voltar:hover {
+    background: #5a6268;
+}
+
+/* Container de tabelas */
+#clp-tables-container {
+    padding: 0 20px 20px;
+}
+
+/* Secao (para CLPs com multiplas secoes) */
+.clp-secao {
+    margin-bottom: 24px;
+}
+
+.clp-secao-header {
+    background: #e9ecef;
+    padding: 10px 16px;
+    border-radius: 8px 8px 0 0;
+    font-weight: 600;
+    font-size: 1em;
+    color: #495057;
+    border: 1px solid #dee2e6;
+    border-bottom: none;
+}
+
+/* Tabela de pontos I/O */
+.clp-table-wrapper {
+    overflow-x: auto;
+    margin-bottom: 20px;
+    border-radius: 0 0 8px 8px;
+    border: 1px solid #dee2e6;
+}
+
+.clp-secao + .clp-table-wrapper {
+    border-radius: 0 0 8px 8px;
+}
+
+.clp-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88em;
+}
+
+.clp-table thead {
+    background: #2c5aa0;
+    color: white;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.clp-table thead th {
+    padding: 10px 12px;
+    text-align: left;
+    font-weight: 600;
+    white-space: nowrap;
+    cursor: pointer;
+    user-select: none;
+    transition: background 0.2s;
+}
+
+.clp-table thead th:hover {
+    background: #1a3a5c;
+}
+
+.clp-table thead th .sort-icon {
+    margin-left: 4px;
+    opacity: 0.5;
+    font-size: 0.8em;
+}
+
+.clp-table thead th.sorted .sort-icon {
+    opacity: 1;
+}
+
+.clp-table tbody tr {
+    border-bottom: 1px solid #eee;
+    transition: background 0.15s;
+}
+
+.clp-table tbody tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.clp-table tbody tr:hover {
+    background: #e3ecf7;
+}
+
+.clp-table tbody tr.hidden {
+    display: none;
+}
+
+.clp-table tbody td {
+    padding: 8px 12px;
+    vertical-align: top;
+}
+
+/* Badges de tipo de ponto */
+.tipo-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.8em;
+    font-weight: 600;
+    text-transform: uppercase;
+    min-width: 40px;
+    text-align: center;
+}
+
+.tipo-badge.di {
+    background: #d4edda;
+    color: #155724;
+}
+
+.tipo-badge.do-type {
+    background: #cce5ff;
+    color: #004085;
+}
+
+.tipo-badge.ai {
+    background: #fff3cd;
+    color: #856404;
+}
+
+.tipo-badge.ao {
+    background: #f8d7da;
+    color: #721c24;
+}
+
+.tipo-badge.outro {
+    background: #e2e3e5;
+    color: #383d41;
+}
+
+/* Mensagem vazio */
+.clp-empty {
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+    font-size: 1.1em;
+}
+
+/* Responsivo */
+@media (max-width: 768px) {
+    .clp-header {
+        padding: 16px;
+        flex-direction: column;
+    }
+
+    .clp-header h1 {
+        font-size: 1.2em;
+    }
+
+    .clp-stats {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .clp-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .clp-nav-buttons {
+        justify-content: center;
+    }
+
+    .clp-table {
+        font-size: 0.8em;
+    }
+
+    .clp-table thead th,
+    .clp-table tbody td {
+        padding: 6px 8px;
+    }
+}
+
+@media (max-width: 480px) {
+    .clp-meta {
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .clp-stats {
+        flex-direction: column;
+        gap: 10px;
+    }
+}

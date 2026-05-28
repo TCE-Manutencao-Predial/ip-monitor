@@ -8,6 +8,8 @@ import logging  # Adicionar logging
 import json  # Para serialização de dados em logs
 from app.config_manager import config_manager  # Importa o gerenciador de configurações.
 from app.device_manager import device_manager  # Importa o gerenciador de dispositivos.
+from app.clp_manager import clp_manager  # Importa o gerenciador de dados CLP.
+from app import audit as audit_mod  # Trilha de auditoria (SQLite local).
 from app.settings import ROUTES_PREFIX, NETWORK_BASE  # Importa configurações centralizadas
 
 # Configurar logging
@@ -47,8 +49,8 @@ def background_ip_check(vlan):
 @app.route('/')  # Rota para rodar localmente.
 @app.route(RAIZ + '/')  # Rota que inclui o prefixo 'RAIZ' para ambiente de produção.
 def index():
-    # Renderiza o arquivo HTML 'index.html' como resposta.
-    return render_template('index.html')
+    # Passa lista de IPs com dados CLP para o template
+    return render_template('index.html', clp_ips=clp_manager.get_clp_ips())
 
 # Define o endpoint principal para a página de configurações.
 @app.route('/configuracoes')  # Rota para rodar localmente.
@@ -58,13 +60,6 @@ def configuracoes():
     config = config_manager.get_config()
     # Renderiza o arquivo HTML 'configuracoes.html' com as configurações
     return render_template('configuracoes.html', config=config)
-
-# Define o endpoint principal para a página de gerenciamento de dispositivos.
-@app.route('/dispositivos')  # Rota para rodar localmente.
-@app.route(RAIZ + '/dispositivos')  # Rota que inclui o prefixo 'RAIZ' para ambiente de produção.
-def dispositivos():
-    # Renderiza o arquivo HTML 'dispositivos.html' sem dependências Jinja2
-    return render_template('dispositivos.html')
 
 # Define o endpoint para retornar o status dos IPs verificados em formato JSON.
 @app.route('/api/ip-status')  # Rota para rodar localmente.
@@ -261,16 +256,30 @@ def add_device(vlan):
 def update_device(vlan, ip):
     try:
         data = request.get_json()
-        descricao = data.get('descricao')  # Corrigido para usar 'descricao'
+        descricao = data.get('descricao')
         tipo = data.get('tipo')
-        
-        success, message = device_manager.update_device(vlan, ip, descricao, tipo)
-        
+        sensores = data.get('sensores')          # lista de {codigo, categoria}
+        tabelas_sql = data.get('tabelas_sql')    # lista de {tabela, coluna}
+
+        # Sanitização leve: garantir que são listas se foram enviadas
+        if sensores is not None and not isinstance(sensores, list):
+            return jsonify({'error': 'sensores deve ser uma lista'}), 400
+        if tabelas_sql is not None and not isinstance(tabelas_sql, list):
+            return jsonify({'error': 'tabelas_sql deve ser uma lista'}), 400
+
+        success, message = device_manager.update_device(
+            vlan, ip,
+            descricao=descricao,
+            tipo=tipo,
+            sensores=sensores,
+            tabelas_sql=tabelas_sql,
+        )
+
         if success:
             return jsonify({'success': True, 'message': message})
         else:
             return jsonify({'error': message}), 400
-    
+
     except Exception as e:
         print(f"Erro ao atualizar dispositivo: {e}")
         return jsonify({'error': str(e)}), 500
@@ -361,6 +370,95 @@ def delete_device_type(vlan):
     except Exception as e:
         print(f"Erro ao remover tipo de dispositivo: {e}")
         return jsonify({'error': str(e)}), 500
+
+# Pagina de listagem de todos os CLPs
+@app.route('/clps')
+@app.route(RAIZ + '/clps')
+def clps_listagem():
+    """Pagina com listagem de todos os CLPs."""
+    all_clps = clp_manager.get_all_clps()
+    return render_template('clps.html', clps_data=all_clps)
+
+# Endpoints para dados de CLPs
+@app.route('/clp/<ip>')
+@app.route(RAIZ + '/clp/<ip>')
+def clp_detalhes(ip):
+    """Pagina de detalhes de um CLP especifico."""
+    clp = clp_manager.get_clp_data(ip)
+    if not clp:
+        return jsonify({'error': f'CLP nao encontrado para IP {ip}'}), 404
+    # Lista ordenada de IPs para navegacao prev/next
+    all_ips = sorted(clp_manager.get_clp_ips(), key=lambda x: list(map(int, x.split('.'))))
+    return render_template('clp_detalhes.html', clp_data=clp, clp_ip=ip, clp_ips_ordered=all_ips)
+
+@app.route('/api/clp')
+@app.route(RAIZ + '/api/clp')
+def api_clp_list():
+    """API - lista resumida de todos os CLPs disponiveis."""
+    return jsonify(clp_manager.get_all_clps())
+
+@app.route('/api/clp/<ip>')
+@app.route(RAIZ + '/api/clp/<ip>')
+def api_clp_data(ip):
+    """API - dados completos de um CLP especifico."""
+    clp = clp_manager.get_clp_data(ip)
+    if not clp:
+        return jsonify({'error': f'CLP nao encontrado para IP {ip}'}), 404
+    return jsonify(clp)
+
+
+def _parse_ponto_payload():
+    """Lê JSON do request e devolve (ponto, secao_idx)."""
+    payload = request.get_json(silent=True) or {}
+    ponto = payload.get('ponto')
+    if not isinstance(ponto, dict):
+        return None, None, 'Body inválido: campo "ponto" obrigatório (objeto).'
+    secao_idx = payload.get('secao_idx')
+    if secao_idx is not None:
+        try:
+            secao_idx = int(secao_idx)
+        except (TypeError, ValueError):
+            return None, None, 'secao_idx inválido'
+    return ponto, secao_idx, None
+
+
+@app.route('/api/clp/<ip>/pontos', methods=['POST'])
+@app.route(RAIZ + '/api/clp/<ip>/pontos', methods=['POST'])
+def api_clp_add_ponto(ip):
+    """Adiciona um ponto I/O ao CLP."""
+    ponto, secao_idx, err = _parse_ponto_payload()
+    if err:
+        return jsonify({'error': err}), 400
+    ok, msg = clp_manager.add_ponto(ip, ponto, secao_idx)
+    return (jsonify({'sucesso': True, 'mensagem': msg}) if ok
+            else (jsonify({'error': msg}), 400))
+
+
+@app.route('/api/clp/<ip>/pontos/<int:idx>', methods=['PUT'])
+@app.route(RAIZ + '/api/clp/<ip>/pontos/<int:idx>', methods=['PUT'])
+def api_clp_update_ponto(ip, idx):
+    """Atualiza ponto[idx] do CLP."""
+    ponto, secao_idx, err = _parse_ponto_payload()
+    if err:
+        return jsonify({'error': err}), 400
+    ok, msg = clp_manager.update_ponto(ip, idx, ponto, secao_idx)
+    return (jsonify({'sucesso': True, 'mensagem': msg}) if ok
+            else (jsonify({'error': msg}), 400))
+
+
+@app.route('/api/clp/<ip>/pontos/<int:idx>', methods=['DELETE'])
+@app.route(RAIZ + '/api/clp/<ip>/pontos/<int:idx>', methods=['DELETE'])
+def api_clp_delete_ponto(ip, idx):
+    """Remove ponto[idx] do CLP. secao_idx via querystring para CLPs com seções."""
+    secao_idx = request.args.get('secao_idx')
+    if secao_idx is not None:
+        try:
+            secao_idx = int(secao_idx)
+        except (TypeError, ValueError):
+            return jsonify({'error': 'secao_idx inválido'}), 400
+    ok, msg = clp_manager.delete_ponto(ip, idx, secao_idx)
+    return (jsonify({'sucesso': True, 'mensagem': msg}) if ok
+            else (jsonify({'error': msg}), 400))
 
 # Função para validar dados de configuração
 def validate_config_data(data):
@@ -468,6 +566,49 @@ def start_background_service():
     background_thread = threading.Thread(target=check_loop, daemon=True)
     background_thread.start()
     
+# ----------------------------------------------------------------------------
+# Auditoria de modificações (trilha em SQLite local)
+# ----------------------------------------------------------------------------
+@app.route('/configuracoes/historico')
+@app.route(RAIZ + '/configuracoes/historico')
+def historico_alteracoes():
+    """Página com histórico de modificações nos devices (audit log SQLite)."""
+    return render_template('historico_alteracoes.html', RAIZ=RAIZ)
+
+
+@app.route('/api/audit/historico')
+@app.route(RAIZ + '/api/audit/historico')
+def api_audit_historico():
+    """Lista paginada da trilha de auditoria. Filtros: vlan, ip, action, since."""
+    try:
+        limit  = min(int(request.args.get('limit', 100)), 500)
+        offset = int(request.args.get('offset', 0))
+        vlan   = request.args.get('vlan') or None
+        ip     = request.args.get('ip') or None
+        action = request.args.get('action') or None
+        since  = request.args.get('since') or None
+        entries = audit_mod.list_entries(limit=limit, offset=offset,
+                                          vlan=vlan, ip=ip,
+                                          action=action, since=since)
+        total = audit_mod.count_entries(vlan=vlan, ip=ip, action=action, since=since)
+        return jsonify({'success': True, 'total': total,
+                        'limit': limit, 'offset': offset,
+                        'entries': entries})
+    except Exception as e:
+        return jsonify({'success': False, 'erro': str(e)}), 500
+
+
+@app.route('/api/audit/stats')
+@app.route(RAIZ + '/api/audit/stats')
+def api_audit_stats():
+    """Resumo dos últimos N dias."""
+    try:
+        days = int(request.args.get('days', 7))
+        return jsonify({'success': True, **audit_mod.stats(days=days)})
+    except Exception as e:
+        return jsonify({'success': False, 'erro': str(e)}), 500
+
+
 # Ponto de entrada da aplicação. Executa o Flask quando o script é rodado diretamente.
 if __name__ == '__main__':
     app.run(debug=True)  # Inicia o servidor Flask em modo debug.

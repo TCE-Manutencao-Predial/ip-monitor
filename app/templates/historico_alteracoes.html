@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Histórico - IP Monitor</title>
+    <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <script>
+        const APP_CONFIG = { routesPrefix: '{{ RAIZ }}' };
+        function getBasePath() {
+            const path = window.location.pathname;
+            return path.includes(APP_CONFIG.routesPrefix + '/') ? APP_CONFIG.routesPrefix + '/' : '/';
+        }
+        function navigateTo(page) {
+            const basePath = getBasePath();
+            window.location.href = page === 'home' ? basePath : basePath + page;
+        }
+    </script>
+    <style>
+        /* Reutilizamos .container/.section/.stats-grid/.stat-card do styles.css
+           para casar com o visual do index.html. Estilos abaixo são só os
+           componentes específicos do histórico. */
+        .audit-toolbar {
+            display: flex; gap: 0.5rem; flex-wrap: wrap; align-items: center;
+            margin-bottom: 1rem;
+        }
+        .audit-toolbar input, .audit-toolbar select {
+            padding: 6px 10px; border: 1px solid #d1d5db; border-radius: 6px;
+            font-size: 0.85rem; background: #fff; height: 32px; box-sizing: border-box;
+        }
+        .audit-toolbar input { width: 140px; }
+        .audit-toolbar button {
+            padding: 0 14px; height: 32px; background: var(--primary); color: #fff;
+            border: none; border-radius: 6px; cursor: pointer; font-size: 0.82rem;
+            font-weight: 600; display: inline-flex; align-items: center; gap: 6px;
+        }
+        .audit-toolbar button:hover { background: #4338ca; filter: brightness(0.95); }
+        .audit-toolbar .toolbar-info { margin-left: auto; color: var(--text-light); font-size: 0.78rem; }
+        .audit-table { width: 100%; border-collapse: collapse; }
+        .audit-table thead { background: linear-gradient(135deg, #1e3a8a, #1e40af); color: #fff; }
+        .audit-table th {
+            padding: 8px 10px; text-align: left; font-size: 0.78rem;
+            text-transform: uppercase; font-weight: 700; letter-spacing: 0.3px;
+        }
+        .audit-table td {
+            padding: 6px 10px; border-bottom: 1px solid #f1f5f9;
+            font-size: 0.85rem; vertical-align: top;
+        }
+        .audit-table tbody tr:hover { background: #f8fafc; }
+        .audit-badge {
+            display: inline-block; padding: 2px 9px; border-radius: 999px;
+            font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px;
+        }
+        .audit-badge.add    { background: #d1fae5; color: #065f46; }
+        .audit-badge.update { background: #fef3c7; color: #92400e; }
+        .audit-badge.remove { background: #fee2e2; color: #991b1b; }
+        .audit-ip { font-family: ui-monospace, monospace; color: var(--text); font-weight: 600; }
+        .audit-fields {
+            display: inline-block; padding: 1px 7px; margin: 1px;
+            background: #eef2ff; color: #4338ca; border-radius: 4px;
+            font-size: 0.72rem; font-family: ui-monospace, monospace;
+        }
+        .audit-diff {
+            font-family: ui-monospace, monospace; font-size: 0.72rem;
+            color: var(--text-light); white-space: pre-wrap; word-break: break-word;
+        }
+        .audit-diff-from { color: #b91c1c; text-decoration: line-through; }
+        .audit-diff-to   { color: #047857; }
+        .audit-pager {
+            display: flex; gap: 8px; justify-content: center;
+            margin: 1rem 0 0; align-items: center;
+        }
+        .audit-pager button {
+            padding: 5px 12px; background: #fff; border: 1px solid #d1d5db;
+            border-radius: 6px; cursor: pointer; font-size: 0.82rem;
+        }
+        .audit-pager button:hover { background: #f1f5f9; }
+        .audit-pager button[disabled] { opacity: 0.4; cursor: not-allowed; }
+        .empty { text-align: center; padding: 40px; color: var(--text-light); }
+        /* Card "última alteração": valor menor pra caber timestamp+ip compactos. */
+        .stat-card.stat-last .stat-value { font-size: 0.95rem; line-height: 1.2; }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="header-content">
+        <div class="header-left">
+            <h1><i class="fas fa-network-wired"></i> Rede <span class="h1-sub">· Histórico</span></h1>
+            <nav class="header-nav">
+                <a href="javascript:navigateTo('home')">
+                    <i class="fas fa-home"></i><span>Início</span>
+                </a>
+                <div class="nav-item-dropdown">
+                    <a href="javascript:navigateTo('clps')" data-dropdown-toggle>
+                        <i class="fas fa-server"></i><span>CLPs</span>
+                        <i class="fas fa-chevron-down nav-chevron"></i>
+                    </a>
+                    <ul class="nav-submenu" id="clps-submenu" role="menu">
+                        <li class="nav-submenu-loading">Carregando…</li>
+                    </ul>
+                </div>
+                <div class="nav-item-dropdown">
+                    <a href="javascript:navigateTo('configuracoes')" data-dropdown-toggle class="active">
+                        <i class="fas fa-cog"></i><span>Configurações</span>
+                        <i class="fas fa-chevron-down nav-chevron"></i>
+                    </a>
+                    <ul class="nav-submenu" role="menu">
+                        <li><a href="javascript:navigateTo('configuracoes')">
+                            <i class="fas fa-sliders-h"></i> Geral</a></li>
+                        <li><a href="javascript:navigateTo('configuracoes/historico')" class="active">
+                            <i class="fas fa-history"></i> Histórico</a></li>
+                    </ul>
+                </div>
+            </nav>
+        </div>
+        <a href="https://automacao.tce.go.gov.br/" class="header-badge" title="Voltar ao Dashboard Principal">
+            <i class="fas fa-shield-alt"></i> TCE-GO
+        </a>
+    </div>
+</header>
+
+<main>
+    <div class="container">
+        <!-- Stats cards (mesmo padrão do index.html: .stats-grid + .stat-card) -->
+        <div class="stats-grid">
+            <div class="stat-card stat-vis">
+                <div class="stat-icon"><i class="fas fa-clipboard-list"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statTotal">—</span>
+                    <span class="stat-label">Alterações (7d)</span>
+                </div>
+            </div>
+            <div class="stat-card stat-on">
+                <div class="stat-icon"><i class="fas fa-plus-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statAdd">—</span>
+                    <span class="stat-label">Adições</span>
+                </div>
+            </div>
+            <div class="stat-card stat-tot">
+                <div class="stat-icon"><i class="fas fa-pen"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statUpd">—</span>
+                    <span class="stat-label">Edições</span>
+                </div>
+            </div>
+            <div class="stat-card stat-off">
+                <div class="stat-icon"><i class="fas fa-trash"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statRem">—</span>
+                    <span class="stat-label">Remoções</span>
+                </div>
+            </div>
+            <div class="stat-card stat-last">
+                <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="statLast" title="">—</span>
+                    <span class="stat-label">Última alteração</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title"><i class="fas fa-history"></i> Histórico de Modificações</h2>
+                <span class="toolbar-info" id="totalInfo" style="color:var(--text-light); font-size:0.8rem;">—</span>
+            </div>
+
+            <div class="audit-toolbar">
+                <select id="filtroVlan"><option value="">VLAN (todas)</option></select>
+                <input type="text" id="filtroIp" placeholder="IP exato…">
+                <select id="filtroAction">
+                    <option value="">Ação (qualquer)</option>
+                    <option value="add">add</option>
+                    <option value="update">update</option>
+                    <option value="remove">remove</option>
+                </select>
+                <input type="date" id="filtroSince" title="A partir de…">
+                <button onclick="carregar(0)"><i class="fas fa-search"></i> Filtrar</button>
+                <button onclick="limpar()" style="background:#6b7280"><i class="fas fa-eraser"></i> Limpar</button>
+            </div>
+
+            <table class="audit-table" id="audit-table">
+                <thead>
+                    <tr>
+                        <th style="width:140px">Quando</th>
+                        <th style="width:80px">Ação</th>
+                        <th style="width:60px">VLAN</th>
+                        <th style="width:140px">IP</th>
+                        <th>Mudanças</th>
+                        <th style="width:100px">Usuário</th>
+                        <th style="width:140px">Origem</th>
+                    </tr>
+                </thead>
+                <tbody id="audit-body"></tbody>
+            </table>
+            <div id="audit-empty" class="empty" style="display:none">
+                <i class="fas fa-inbox" style="font-size:2rem"></i>
+                <p>Sem alterações no filtro selecionado.</p>
+            </div>
+
+            <div class="audit-pager">
+                <button id="prevBtn" onclick="paginar(-1)">← Anterior</button>
+                <span id="paginaInfo" style="font-size:0.85rem"></span>
+                <button id="nextBtn" onclick="paginar(+1)">Próxima →</button>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+const RAIZ = APP_CONFIG.routesPrefix || '';
+const PAGE_SIZE = 50;
+let pagina = 0;
+let total = 0;
+
+function fmtTs(ts) {
+    if (!ts) return '—';
+    return ts.replace('T', ' ').replace(/:\d\d$/, '');
+}
+// Última alteração: resumo do tipo "HH:MM · .65" (último octeto) ou
+// "dd/MM HH:MM · .65" se não for hoje.
+function fmtTsCompact(ts, ip) {
+    if (!ts) return '—';
+    const d = new Date(ts);
+    const hoje = new Date();
+    const sameDay = d.toDateString() === hoje.toDateString();
+    const hm = `${String(d.getHours()).padStart(2,'0')}:${String(d.getMinutes()).padStart(2,'0')}`;
+    const stamp = sameDay ? hm : `${String(d.getDate()).padStart(2,'0')}/${String(d.getMonth()+1).padStart(2,'0')} ${hm}`;
+    const last = ip ? '.' + ip.split('.').pop() : '';
+    return stamp + (last ? ` · ${last}` : '');
+}
+function escapeHtml(s) {
+    return String(s || '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+function changesHtml(e) {
+    if (e.action === 'add')    return `<i class="fas fa-plus" style="color:#059669"></i> ${escapeHtml(e.after_json?.descricao || '')} <span style="color:#94a3b8">· tipo: ${escapeHtml(e.after_json?.tipo || '—')}</span>`;
+    if (e.action === 'remove') return `<i class="fas fa-times" style="color:#dc2626"></i> ${escapeHtml(e.before_json?.descricao || '')} <span style="color:#94a3b8">· tipo: ${escapeHtml(e.before_json?.tipo || '—')}</span>`;
+    let h = (e.fields || []).map(f => `<span class="audit-fields">${escapeHtml(f)}</span>`).join(' ');
+    const diffs = [];
+    for (const f of (e.fields || [])) {
+        if (f === 'sensores' || f === 'tabelas_sql') continue;
+        const a = e.before_json?.[f], b = e.after_json?.[f];
+        diffs.push(`<div class="audit-diff"><b>${escapeHtml(f)}:</b> <span class="audit-diff-from">${escapeHtml(JSON.stringify(a) || '(vazio)')}</span> → <span class="audit-diff-to">${escapeHtml(JSON.stringify(b) || '(vazio)')}</span></div>`);
+    }
+    return h + diffs.join('');
+}
+
+async function carregarStats() {
+    const r = await fetch(RAIZ + '/api/audit/stats?days=7');
+    const d = await r.json();
+    if (!d.success) return;
+    document.getElementById('statTotal').textContent = d.total;
+    document.getElementById('statAdd').textContent = d.by_action?.add || 0;
+    document.getElementById('statUpd').textContent = d.by_action?.update || 0;
+    document.getElementById('statRem').textContent = d.by_action?.remove || 0;
+    const last = d.last;
+    const el = document.getElementById('statLast');
+    if (last) {
+        el.textContent = fmtTsCompact(last.timestamp, last.ip);
+        el.title = `${fmtTs(last.timestamp)} · ${last.action} · ${last.ip}`;
+    } else {
+        el.textContent = '—'; el.title = '';
+    }
+}
+
+function carregarVlans() {
+    const sel = document.getElementById('filtroVlan');
+    for (const v of ['70','80','85','86','90','200','204']) {
+        const o = document.createElement('option'); o.value = v; o.textContent = `VLAN ${v}`;
+        sel.appendChild(o);
+    }
+}
+
+async function carregar(pageOverride) {
+    if (pageOverride !== undefined) pagina = pageOverride;
+    const params = new URLSearchParams({ limit: PAGE_SIZE, offset: pagina * PAGE_SIZE });
+    const vlan   = document.getElementById('filtroVlan').value;
+    const ip     = document.getElementById('filtroIp').value.trim();
+    const action = document.getElementById('filtroAction').value;
+    const since  = document.getElementById('filtroSince').value;
+    if (vlan) params.set('vlan', vlan);
+    if (ip) params.set('ip', ip);
+    if (action) params.set('action', action);
+    if (since) params.set('since', since);
+
+    const r = await fetch(RAIZ + '/api/audit/historico?' + params);
+    const d = await r.json();
+    const tbody = document.getElementById('audit-body');
+    const empty = document.getElementById('audit-empty');
+    tbody.innerHTML = '';
+    if (!d.success) { tbody.innerHTML = `<tr><td colspan="7" style="color:#dc2626">${escapeHtml(d.erro)}</td></tr>`; return; }
+    total = d.total;
+    document.getElementById('totalInfo').textContent = `${d.total} alteração(ões) no filtro`;
+    if (!d.entries.length) { empty.style.display = 'block'; document.getElementById('paginaInfo').textContent = ''; return; }
+    empty.style.display = 'none';
+    for (const e of d.entries) {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+            <td style="white-space:nowrap;color:var(--text-light);font-family:ui-monospace,monospace;font-size:0.8rem">${fmtTs(e.timestamp)}</td>
+            <td><span class="audit-badge ${e.action}">${e.action}</span></td>
+            <td>${escapeHtml(e.vlan)}</td>
+            <td class="audit-ip">${escapeHtml(e.ip)}</td>
+            <td>${changesHtml(e)}</td>
+            <td>${escapeHtml(e.user || '—')}</td>
+            <td style="color:var(--text-light);font-family:ui-monospace,monospace;font-size:0.75rem">${escapeHtml(e.source || '—')}</td>
+        `;
+        tbody.appendChild(tr);
+    }
+    const totalPages = Math.ceil(total / PAGE_SIZE);
+    document.getElementById('paginaInfo').textContent = `Página ${pagina + 1} de ${totalPages}`;
+    document.getElementById('prevBtn').disabled = pagina === 0;
+    document.getElementById('nextBtn').disabled = pagina + 1 >= totalPages;
+}
+
+function paginar(delta) {
+    pagina = Math.max(0, pagina + delta);
+    carregar();
+}
+function limpar() {
+    document.getElementById('filtroVlan').value = '';
+    document.getElementById('filtroIp').value = '';
+    document.getElementById('filtroAction').value = '';
+    document.getElementById('filtroSince').value = '';
+    carregar(0);
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    carregarVlans();
+    carregarStats();
+    carregar(0);
+});
+</script>
+</body>
+</html>

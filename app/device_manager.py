@@ -69,13 +69,46 @@ class IPDeviceManager:
             print(f"Erro na migração: {e}")
             return {"vlans": {}}
     
-    def _save_devices(self, devices_data=None):
-        """Salva dispositivos no arquivo JSON"""
+    def _save_devices(self, devices_data=None, audit_user=None, audit_source=None):
+        """Salva dispositivos no arquivo JSON e registra diff no audit log.
+
+        Se audit_user/audit_source não forem passados, tenta extrair da request
+        Flask atual (X-Remote-User via nginx + path da rota). Assim qualquer
+        endpoint que dispare um save herda automaticamente o contexto.
+        """
         try:
             with self.devices_lock:
                 data_to_save = devices_data if devices_data else self.devices
+                # Snapshot do estado anterior (do disco) p/ diff de auditoria.
+                old_data = None
+                try:
+                    if os.path.exists(self.devices_file):
+                        with open(self.devices_file, 'r', encoding='utf-8') as f:
+                            old_data = json.load(f)
+                except Exception:
+                    old_data = None
                 with open(self.devices_file, 'w', encoding='utf-8') as f:
                     json.dump(data_to_save, f, indent=4, ensure_ascii=False)
+                # Audit log — falha silenciosa (não bloqueia save se SQLite estiver indisponível).
+                try:
+                    # Extrai user/source automaticamente da request Flask atual
+                    # (mesma convenção do scada-web: header X-Remote-User do nginx).
+                    if audit_user is None or audit_source is None:
+                        try:
+                            from flask import request, has_request_context
+                            if has_request_context():
+                                if audit_user is None:
+                                    audit_user = (request.headers.get('X-Remote-User')
+                                                  or request.headers.get('Remote-User'))
+                                if audit_source is None:
+                                    audit_source = request.path
+                        except Exception:
+                            pass  # rodando fora de request (ex.: script CLI)
+                    from app.audit import record_diff
+                    record_diff(old_data or {}, data_to_save,
+                                user=audit_user, source=audit_source)
+                except Exception as e:
+                    logging.warning(f"[DEVICE_MANAGER] audit log falhou: {e}")
                 return True
         except Exception as e:
             print(f"Erro ao salvar dispositivos: {e}")
@@ -131,30 +164,48 @@ class IPDeviceManager:
             print(f"Erro ao adicionar dispositivo: {e}")
             return False, str(e)
     
-    def update_device(self, vlan, ip, descricao=None, tipo=None):
+    def update_device(self, vlan, ip, descricao=None, tipo=None, sensores=None, tabelas_sql=None):
         """Atualiza um dispositivo existente"""
         try:
             with self.devices_lock:
                 vlan_str = str(vlan)
-                
+
                 if vlan_str not in self.devices.get('vlans', {}):
-                    return False, "VLAN não encontrada"
-                
+                    # Cria a VLAN se ela ainda não existir (caso de IP novo numa VLAN nova)
+                    self.devices.setdefault('vlans', {})[vlan_str] = []
+
                 for device in self.devices['vlans'][vlan_str]:
                     if device['ip'] == ip:
                         if descricao is not None:
                             device['descricao'] = descricao
                         if tipo is not None:
                             device['tipo'] = tipo
+                        if sensores is not None:
+                            device['sensores'] = sensores
+                        if tabelas_sql is not None:
+                            device['tabelas_sql'] = tabelas_sql
                         device['updated_at'] = datetime.now().isoformat()
-                        
+
                         if self._save_devices():
                             return True, "Dispositivo atualizado com sucesso"
                         else:
                             return False, "Erro ao salvar alterações"
-                
-                return False, "Dispositivo não encontrado"
-        
+
+                # IP não existe na VLAN — cria o registro
+                novo = {
+                    'ip': ip,
+                    'descricao': descricao or '',
+                    'tipo': tipo or '',
+                    'sensores': sensores if sensores is not None else [],
+                    'tabelas_sql': tabelas_sql if tabelas_sql is not None else [],
+                    'created_at': datetime.now().isoformat(),
+                    'updated_at': datetime.now().isoformat(),
+                }
+                self.devices['vlans'][vlan_str].append(novo)
+                if self._save_devices():
+                    return True, "Dispositivo criado com sucesso"
+                return False, "Erro ao salvar novo dispositivo"
+
         except Exception as e:
             print(f"Erro ao atualizar dispositivo: {e}")
             return False, str(e)

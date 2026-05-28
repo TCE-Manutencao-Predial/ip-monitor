@@ -3,220 +3,453 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IP Status</title>
+    <title>IP Monitor - TCE-GO</title>
     <link rel="icon" href="data:,">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
     <script>
-        // Configurações injetadas do settings.py
         const APP_CONFIG = {
             routesPrefix: '{{ ROUTES_PREFIX }}',
             domainBase: '{{ DOMAIN_BASE }}',
             projectName: '{{ PROJECT_NAME }}'
         };
-        
-        // Função para detectar o caminho base dos estáticos
-        function getStaticPath() {
-            const path = window.location.pathname;
-            return path.includes(APP_CONFIG.routesPrefix + '/') ? APP_CONFIG.routesPrefix + '/static/' : '/static/';
-        }
-        
-        // Carregar CSS dinamicamente
-        function loadCSS(filename) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = getStaticPath() + filename;
-            document.head.appendChild(link);
-        }
-        
-        // Carregar CSS principal
-        loadCSS('styles.css');
-    </script>
-    <script>
         function getBasePath() {
             const path = window.location.pathname;
             return path.includes(APP_CONFIG.routesPrefix + '/') ? APP_CONFIG.routesPrefix + '/' : '/';
         }
         function navigateTo(page) {
             const basePath = getBasePath();
-            if (page === 'home') {
-                window.location.href = basePath;
-            } else {
-                window.location.href = basePath + page;
-            }
+            window.location.href = page === 'home' ? basePath : basePath + page;
         }
     </script>
 </head>
 <body>
 
-    <nav>
-        <!-- Controles principais -->
-        <div id="nav-controls">
-            <button id="botaoDashboard" onclick="window.location.href='https://automacao.tce.go.gov.br/zapdos/'">
-                Dashboard
-            </button>
-            <button id="botaoInicio" class="active" onclick="navigateTo('home')">
-                Início
-            </button>
-            <button id="botaoDispositivos" onclick="navigateTo('dispositivos')">
-                Dispositivos
-            </button>
-            <button id="botaoConfiguracoes" onclick="navigateTo('configuracoes')">
-                Configurações
-            </button>
-            
-            <select id="filtroVLAN" onchange="searchByVlan()">
-                <!-- VLANs Principais do Sistema -->
-                <option value="80">VLAN 80 - Alarme</option>
-                <option value="85">VLAN 85 - Automação Ethernet</option>
-                <option value="86">VLAN 86 - Automação WiFi</option>
-                <!-- Outras VLANs -->
-                <option value="70">VLAN 70 - Câmeras</option>
-                <option value="200">VLAN 200 - Telefonia IP Fixa</option>
-                <option value="204">VLAN 204 - Telefonia IP Móvel</option>
-            </select>
-        </div>    <!-- Informações de Rede -->
-    <div id="network-info">
-        <span class="network-info-item" title="Máscara de sub-rede padrão para todas as VLANs">
-            <strong>Máscara:</strong> 255.255.255.0
-        </span>
-        <span class="network-info-item gateway-info" title="Gateway calculado automaticamente baseado na VLAN selecionada (172.17.[VLAN].254)">
-            <strong>Gateway:</strong> <span id="gateway-value">172.17.85.254</span>
-        </span>
-    </div>
-
-    </nav>
-
-    <!-- Informações sobre VLANs -->
-    <div id="vlan-info-section">
-        <div class="vlan-info-card" id="vlan-80-info" style="display: none;">
-            <h4>🚨 VLAN 80 - Sistema de Alarme</h4>
-            <p>Rede dedicada aos dispositivos do sistema de alarme e segurança do edifício.</p>
-            <div class="vlan-details">
-                <span class="vlan-detail">Máscara: 255.255.255.0</span>
-                <span class="vlan-detail">Gateway: 172.17.80.254</span>
-            </div>
-        </div>
-        <div class="vlan-info-card" id="vlan-85-info" style="display: block;">
-            <h4>🔌 VLAN 85 - Automação Ethernet</h4>
-            <p>Rede para dispositivos de automação predial conectados via cabo Ethernet.</p>
-            <div class="vlan-details">
-                <span class="vlan-detail">Máscara: 255.255.255.0</span>
-                <span class="vlan-detail">Gateway: 172.17.85.254</span>
-            </div>
-        </div>
-        <div class="vlan-info-card" id="vlan-86-info" style="display: none;">
-            <h4>📶 VLAN 86 - Automação WiFi</h4>
-            <p>Rede para dispositivos de automação e sensores conectados via WiFi.</p>
-            <div class="vlan-details">
-                <span class="vlan-detail">Máscara: 255.255.255.0</span>
-                <span class="vlan-detail">Gateway: 172.17.86.254</span>
-            </div>
-        </div>
-        <div class="vlan-info-card" id="vlan-70-info" style="display: none;">
-            <h4>📹 VLAN 70 - Sistema de Câmeras</h4>
-            <p>Rede dedicada ao sistema de monitoramento por câmeras de segurança.</p>
-            <div class="vlan-details">
-                <span class="vlan-detail">Máscara: 255.255.255.0</span>
-                <span class="vlan-detail">Gateway: 172.17.70.254</span>
-            </div>
-        </div>
-        <div class="vlan-info-card" id="vlan-200-info" style="display: none;">
-            <h4>☎️ VLAN 200 - Telefonia IP Fixa</h4>
-            <p>Rede para sistema de telefonia IP com aparelhos fixos.</p>
-            <div class="vlan-details">
-                <span class="vlan-detail">Máscara: 255.255.255.0</span>
-                <span class="vlan-detail">Gateway: 172.17.200.254</span>
-            </div>
-        </div>
-        <div class="vlan-info-card" id="vlan-204-info" style="display: none;">
-            <h4>📱 VLAN 204 - Telefonia IP Móvel</h4>
-            <p>Rede para sistema de telefonia IP com dispositivos móveis e softphones.</p>
-            <div class="vlan-details">
-                <span class="vlan-detail">Máscara: 255.255.255.0</span>
-                <span class="vlan-detail">Gateway: 172.17.204.254</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- Mensagem Preliminar -->
-    <div id="mensagem_preliminar">Aguardando obtenção de dados...</div>
-
-    <!-- Container de visualização em Grid/Cards -->
-    <div id="devices-container" class="devices-grid">
-        <!-- Cards serão inseridos aqui dinamicamente -->
-    </div>
-
-    <!-- Tabela antiga (mantida oculta como fallback) -->
-    <table id='main_table' style="display: none;">
-        <thead>
-            <tr>
-                <th class="descricao_A">Descrição</th>
-                <th class="tipo_A">Tipo</th>
-                <th class="IP_A">IP</th>
-                <th class="status_A">Status</th>
-                <th class="descricao_B">Descrição</th>
-                <th class="tipo_B">Tipo</th>
-                <th class="IP_B">IP</th>
-                <th class="status_B">Status</th>
-                <th class="descricao_C">Descrição</th>
-                <th class="tipo_C">Tipo</th>
-                <th class="IP_C">IP</th>
-                <th class="status_C">Status</th>
-                <th class="descricao_D">Descrição</th>
-                <th class="tipo_D">Tipo</th>
-                <th class="IP_D">IP</th>
-                <th class="status_D">Status</th>
-            </tr>
-        </thead>
-        <tbody id="ipTableBody">
-            <!-- Itens da tabela -->
-        </tbody>
-    </table>
-
-    <!-- Modal de Edição de Dispositivo -->
-    <div id="editModal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>✏️ Editar Dispositivo</h2>
-                <span class="close">&times;</span>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label for="edit-ip">🌐 IP:</label>
-                    <input type="text" id="edit-ip" readonly>
+<header class="header">
+    <div class="header-content">
+        <div class="header-left">
+            <h1><i class="fas fa-network-wired"></i> Rede</h1>
+            <nav class="header-nav">
+                <a href="javascript:navigateTo('home')" class="active">
+                    <i class="fas fa-home"></i><span>Início</span>
+                </a>
+                <div class="nav-item-dropdown">
+                    <a href="javascript:navigateTo('clps')" data-dropdown-toggle>
+                        <i class="fas fa-server"></i><span>CLPs</span>
+                        <i class="fas fa-chevron-down nav-chevron"></i>
+                    </a>
+                    <ul class="nav-submenu" id="clps-submenu" role="menu">
+                        <li class="nav-submenu-loading">Carregando…</li>
+                    </ul>
                 </div>
-                <div class="form-group">
-                    <label for="edit-descricao">📝 Descrição:</label>
-                    <input type="text" id="edit-descricao" placeholder="Digite a descrição do dispositivo">
+                <div class="nav-item-dropdown">
+                    <a href="javascript:navigateTo('configuracoes')" data-dropdown-toggle>
+                        <i class="fas fa-cog"></i><span>Configurações</span>
+                        <i class="fas fa-chevron-down nav-chevron"></i>
+                    </a>
+                    <ul class="nav-submenu" role="menu">
+                        <li><a href="javascript:navigateTo('configuracoes')">
+                            <i class="fas fa-sliders-h"></i> Geral</a></li>
+                        <li><a href="javascript:navigateTo('configuracoes/historico')">
+                            <i class="fas fa-history"></i> Histórico</a></li>
+                    </ul>
                 </div>
-                <div class="form-group">
-                    <label for="edit-tipo">🏷️ Tipo:</label>
-                    <input type="text" id="edit-tipo" list="device-types" placeholder="Digite ou selecione o tipo">
-                    <datalist id="device-types">
-                        <!-- Será preenchido dinamicamente -->
-                    </datalist>
+            </nav>
+        </div>
+        <a href="https://automacao.tce.go.gov.br/" class="header-badge" title="Voltar ao Dashboard Principal">
+            <i class="fas fa-shield-alt"></i> TCE-GO
+        </a>
+    </div>
+</header>
+
+<main>
+    <div id="mensagem_preliminar" style="display:none;">Aguardando obtenção de dados...</div>
+
+    <div class="container">
+        <!-- Stats cards -->
+        <div class="stats-grid" id="stats-grid">
+            <div class="stat-card stat-on">
+                <div class="stat-icon"><i class="fas fa-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-online">0</span>
+                    <span class="stat-label">Online</span>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeEditModal()">❌ Cancelar</button>
-                <button class="btn-save" onclick="saveDevice()">💾 Salvar</button>
+            <div class="stat-card stat-off">
+                <div class="stat-icon"><i class="far fa-circle"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-offline">0</span>
+                    <span class="stat-label">Offline</span>
+                </div>
+            </div>
+            <div class="stat-card stat-vis">
+                <div class="stat-icon"><i class="fas fa-eye"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-visible">0</span>
+                    <span class="stat-label">Exibidos</span>
+                </div>
+            </div>
+            <div class="stat-card stat-tot">
+                <div class="stat-icon"><i class="fas fa-database"></i></div>
+                <div class="stat-info">
+                    <span class="stat-value" id="total-devices">0</span>
+                    <span class="stat-label">Total na VLAN</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section: dispositivos -->
+        <div class="section">
+            <div class="section-header">
+                <h2 class="section-title">
+                    <i class="fas fa-list"></i> Dispositivos da VLAN
+                    <span class="badge badge-info" id="vlanBadge" style="margin-left:0.5rem;">VLAN 85</span>
+                    <span class="mono" style="font-size:0.78rem; color:var(--text-light); font-weight:400;">
+                        ·
+                        <span class="ipm-tip" data-tip="cidr" tabindex="0" aria-label="O que significa /24?">/24</span>
+                        ·
+                        <span class="ipm-tip" data-tip="gw" tabindex="0" aria-label="O que é Gateway?">GW</span>
+                        <span id="gateway-value">172.17.85.254</span>
+                    </span>
+
+                    <!-- Tooltips técnicos (popup em hover/focus) -->
+                    <template id="ipm-tooltips">
+                        <div data-key="cidr">
+                            <strong>Notação CIDR: /24</strong><br>
+                            <em>Em uma frase:</em> "/24" diz que os primeiros 24 bits do IP identificam a <em>rede</em>; os 8 bits restantes identificam o <em>host</em> dentro dela.
+                            <hr>
+                            <strong>Tecnicamente:</strong> CIDR (Classless Inter-Domain Routing, RFC 4632) substituiu o esquema antigo de classes A/B/C. O prefixo /24 equivale à máscara de sub-rede <code>255.255.255.0</code> (8 + 8 + 8 zeros = 24 bits ligados). Sobram 32&nbsp;−&nbsp;24 = <strong>8 bits para hosts</strong>, ou seja 2<sup>8</sup> = 256 endereços; descontando o de rede (.0) e o de broadcast (.255), restam <strong>254 hosts utilizáveis</strong>. O cálculo do endereço de rede é feito por AND bit-a-bit entre o IP e a máscara.
+                        </div>
+                        <div data-key="gw">
+                            <strong>Gateway (GW)</strong><br>
+                            <em>Em uma frase:</em> é o "portão de saída" que o seu dispositivo usa para falar com computadores que estão fora da sua rede local.
+                            <hr>
+                            <strong>Tecnicamente:</strong> o gateway padrão (default gateway) é o roteador da próxima camada (layer 3) ao qual a interface envia pacotes cujo destino não pertence à sub-rede local. Quando um host quer transmitir para um IP fora do prefixo, consulta sua <em>routing table</em>: a entrada <code>default (0.0.0.0/0)</code> aponta para o IP do gateway. O host resolve então o MAC do gateway por <em>ARP</em>, encapsula o pacote IP em um quadro Ethernet com esse MAC de destino e o envia. O roteador, por sua vez, decide pelo próximo salto consultando suas próprias tabelas (estáticas, OSPF, BGP, etc.) até alcançar o destino. Por convenção, em redes /24 do TCE-GO usa-se o último IP utilizável (<code>x.x.x.254</code>) como gateway; o primeiro (<code>x.x.x.1</code>) também é convenção comum. Sem gateway configurado, o tráfego fica confinado ao broadcast domain (host só consegue falar com IPs do mesmo /24).
+                        </div>
+                    </template>
+                </h2>
+                <div class="filters">
+                    <select id="filtroVLAN" onchange="searchByVlan()">
+                        <option value="80">VLAN 80 — Alarme</option>
+                        <option value="85">VLAN 85 — Automação Eth</option>
+                        <option value="86" selected>VLAN 86 — Automação WiFi</option>
+                        <option value="70">VLAN 70 — Câmeras</option>
+                        <option value="200">VLAN 200 — Telef. Fixa</option>
+                        <option value="204">VLAN 204 — Telef. Móvel</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filters" style="margin-bottom: 1rem;">
+                <input type="text" id="search-devices" placeholder="🔎 Buscar (IP, descrição, tipo, sensor, tabela...)" oninput="filtrarDispositivos()">
+                <select id="filter-status" onchange="filtrarDispositivos()">
+                    <option value="">Todos os status</option>
+                    <option value="online">Online</option>
+                    <option value="offline">Offline</option>
+                </select>
+                <select id="filter-tipo" onchange="filtrarDispositivos()">
+                    <option value="">Todos os tipos</option>
+                </select>
+                <select id="filter-sensor" onchange="filtrarDispositivos()">
+                    <option value="">Todos os sensores</option>
+                </select>
+                <select id="filter-tabela" onchange="filtrarDispositivos()">
+                    <option value="">Todas as tabelas</option>
+                </select>
+                <label class="toggle-hide-empty" title="Ocultar IPs que não estão cadastrados como dispositivo">
+                    <input type="checkbox" id="hide-empty" checked onchange="filtrarDispositivos()">
+                    Ocultar sem dados
+                </label>
+                <button class="btn-clear-filter" onclick="limparFiltros()" title="Limpar filtros">
+                    <i class="fas fa-undo"></i> Limpar
+                </button>
+                <span style="flex: 1;"></span>
+                <button class="btn-clear-filter" onclick="openAddDeviceModal()" title="Cadastrar novo dispositivo">
+                    <i class="fas fa-plus"></i> Adicionar
+                </button>
+                <button class="btn-clear-filter" onclick="openManageTypesModal()" title="Gerenciar tipos de dispositivos">
+                    <i class="fas fa-tags"></i> Tipos
+                </button>
+            </div>
+
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="col-status sortable" onclick="ordenar('status')" title="Ordenar por status">●</th>
+                            <th class="col-ip sortable" onclick="ordenar('ip')">IP <i class="fas fa-sort"></i></th>
+                            <th class="sortable" onclick="ordenar('descricao')">Descrição <i class="fas fa-sort"></i></th>
+                            <th class="col-tipo sortable" onclick="ordenar('tipo')">Tipo <i class="fas fa-sort"></i></th>
+                            <th class="col-sensores">Sensores</th>
+                            <th class="col-sql">Tabelas SQL</th>
+                            <th class="col-arduinos" title="Status no sistema Arduinos (uptime ≥ 24h = OK)">Arduinos</th>
+                            <th class="col-acoes">Ações</th>
+                        </tr>
+                    </thead>
+                    <tbody id="devicesTableBody"></tbody>
+                </table>
+                <div id="empty-state" class="empty-state" style="display:none;">
+                    <i class="fas fa-inbox"></i>
+                    <p>Nenhum dispositivo encontrado com os filtros aplicados.</p>
+                </div>
             </div>
         </div>
     </div>
+</main>
 
-    <!-- Script -->
-    <script>
-        // Carregar JavaScript dinamicamente
-        const scriptSrc = getStaticPath() + 'index.js';
-        const script = document.createElement('script');
-        script.src = scriptSrc;
-        document.head.appendChild(script);
-    </script>
-
-    <footer>
-        <div class="footer-content">
-          <p>@Sistema WEB desenvolvido por Wilson do Serv. Infraestrutura Predial.</p>
+<!-- Modal de Edição -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-edit"></i> Editar Dispositivo</h2>
+            <button class="close">&times;</button>
         </div>
-  
-      </footer> 
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="edit-ip">IP</label>
+                <input type="text" id="edit-ip" readonly>
+            </div>
+            <div class="form-group">
+                <label for="edit-descricao">Descrição</label>
+                <input type="text" id="edit-descricao" placeholder="Descrição do dispositivo">
+            </div>
+            <div class="form-group">
+                <label for="edit-tipo">Tipo</label>
+                <input type="text" id="edit-tipo" list="device-types" placeholder="Tipo">
+                <datalist id="device-types"></datalist>
+            </div>
+            <div class="form-group">
+                <label for="edit-sensores">Sensores <small style="font-weight:400; opacity:0.7;">(um por linha)</small></label>
+                <textarea id="edit-sensores" placeholder="DS18B20 | temperatura&#10;PIR | movimento_pir"></textarea>
+                <span class="form-help">Formato: <code>CÓDIGO | categoria</code> — categoria opcional. Ex.: <code>BME680 | temp_umid_pressao_gas</code></span>
+            </div>
+            <div class="form-group">
+                <label for="edit-tabelas-sql">Tabelas SQL <small style="font-weight:400; opacity:0.7;">(uma coluna por linha)</small></label>
+                <textarea id="edit-tabelas-sql" placeholder="ILUMINACAO.TEMT6000_3P_A&#10;ILUMINACAO.BH1750_3P_A&#10;REFRIGERACAO_ATRIO.DS18B20_3P_A"></textarea>
+                <span class="form-help">Formato: <code>TABELA.COLUNA</code> (uma por linha). Para tabela sem coluna específica, use só <code>TABELA</code>.</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button class="btn-clear-data" onclick="clearDeviceData()" title="Apaga descrição, tipo, sensores e tabelas — mantém o IP no cadastro">
+                <i class="fas fa-eraser"></i> Limpar dados
+            </button>
+            <span style="flex:1;"></span>
+            <button class="btn-cancel" onclick="closeEditModal()">Cancelar</button>
+            <button class="btn-save" onclick="saveDevice()">
+                <i class="fas fa-save"></i> Salvar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Adicionar Dispositivo -->
+<div id="addDeviceModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-plus"></i> Adicionar Dispositivo</h2>
+            <button class="close" onclick="closeAddDeviceModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="add-ip">IP <small style="opacity:0.7;">(VLAN atual)</small></label>
+                <input type="text" id="add-ip" placeholder="172.17.85.100" pattern="^(\d{1,3}\.){3}\d{1,3}$" required>
+                <span class="form-help">Formato: <code>172.17.X.Y</code></span>
+            </div>
+            <div class="form-group">
+                <label for="add-descricao">Descrição</label>
+                <input type="text" id="add-descricao" placeholder="Descrição do dispositivo" maxlength="200">
+            </div>
+            <div class="form-group">
+                <label for="add-tipo">Tipo</label>
+                <input type="text" id="add-tipo" list="device-types" placeholder="Tipo (digite novo ou escolha existente)" maxlength="50">
+                <span class="form-help">A lista <code>device-types</code> é compartilhada com a edição.</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span style="flex: 1;"></span>
+            <button class="btn-cancel" onclick="closeAddDeviceModal()">Cancelar</button>
+            <button class="btn-save" onclick="addDevice()">
+                <i class="fas fa-save"></i> Adicionar
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal: Gerenciar Tipos -->
+<div id="typesModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2><i class="fas fa-tags"></i> Gerenciar Tipos <small style="opacity:0.7; font-weight:400;" id="types-vlan-label">(VLAN --)</small></h2>
+            <button class="close" onclick="closeTypesModal()">&times;</button>
+        </div>
+        <div class="modal-body">
+            <div class="form-group">
+                <label for="new-type-input">Novo tipo</label>
+                <div style="display:flex; gap:0.5rem;">
+                    <input type="text" id="new-type-input" placeholder="Ex: Câmera, Sensor, CLP..." maxlength="50">
+                    <button class="btn-save" onclick="addNewType()">
+                        <i class="fas fa-plus"></i> Adicionar
+                    </button>
+                </div>
+                <span class="form-help">Tipos são por VLAN. Verde = em uso.</span>
+            </div>
+            <h3 style="font-size:0.95rem; font-weight:600; margin:0.6rem 0 0.4rem; color:var(--text);">Tipos existentes</h3>
+            <div id="types-list" class="chip-row">
+                <span style="color:var(--text-light); font-size:0.85rem;">Carregando…</span>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <span style="flex: 1;"></span>
+            <button class="btn-cancel" onclick="closeTypesModal()">Fechar</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de Detalhes -->
+<div id="detailsModal" class="modal">
+    <div class="modal-content modal-wide">
+        <div class="modal-header">
+            <h2 id="details-title"><i class="fas fa-info-circle"></i> Detalhes</h2>
+            <button class="close" onclick="closeDetailsModal()">&times;</button>
+        </div>
+        <div class="modal-body" id="details-body"></div>
+    </div>
+</div>
+
+<script>
+    const CLP_IPS = {{ clp_ips | tojson }};
+</script>
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+
+<!-- Tooltips técnicos (CIDR /24, Gateway) — popup rico em hover/focus -->
+<style>
+.ipm-tip {
+    position: relative;
+    cursor: help;
+    border-bottom: 1px dashed currentColor;
+    padding-bottom: 1px;
+    font-weight: 600;
+    color: var(--primary, #0e6dba);
+}
+.ipm-tip:focus { outline: 2px solid rgba(14,109,186,0.4); outline-offset: 2px; border-radius: 2px; }
+.ipm-tooltip-box {
+    position: fixed;
+    z-index: 9999;
+    max-width: 420px;
+    background: #1e293b;
+    color: #f1f5f9;
+    border-radius: 8px;
+    padding: 12px 14px;
+    font-size: 0.78rem;
+    line-height: 1.45;
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.12s ease;
+    font-weight: 400;
+}
+.ipm-tooltip-box.show { opacity: 1; }
+.ipm-tooltip-box strong { color: #fff; }
+.ipm-tooltip-box em { color: #cbd5e1; font-style: italic; }
+.ipm-tooltip-box code {
+    background: rgba(255,255,255,0.10);
+    color: #fbbf24;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.92em;
+}
+.ipm-tooltip-box hr {
+    border: 0;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    margin: 8px 0;
+}
+</style>
+<script>
+(function () {
+    const tmpl = document.getElementById('ipm-tooltips');
+    if (!tmpl) return;
+    const contents = {};
+    tmpl.content.querySelectorAll('[data-key]').forEach(el => {
+        contents[el.dataset.key] = el.innerHTML;
+    });
+
+    const box = document.createElement('div');
+    box.className = 'ipm-tooltip-box';
+    box.setAttribute('role', 'tooltip');
+    document.body.appendChild(box);
+
+    let hideTimer = null;
+
+    function position(target) {
+        const r = target.getBoundingClientRect();
+        const margin = 8;
+        // Renderiza primeiro pra medir
+        box.style.left = '0px';
+        box.style.top = '0px';
+        const bw = box.offsetWidth;
+        const bh = box.offsetHeight;
+        const vw = window.innerWidth;
+
+        let left = r.left + r.width / 2 - bw / 2;
+        if (left < margin) left = margin;
+        if (left + bw + margin > vw) left = vw - bw - margin;
+
+        let top = r.bottom + margin;
+        if (top + bh > window.innerHeight - margin) {
+            // mostra acima se não couber abaixo
+            top = r.top - bh - margin;
+        }
+        box.style.left = `${left}px`;
+        box.style.top  = `${top}px`;
+    }
+
+    function show(e) {
+        const t = e.currentTarget;
+        const key = t.dataset.tip;
+        if (!contents[key]) return;
+        clearTimeout(hideTimer);
+        box.innerHTML = contents[key];
+        box.classList.add('show');
+        // Defer pra DOM atualizar antes de medir
+        requestAnimationFrame(() => position(t));
+    }
+
+    function hide() {
+        hideTimer = setTimeout(() => box.classList.remove('show'), 80);
+    }
+
+    document.querySelectorAll('.ipm-tip').forEach(el => {
+        el.addEventListener('mouseenter', show);
+        el.addEventListener('mouseleave', hide);
+        el.addEventListener('focus', show);
+        el.addEventListener('blur', hide);
+    });
+})();
+</script>
+
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            <i class="fas fa-network-wired"></i>
+            <span>IP Monitor - Monitoramento de Dispositivos de Rede</span>
+            <span class="footer-separator">|</span>
+            <span class="footer-year">2026</span>
+        </div>
+        <div class="footer-credits">
+            <i class="fas fa-code"></i>
+            <span>Desenvolvido por <strong>Eng. Pedro Henrique</strong></span>
+        </div>
+    </div>
+</footer>
+
+<script src="{{ url_for('static', filename='nav-clps.js') }}"></script>
 </body>
 </html>

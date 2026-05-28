@@ -1,1001 +1,800 @@
-/* Estilo da tabela */
-table {
-    width: 85%; /* Aumentar largura para acomodar coluna tipo */
-    margin: 20px auto; /* Centraliza a tabela e aplica uma margem de 20px */
-    border-collapse: collapse; /* Remove os espaços entre as bordas das células */
-    font-family: Arial, sans-serif; /* Define a fonte da tabela */
+/* =========================================================
+   IP Monitor — alinhado com JardimGIS / InfraWiki
+   ========================================================= */
+
+:root {
+    --primary: #0e6dba;
+    --primary-dark: #0a558f;
+    --secondary: #2196f3;
+    --warning: #ff9800;
+    --danger: #f44336;
+    --success: #4caf50;
+    --info: #2196f3;
+    --bg: #f5f5f5;
+    --card-bg: #ffffff;
+    --text: #333;
+    --text-light: #666;
+    --border: #ddd;
 }
 
-/* Estilo para as células (td) */
-td {
-    border: 1px solid #ddd; /* Borda cinza ao redor das células */
-    padding: 10px; /* Espaçamento interno das células */
-    text-align: center; /* Alinhamento centralizado do texto */
-    font-size: 14px; /* Tamanho da fonte */
-}
-
-/* Estilo específico para as colunas "Status" */
-td.status_A, td.status_B, td.status_C, td.status_D {
-    border-right: 2.5px solid #ccc; /* Borda mais grossa à direita */
-}
-
-/* Estilo específico para as colunas "Tipo" */
-td.tipo_A, td.tipo_B, td.tipo_C, td.tipo_D {
-    font-weight: 500;
-    color: #28a745;
-    font-size: 12px;
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-}
-
-/* Estilo para os cabeçalhos (th) */
-th {
-    background-color: #f2f2f2; /* Fundo cinza claro para os cabeçalhos */
-    color: #333; /* Cor do texto */
-    padding: 12px; /* Espaçamento interno dos cabeçalhos */
-    text-align: center; /* Texto centralizado */
-    font-weight: bold; /* Texto em negrito */
-    font-size: 16px; /* Tamanho da fonte */
-    border-bottom: 2px solid #ddd; /* Linha na parte inferior dos cabeçalhos */
-    white-space: nowrap; /* Impede a quebra de linha nos cabeçalhos */
-}
-
-/* Estilo específico para os cabeçalhos das colunas "Status" */
-th.status_A, th.status_B, th.status_C, th.status_D {
-    border-right: 2.5px solid #ccc; /* Borda mais grossa à direita */
-}
-
-/* Estilo específico para os cabeçalhos das colunas "Tipo" */
-th.tipo_A, th.tipo_B, th.tipo_C, th.tipo_D {
-    font-weight: bold;
-    color: #28a745;
-    font-size: 14px;
-    max-width: 120px;
-}
-
-/* Alterna a cor de fundo entre linhas pares e ímpares */
-tr:nth-child(even) {
-    background-color: #f9f9f9; /* Fundo para linhas pares */
-}
-
-tr:nth-child(odd) {
-    background-color: #fff; /* Fundo para linhas ímpares */
-}
-
-/* Estilo base para o círculo */
-.circle {
-    height: 20px;
-    width: 20px;
-    border-radius: 50%;
-    display: inline-block;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Sombra suave ao redor */
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-/* Cor e gradiente para o dispositivo online (verde) */
-.green {
-    background: linear-gradient(145deg, #4CAF50, #81C784); /* Gradiente suave entre tons de verde */
-    box-shadow: 0 0 15px rgba(76, 175, 80, 0.6); /* Brilho verde ao redor */
-}
-
-/* Cor e gradiente para o dispositivo offline (vermelho) */
-.red {
-    background: linear-gradient(145deg, #FF5252, #FF8A80); /* Gradiente suave entre tons de vermelho */
-    box-shadow: 0 0 15px rgba(255, 82, 82, 0.6); /* Brilho vermelho ao redor */
-}
-
-/* Animação ao passar o mouse, destacando o círculo */
-.circle:hover {
-    transform: scale(1.2); /* Aumenta ligeiramente o tamanho ao passar o mouse */
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3); /* Aumenta a sombra ao passar o mouse */
-}
-
-/* Centraliza um elemento no meio da tela */
-.center {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    text-align: center; /* Texto centralizado */
-}
-
-/* Estilo para botões */
-.button {
-    padding: 10px 20px; /* Espaçamento interno do botão */
-    background-color: #4CAF50; /* Verde como cor de fundo */
-    color: white; /* Texto branco */
-    border: none; /* Remove a borda */
-    border-radius: 8px; /* Bordas arredondadas */
-    cursor: pointer; /* Cursor de mão ao passar o mouse */
-    font-size: 16px; /* Tamanho da fonte */
-    transition: background-color 0.3s ease, transform 0.2s ease; /* Efeito suave ao passar o mouse */
-}
-
-/* Estilo para o botão de retorno */
-#returnButton {
-    margin-left: auto; /* Empurra o botão para a direita */
-}
-
-/* ============================================
-   MENU SUPERIOR ELEGANTE - GLASSMORPHISM AZUL
-   ============================================ */
-
-/* Barra de navegação com gradiente azul elegante */
-nav {
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body { height: 100%; }
+body {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.6;
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 24px;
-    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
-    box-shadow: 0 2px 10px rgba(0, 123, 255, 0.3);
-    border-bottom: none;
-    flex-wrap: wrap;
-    gap: 12px;
+    flex-direction: column;
+}
+main { flex: 1; }
+
+/* ========================================
+   HEADER (padrão JardimGIS)
+   ======================================== */
+.header {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    padding: 0.5rem 0;
     position: sticky;
     top: 0;
-    z-index: 1000;
-}
-
-/* Container dos controles de navegação */
-#nav-controls {
-    display: flex;
-    gap: 12px;
-    align-items: center;
-    flex-wrap: wrap;
-}
-
-/* Estilo glassmorphism para botões de navegação */
-nav button {
-    padding: 10px 20px;
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 0.3px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
+    z-index: 100;
+    border-bottom: 3px solid var(--primary);
     backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
+}
+.header-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.header-left { display: flex; align-items: center; gap: 1.25rem; }
+.header h1 {
+    color: var(--primary);
+    font-size: 1.25rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-weight: 700;
+    letter-spacing: -0.3px;
+}
+.header h1 .h1-sub { font-weight: 500; color: var(--text); }
+
+.header-nav { display: flex; gap: 0.25rem; align-items: center; }
+.header-nav a {
+    background: var(--primary);
+    border: none;
+    color: white;
+    padding: 8px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.3s ease;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    height: 40px;
-}
-
-/* Hover nos botões com micro-animação */
-nav button:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-}
-
-/* Botão ativo */
-nav button.active {
-    background: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 4px 15px rgba(0, 123, 255, 0.5);
-}
-
-/* Container do filtro VLAN com glassmorphism */
-#filtroVLAN-container {
-    display: none;
-}
-
-/* Select VLAN direto - mesmo estilo dos botões */
-#filtroVLAN {
-    padding: 10px 20px;
-    padding-right: 36px;
-    cursor: pointer;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: bold;
-    letter-spacing: 0.3px;
-    transition: all 0.3s ease;
-    background: rgba(255, 255, 255, 0.1);
-    color: white;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    gap: 5px;
+    font-size: 0.8rem;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(14, 109, 186, 0.25);
+    text-decoration: none;
+    min-width: 90px;
     white-space: nowrap;
-    height: 40px;
-    min-width: 240px;
-    outline: none;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
 }
-
-/* Hover no select */
-#filtroVLAN:hover {
-    background-color: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-}
-
-/* Focus no select */
-#filtroVLAN:focus {
-    background-color: rgba(255, 255, 255, 0.25);
-    border-color: rgba(255, 255, 255, 0.5);
-    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='white' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 12px center;
-}
-
-/* Opções do select */
-#filtroVLAN option {
-    padding: 12px;
-    font-weight: bold;
-    color: #333;
-    background: white;
-}
-
-/* Estilo para o botão home */
-.btn-home {
-    background-color: #007bff; /* Azul */
-    color: white; /* Cor do texto */
-}
-
-/* Efeito hover no botão home */
-.btn-home:hover {
-    background-color: #0056b3; /* Azul escuro ao passar o mouse */
-}
-
-/* Estilo para o botão toggle */
-.btn-toggle {
-    background-color: #28a745; /* Verde */
-    color: white; /* Cor do texto */
-}
-
-/* Efeito hover no botão toggle */
-.btn-toggle:hover {
-    background-color: #218838; /* Verde escuro ao passar o mouse */
-}
-
-/* Estilo para o rodapé */
-footer {
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0; /* Cor de fundo do rodapé */
-    padding: 20px 0; /* Espaçamento superior e inferior */
-    text-align: center; /* Centraliza o texto */
-    position: relative; /* Para posicionamento absoluto, se necessário */
-}
-
-/* Estilo do conteúdo do rodapé */
-.footer-content p {
-    color: #999; /* Cor cinza do texto */
-    font-size: 14px; /* Tamanho da fonte */
-    margin: 0; /* Remove margens padrão */
-    opacity: 0.7; /* Texto com transparência leve */
-}
-
-/* Estilo da mensagem preliminar para advertência */
-#mensagem_preliminar {
-    font-family: Arial, sans-serif; /* Define a fonte */
-    font-size: 16px; /* Tamanho da fonte */
-    color: #333; /* Cor do texto */
-    background-color: #f8d7da; /* Fundo vermelho claro para advertência */
-    padding: 15px 20px; /* Espaçamento interno */
-    border-radius: 8px; /* Bordas arredondadas */
-    text-align: center; /* Centraliza o texto */
-    width: 50%; /* Define a largura da mensagem */
-    margin: 20px auto; /* Centraliza o div na página */
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Adiciona uma leve sombra */
-    border: 2px solid #f5c2c7; /* Borda vermelha suave */
-    animation: fadeIn 0.5s ease-in-out; /* Animação de entrada suave */
-}
-
-/* Animação para a mensagem surgir suavemente */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Estilo para as informações de rede */
-/* ============================================
-   INFORMAÇÕES DE REDE - GLASSMORPHISM ELEGANTE
-   ============================================ */
-
-#network-info {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-left: auto;
-}
-
-.network-info-item {
-    padding: 0 18px;
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 13px;
-    font-weight: bold;
+.header-nav a:hover {
+    background: var(--primary-dark);
     color: white;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    cursor: help;
-    transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    white-space: nowrap;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(14, 109, 186, 0.4);
+}
+.header-nav a.active {
+    background: linear-gradient(135deg, var(--primary-dark) 0%, #073f6c 100%);
+    box-shadow: 0 4px 12px rgba(14, 109, 186, 0.4);
+}
+.header-nav a i { font-size: 0.85rem; }
+.header-nav a.btn-dashboard {
+    background: linear-gradient(135deg, #ff9800 0%, #f57c00 100%);
+    box-shadow: 0 2px 6px rgba(255, 152, 0, 0.3);
+}
+.header-nav a.btn-dashboard:hover {
+    background: linear-gradient(135deg, #f57c00 0%, #e65100 100%);
+    box-shadow: 0 4px 12px rgba(255, 152, 0, 0.4);
+}
+
+.header-badge {
     display: inline-flex;
     align-items: center;
-    height: 40px;
-}
-
-.network-info-item:hover {
-    background: rgba(255, 255, 255, 0.15);
-    border-color: rgba(255, 255, 255, 0.3);
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
-}
-
-.gateway-info:hover {
-    background: rgba(255, 255, 255, 0.2);
-    border-color: rgba(255, 255, 255, 0.4);
-}
-
-.network-info-item strong {
+    gap: 0.5rem;
+    padding: 0.4rem 1rem;
+    border-radius: 25px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
     color: white;
-    font-weight: bold;
-    margin-right: 4px;
+    box-shadow: 0 2px 8px rgba(14, 109, 186, 0.3);
+    text-decoration: none;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+a.header-badge:hover {
+    color: white;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(14, 109, 186, 0.45);
+    filter: brightness(1.05);
 }
 
-#nav-controls {
+/* === Dropdown CLPs (submenu) === */
+.nav-item-dropdown {
+    position: relative;
+    display: inline-flex;
+}
+.nav-item-dropdown > a .nav-chevron {
+    font-size: 0.65rem;
+    margin-left: 4px;
+    opacity: 0.85;
+    transition: transform 0.2s;
+}
+.nav-item-dropdown:hover > a .nav-chevron,
+.nav-item-dropdown.is-open > a .nav-chevron {
+    transform: rotate(180deg);
+}
+.nav-submenu {
+    list-style: none;
+    margin: 0;
+    padding: 4px;
+    visibility: hidden;
+    opacity: 0;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    /* min-width baseado no item — usa width: max-content pra encolher
+       ao texto. Cap de 320px só pra submenus longos (CLPs). */
+    min-width: 0;
+    width: max-content;
+    max-width: 320px;
+    max-height: 70vh;
+    overflow-y: auto;
+    background: white;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+    z-index: 1000;
+    margin-top: 4px;
+    /* Delay de 250ms ao FECHAR — mouse pode atravessar o gap até o submenu
+       sem ele desaparecer. Ao abrir não tem delay (transition padrão 0s). */
+    transition: visibility 0s linear 0.25s, opacity 0.15s ease 0.25s;
+}
+/* Ponte invisível entre o item principal e o submenu (cobre o gap de 4px
+   do margin-top). Sem isso o hover quebra ao cruzar essa faixa. */
+.nav-item-dropdown::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: 12px;
+    z-index: 1001;
+}
+.nav-item-dropdown:hover > .nav-submenu,
+.nav-item-dropdown:focus-within > .nav-submenu,
+.nav-item-dropdown.is-open > .nav-submenu {
+    visibility: visible;
+    opacity: 1;
+    transition-delay: 0s;          /* abre instantâneo, fecha com delay */
+}
+.nav-item-dropdown { position: relative; }
+.nav-submenu li {
+    list-style: none;
+}
+.nav-submenu li a {
+    display: flex !important;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 6px 10px !important;
+    font-size: 0.82rem !important;
+    font-weight: 500 !important;
+    color: var(--text) !important;
+    background: transparent !important;
+    border-radius: 4px !important;
+    text-decoration: none;
+    min-width: 0 !important;
+    box-shadow: none !important;
+    transform: none !important;
+}
+.nav-submenu li a:hover {
+    background: #f3f4f6 !important;
+    color: var(--primary) !important;
+    transform: none !important;
+    box-shadow: none !important;
+}
+.nav-submenu-ip {
+    display: inline-block;
+    min-width: 38px;
+    text-align: right;
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 0.75rem;
+    color: var(--text-light);
+}
+.nav-submenu-name {
+    flex: 1;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.nav-submenu-section a { font-weight: 600 !important; color: var(--primary) !important; }
+.nav-submenu-divider {
+    height: 1px;
+    background: #e5e7eb;
+    margin: 4px 0;
+}
+.nav-submenu-loading,
+.nav-submenu-empty {
+    padding: 10px 14px;
+    color: var(--text-light);
+    font-size: 0.82rem;
+    font-style: italic;
+}
+
+/* ========================================
+   FOOTER (padrão JardimGIS)
+   ======================================== */
+.footer {
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    padding: 0.45rem 2rem;
+    text-align: center;
+    border-top: 2px solid var(--primary);
+    box-shadow: 0 -1px 6px rgba(0, 0, 0, 0.04);
+}
+.footer-content {
+    max-width: 1600px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+}
+.footer-info, .footer-credits {
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 0.4rem;
+    color: #5f6368;
+    font-size: 0.78rem;
 }
-
-/* Seção de informações das VLANs */
-#vlan-info-section {
-    max-width: 800px;
-    margin: 15px auto;
-    padding: 0 20px;
+.footer-info i, .footer-credits i {
+    color: var(--primary);
+    font-size: 0.85rem;
 }
+.footer-separator { color: #d1d5db; font-weight: 300; margin: 0 0.25rem; }
+.footer-year { color: #9ca3af; font-weight: 500; }
+.footer-content strong { color: var(--primary); font-weight: 600; }
 
-.vlan-info-card {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-    border: 1px solid #dee2e6;
-    border-radius: 8px;
-    padding: 12px 16px;
-    margin-bottom: 10px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-    transition: all 0.3s ease;
+/* ========================================
+   CONTAINER / SECTION (padrão JardimGIS)
+   ======================================== */
+.container {
+    max-width: 1600px;
+    margin: 0 auto;
+    padding: 1.5rem 2rem;
 }
-
-.vlan-info-card:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+.section {
+    background: white;
+    border-radius: 10px;
+    padding: 1.5rem;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
 }
-
-.vlan-info-card h4 {
-    margin: 0 0 8px 0;
-    font-family: Arial, sans-serif;
-    font-size: 16px;
-    color: #495057;
-    font-weight: bold;
-}
-
-.vlan-info-card p {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    color: #6c757d;
-    line-height: 1.4;
-}
-
-/* Cores específicas para cada VLAN */
-#vlan-80-info {
-    border-left: 4px solid #dc3545;
-}
-
-#vlan-80-info h4 {
-    color: #dc3545;
-}
-
-#vlan-85-info {
-    border-left: 4px solid #28a745;
-}
-
-#vlan-85-info h4 {
-    color: #28a745;
-}
-
-#vlan-86-info {
-    border-left: 4px solid #007bff;
-}
-
-#vlan-86-info h4 {
-    color: #007bff;
-}
-
-#vlan-70-info {
-    border-left: 4px solid #6f42c1;
-}
-
-#vlan-70-info h4 {
-    color: #6f42c1;
-}
-
-#vlan-200-info {
-    border-left: 4px solid #fd7e14;
-}
-
-#vlan-200-info h4 {
-    color: #fd7e14;
-}
-
-#vlan-204-info {
-    border-left: 4px solid #e83e8c;
-}
-
-#vlan-204-info h4 {
-    color: #e83e8c;
-}
-
-.vlan-details {
+.section-header {
     display: flex;
-    gap: 15px;
-    margin-top: 8px;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
     flex-wrap: wrap;
+    gap: 1rem;
 }
-
-.vlan-detail {
-    font-family: 'Courier New', monospace;
-    font-size: 12px;
-    background-color: rgba(0, 0, 0, 0.05);
-    padding: 3px 8px;
-    border-radius: 3px;
-    color: #495057;
+.section-title {
+    font-size: 1.1rem;
     font-weight: 600;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+.section-title i { color: var(--primary); }
+
+/* ========================================
+   STATS CARDS (sumário online/offline)
+   ======================================== */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+}
+.stat-card {
+    background: white;
+    border-radius: 8px;
+    padding: 0.9rem 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    border-left: 4px solid var(--border);
+}
+.stat-card.stat-on  { border-left-color: var(--success); }
+.stat-card.stat-off { border-left-color: #cbd5e1; }
+.stat-card.stat-vis { border-left-color: var(--primary); }
+.stat-card.stat-tot { border-left-color: var(--warning); }
+
+.stat-card .stat-icon {
+    width: 36px; height: 36px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    background: #f1f5f9;
+    color: var(--text-light);
+    font-size: 1rem;
+}
+.stat-card.stat-on .stat-icon  { background: #dcfce7; color: var(--success); }
+.stat-card.stat-off .stat-icon { background: #f1f5f9; color: var(--text-light); }
+.stat-card.stat-vis .stat-icon { background: #dbeafe; color: var(--primary); }
+.stat-card.stat-tot .stat-icon { background: #fff3cd; color: var(--warning); }
+
+.stat-card .stat-info { display: flex; flex-direction: column; }
+.stat-card .stat-value { font-size: 1.4rem; font-weight: 700; line-height: 1; color: var(--text); }
+.stat-card .stat-label { font-size: 0.72rem; color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+/* ========================================
+   FILTROS (padrão JardimGIS)
+   ======================================== */
+.filters {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    align-items: center;
+}
+.filters input[type="text"] {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-family: inherit;
+    min-width: 240px;
+    flex: 1;
+}
+.filters select {
+    padding: 0.5rem 0.75rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    background: white;
+    cursor: pointer;
+    font-family: inherit;
 }
 
-/* Responsividade para telas menores */
-@media (max-width: 768px) {
-    nav {
-        flex-direction: column;
-        align-items: stretch;
-    }
-    
-    #nav-controls {
-        justify-content: center;
-        margin-bottom: 8px;
-        flex-wrap: wrap;
-    }
-    
-    #network-info {
-        margin-left: 0;
-        justify-content: center;
-        margin-top: 8px;
-        flex-wrap: wrap;
-    }
-    
-    .network-info-item {
-        font-size: 12px;
-        padding: 4px 8px;
-    }
-    
-    #vlan-info-section {
-        padding: 0 10px;
-    }
-    
-    .vlan-info-card {
-        padding: 10px 12px;
-    }
-    
-    .vlan-info-card h4 {
-        font-size: 14px;
-    }
-    
-    .vlan-info-card p {
-        font-size: 13px;
-    }
-    
-    .vlan-details {
-        gap: 10px;
-    }
-    
-    .vlan-detail {
-        font-size: 11px;
-        padding: 2px 6px;
-    }
+/* VLAN selector — cor por VLAN selecionada */
+#filtroVLAN {
+    font-weight: 600;
+    border-width: 2px;
+    transition: all 0.2s;
+    min-width: 290px;
+    padding: 0.55rem 0.95rem;
+    font-size: 0.92rem;
+}
+#filtroVLAN.vlan-80  { background: #fff5f5; color: #842029; border-color: #f1aeb5; }   /* Alarme — vermelho */
+#filtroVLAN.vlan-85  { background: #f0f7ff; color: #0a4b94; border-color: #9ec5fe; }   /* Automação Eth — azul */
+#filtroVLAN.vlan-86  { background: #f0fbf7; color: #0f5132; border-color: #a3cfbb; }   /* Automação WiFi — verde */
+#filtroVLAN.vlan-70  { background: #faf5ff; color: #4d2a8b; border-color: #c6a8f5; }   /* Câmeras — roxo */
+#filtroVLAN.vlan-200 { background: #f5fbff; color: #055160; border-color: #9eeaf9; }   /* Telef. fixa — ciano */
+#filtroVLAN.vlan-204 { background: #fff7e6; color: #7a4a00; border-color: #ffd591; }   /* Telef. móvel — laranja */
+.filters input:focus, .filters select:focus {
+    outline: none;
+    border-color: var(--primary);
 }
 
-/* ====================================
-   MODAL DE EDIÇÃO DE DISPOSITIVO
-   ==================================== */
+/* Toggle "exibir vazios" */
+.toggle-hide-empty {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.7rem;
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    color: var(--text);
+    cursor: pointer;
+    user-select: none;
+}
+.toggle-hide-empty input { cursor: pointer; }
+.toggle-hide-empty:hover { background: #e9ecef; }
 
-/* Fundo do modal */
+.btn-clear-filter {
+    padding: 0.5rem 0.75rem;
+    background: #f8f9fa;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.85rem;
+    cursor: pointer;
+    color: var(--text);
+}
+.btn-clear-filter:hover { background: #e9ecef; }
+
+/* ========================================
+   TABELA (padrão JardimGIS — limpa e profissional)
+   ======================================== */
+.table-container {
+    overflow-x: auto;
+    border-radius: 8px;
+    border: 1px solid #f0f0f0;
+}
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.9rem;
+}
+th, td {
+    padding: 0.7rem 0.75rem;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+    vertical-align: middle;
+}
+th {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: var(--text);
+    white-space: nowrap;
+    font-size: 0.82rem;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+th.sortable {
+    cursor: pointer;
+    user-select: none;
+}
+th.sortable:hover { background: #e9ecef; }
+th.sortable i {
+    margin-left: 0.3rem;
+    opacity: 0.5;
+    font-size: 0.75rem;
+}
+th.sortable.asc i, th.sortable.desc i { opacity: 1; color: var(--primary); }
+
+tbody tr { transition: background 0.1s; }
+tbody tr:hover { background: #f8f9fa; }
+tbody tr.row-off td { color: var(--text-light); }
+tbody tr.row-off td:first-child { color: inherit; }
+
+td.col-status { width: 28px; text-align: center; }
+td.col-ip     { width: 110px; }
+td.col-tipo   { width: 180px; white-space: nowrap; }
+td.col-sensores { width: 200px; }
+td.col-sql    { min-width: 280px; max-width: 360px; }
+td.col-sql .badge { margin-bottom: 2px; }
+td.col-arduinos { width: 100px; white-space: nowrap; text-align: center; }
+td.col-acoes  { width: 80px; text-align: right; white-space: nowrap; }
+
+/* Badge de status do arduinos (uptime ≥ 24h) */
+.badge-arduinos {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    padding: 0.25rem 0.55rem;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid;
+    font-family: 'SF Mono', Consolas, monospace;
+}
+.badge-arduinos.ok  { background: #d4edda; color: #155724; border-color: #b3e0bd; }
+.badge-arduinos.bad { background: #f8d7da; color: #721c24; border-color: #f1aeb5; }
+.badge-arduinos i   { font-size: 0.7rem; }
+
+/* Link plain — mantém fonte/cor da célula, só sublinha no hover */
+.link-plain { color: inherit; text-decoration: none; cursor: pointer; }
+.link-plain:hover { text-decoration: underline; }
+
+.mono { font-family: 'SF Mono', Consolas, 'Courier New', monospace; font-size: 0.85rem; }
+.muted { color: #cbd5e1; font-style: italic; }
+
+/* ========================================
+   BADGES (semântico, padrão JardimGIS)
+   ======================================== */
+.badge {
+    display: inline-block;
+    padding: 0.22rem 0.55rem;
+    border-radius: 12px;
+    font-size: 0.72rem;
+    font-weight: 600;
+    margin: 1px 2px 1px 0;
+    white-space: nowrap;
+}
+.badge-online   { background: #d4edda; color: #155724; }
+.badge-offline  { background: #f8d7da; color: #721c24; }
+.badge-info     { background: #d1ecf1; color: #0c5460; }
+.badge-warn     { background: #fff3cd; color: #856404; }
+.badge-purple   { background: #e8daef; color: #6c3483; }
+.badge-secondary{ background: #e2e3e5; color: #383d41; }
+
+/* Tipo (categorias de equipamento) */
+.tipo-sensor    { background: #cfe2ff; color: #084298; border: 1px solid #9ec5fe; }   /* Sensor IoT/ESP32 */
+.tipo-clp       { background: #d1e7dd; color: #0f5132; border: 1px solid #a3cfbb; }   /* CLP/PLC */
+.tipo-alarme    { background: #f8d7da; color: #842029; border: 1px solid #f1aeb5; }   /* Alarme/Incêndio */
+.tipo-gerador   { background: #fff3cd; color: #664d03; border: 1px solid #ffe69c; }   /* Gerador/UPS */
+.tipo-inversor  { background: #e0cffc; color: #4d2a8b; border: 1px solid #c6a8f5; }   /* Inversor/Servo */
+.tipo-ihm       { background: #cff4fc; color: #055160; border: 1px solid #9eeaf9; }   /* IHM/Display */
+.tipo-acesso    { background: #d4f4dd; color: #0a6e25; border: 1px solid #a6e1b4; }   /* Cancela/Portão/RFID */
+.tipo-solar     { background: #fde2bd; color: #7a4a00; border: 1px solid #facc8a; }   /* Solar/Microinversor */
+.tipo-conversor { background: #e2e3e5; color: #41464b; border: 1px solid #c4c7ca; }   /* Conversor Serial */
+.tipo-iluminacao{ background: #fef3c7; color: #713f12; border: 1px solid #fcd34d; }   /* Iluminação */
+.tipo-cubiculo  { background: #fbd5d5; color: #7a1d1d; border: 1px solid #f7a2a2; }   /* Energia/Cubículo */
+.tipo-meteo     { background: #ccfbf1; color: #115e59; border: 1px solid #5eead4; }   /* Meteorologia */
+.tipo-default   { background: #e9ecef; color: #495057; border: 1px solid #ced4da; }
+
+.badge-sensor { background: #d1ecf1; color: #0c5460; border: 1px solid #abdde5; cursor: default; }
+.badge-sql {
+    background: #fff7e6;
+    color: #7a4a00;
+    border: 1px solid #ffd591;
+    cursor: pointer;
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 0.68rem;
+    letter-spacing: 0.2px;
+}
+.badge-sql:hover { background: #ffe7ba; border-color: #faad14; }
+.badge-sql .sql-tab { font-weight: 700; opacity: 0.7; margin-right: 2px; }
+.badge-sql .sql-col { font-weight: 600; }
+.badge-more   { background: #e2e3e5; color: #383d41; border: 1px solid #c4c7ca; cursor: pointer; }
+.badge-more:hover { background: #d3d6d8; }
+
+.dot { display: inline-block; width: 9px; height: 9px; border-radius: 50%; }
+.dot-on  { background: var(--success); box-shadow: 0 0 5px rgba(76,175,80,0.5); }
+.dot-off { background: #cbd5e1; }
+
+/* ========================================
+   BOTÕES de ação
+   ======================================== */
+.btn {
+    padding: 0.4rem 0.7rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    background: white;
+    color: var(--text);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3rem;
+    text-decoration: none;
+    transition: all 0.15s;
+    font-family: inherit;
+}
+.btn:hover { background: var(--primary); color: white; border-color: var(--primary); }
+.btn-icon { padding: 0.35rem 0.55rem; font-size: 0.85rem; }
+
+/* Botões pequenos de ações em tabela (Editar/Excluir) */
+.btn-cmd {
+    padding: 0.3rem 0.55rem;
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    background: white;
+    cursor: pointer;
+    font-size: 0.8rem;
+    color: var(--text);
+    transition: all 0.15s;
+}
+.btn-cmd:hover { background: var(--primary); color: white; border-color: var(--primary); }
+.btn-cmd.btn-danger-cmd:hover { background: var(--danger); border-color: var(--danger); }
+
+/* ========================================
+   MODAL
+   ======================================== */
 .modal {
     display: none;
     position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.5);
     z-index: 1000;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
     overflow: auto;
-    background-color: rgba(0, 0, 0, 0.6);
-    backdrop-filter: blur(4px);
-    animation: fadeIn 0.3s ease;
 }
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-/* Conteúdo do modal */
 .modal-content {
-    background-color: #ffffff;
-    margin: 8% auto;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 500px;
-    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
-    animation: slideDown 0.4s ease;
-    overflow: hidden;
-    font-family: Arial, sans-serif; /* Mesma fonte do sistema */
+    background: white;
+    margin: 40px auto;
+    width: 92%;
+    max-width: 580px;
+    border-radius: 10px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+    animation: modalIn 0.2s ease;
 }
+.modal-content.modal-wide { max-width: 780px; }
+@keyframes modalIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
-@keyframes slideDown {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-/* Cabeçalho do modal */
 .modal-header {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 20px 25px;
+    padding: 1rem 1.25rem;
+    border-bottom: 1px solid var(--border);
     display: flex;
     justify-content: space-between;
     align-items: center;
+    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+    border-radius: 10px 10px 0 0;
 }
-
 .modal-header h2 {
-    margin: 0;
-    font-size: 22px;
+    font-size: 1.05rem;
     font-weight: 600;
+    color: var(--primary);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
 }
+.close { font-size: 1.5rem; cursor: pointer; color: var(--text-light); border: none; background: transparent; }
+.close:hover { color: var(--danger); }
 
-/* Botão fechar */
-.close {
-    color: white;
-    font-size: 32px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    line-height: 1;
-}
-
-.close:hover {
-    transform: scale(1.2) rotate(90deg);
-}
-
-/* Corpo do modal */
-.modal-body {
-    padding: 30px 25px;
-}
-
-/* Grupo de formulário */
-.form-group {
-    margin-bottom: 20px;
-}
-
+.modal-body { padding: 1.25rem; }
+.form-group { margin-bottom: 0.85rem; }
 .form-group label {
     display: block;
+    font-size: 0.78rem;
     font-weight: 600;
-    color: #333;
-    margin-bottom: 8px;
-    font-size: 14px;
-}
-
-.form-group input {
-    width: 100%;
-    padding: 12px 15px;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 15px;
-    font-family: Arial, sans-serif; /* Mesma fonte do sistema */
-    transition: all 0.3s ease;
-    box-sizing: border-box;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #667eea;
-    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-}
-
-.form-group input[readonly] {
-    background-color: #f5f5f5;
-    cursor: not-allowed;
-    color: #666;
-}
-
-/* Rodapé do modal */
-.modal-footer {
-    padding: 20px 25px;
-    background-color: #f8f9fa;
-    display: flex;
-    justify-content: flex-end;
-    gap: 12px;
-    border-top: 1px solid #e0e0e0;
-}
-
-/* Botões do modal - Estilo Azul Moderno */
-.modal-footer button {
-    padding: 12px 28px;
-    border: 2px solid transparent;
-    border-radius: 8px;
-    font-family: Arial, sans-serif;
-    font-size: 15px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    letter-spacing: 0.5px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-}
-
-.btn-cancel {
-    background: linear-gradient(135deg, #6c8ca8 0%, #5a7d99 100%);
-    color: white;
-}
-
-.btn-cancel:hover {
-    background: linear-gradient(135deg, #7d9db8 0%, #6c8ca8 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(108, 140, 168, 0.4);
-}
-
-.btn-save {
-    background: linear-gradient(135deg, #4a90e2 0%, #357abd 100%);
-    color: white;
-}
-
-.btn-save:hover {
-    background: linear-gradient(135deg, #5fa3f5 0%, #4a90e2 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(74, 144, 226, 0.4);
-}
-
-/* Ícone de edição nas células */
-.edit-icon {
-    cursor: pointer;
-    color: #667eea;
-    font-size: 16px;
-    margin-left: 8px;
-    opacity: 0.7;
-    transition: all 0.2s ease;
-    display: inline-block;
-}
-
-.edit-icon:hover {
-    opacity: 1;
-    transform: scale(1.2);
-    color: #764ba2;
-}
-
-/* Célula de IP clicável */
-.ip-cell {
-    cursor: pointer;
-    transition: all 0.2s ease;
-    user-select: none;
-    position: relative;
-    font-family: Arial, sans-serif;
-}
-
-.ip-cell:hover {
-    background-color: rgba(102, 126, 234, 0.1);
-    color: #667eea;
-    font-weight: 600;
-}
-
-.ip-cell:active {
-    background-color: rgba(102, 126, 234, 0.2);
-    transform: scale(0.98);
-}
-
-.ip-cell .ip-text {
-    display: inline-block;
-}
-
-/* Responsividade para o modal */
-@media (max-width: 600px) {
-    .modal-content {
-        width: 95%;
-        margin: 5% auto;
-    }
-    
-    .modal-header h2 {
-        font-size: 18px;
-    }
-    
-    .modal-body {
-        padding: 20px 15px;
-    }
-    
-    .modal-footer {
-        flex-direction: column;
-        gap: 10px;
-    }
-    
-    .modal-footer button {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
-/* ====================================
-   GRID DE CARDS MODERNOS
-   ==================================== */
-
-/* Container principal do grid */
-.devices-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-    gap: 20px;
-    padding: 30px;
-    max-width: 1600px;
-    margin: 0 auto;
-}
-
-/* Card individual de dispositivo */
-.device-card {
-    background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
-    border-radius: 16px;
-    padding: 20px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
-    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: 2px solid transparent;
-    position: relative;
-    overflow: hidden;
-    cursor: pointer;
-    font-family: Arial, sans-serif;
-}
-
-/* Barra colorida no topo do card baseada no status */
-.device-card::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    height: 4px;
-    background: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
-    opacity: 0;
-    transition: opacity 0.3s ease;
-}
-
-.device-card:hover::before {
-    opacity: 1;
-}
-
-/* Card online */
-.device-card.online {
-    border-color: rgba(76, 175, 80, 0.2);
-}
-
-.device-card.online::before {
-    background: linear-gradient(90deg, #4CAF50 0%, #81C784 100%);
-}
-
-/* Card offline */
-.device-card.offline {
-    border-color: rgba(255, 82, 82, 0.2);
-}
-
-.device-card.offline::before {
-    background: linear-gradient(90deg, #FF5252 0%, #FF8A80 100%);
-}
-
-/* Efeito hover no card */
-.device-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.15);
-    border-color: rgba(102, 126, 234, 0.3);
-}
-
-/* Header do card com status e IP */
-.device-card-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 15px;
-}
-
-/* Badge de status */
-.status-badge {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 6px 12px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 600;
+    color: var(--text-light);
+    margin-bottom: 0.3rem;
     text-transform: uppercase;
     letter-spacing: 0.5px;
 }
-
-.status-badge.online {
-    background: linear-gradient(135deg, #4CAF50 0%, #81C784 100%);
-    color: white;
-    box-shadow: 0 2px 8px rgba(76, 175, 80, 0.3);
-}
-
-.status-badge.offline {
-    background: linear-gradient(135deg, #FF5252 0%, #FF8A80 100%);
-    color: white;
-    box-shadow: 0 2px 8px rgba(255, 82, 82, 0.3);
-}
-
-/* Indicador circular de status */
-.status-indicator {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: white;
-    animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% { opacity: 1; }
-    50% { opacity: 0.5; }
-}
-
-/* Endereço IP */
-.device-ip {
-    font-family: 'Courier New', monospace;
-    font-size: 14px;
-    font-weight: 600;
-    color: #667eea;
-    padding: 4px 10px;
-    background: rgba(102, 126, 234, 0.1);
-    border-radius: 8px;
-}
-
-/* Corpo do card */
-.device-card-body {
-    margin-bottom: 15px;
-}
-
-/* Descrição do dispositivo */
-.device-description {
-    font-size: 16px;
-    font-weight: 600;
-    color: #2c3e50;
-    margin-bottom: 10px;
-    line-height: 1.4;
-    min-height: 44px;
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    -webkit-box-orient: vertical;
-    overflow: hidden;
-}
-
-/* Tipo do dispositivo */
-.device-type {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 13px;
-    color: #28a745;
-    font-weight: 500;
-    padding: 4px 10px;
-    background: rgba(40, 167, 69, 0.1);
+.form-group input,
+.form-group textarea {
+    width: 100%;
+    padding: 0.55rem 0.75rem;
+    border: 1px solid var(--border);
     border-radius: 6px;
-    border: 1px solid rgba(40, 167, 69, 0.2);
+    font-size: 0.9rem;
+    font-family: inherit;
+}
+.form-group textarea {
+    resize: vertical;
+    min-height: 70px;
+    font-family: 'SF Mono', Consolas, monospace;
+    font-size: 0.82rem;
+    line-height: 1.5;
+}
+.form-group input:focus,
+.form-group textarea:focus { outline: none; border-color: var(--primary); box-shadow: 0 0 0 2px rgba(14,109,186,0.12); }
+.form-help {
+    display: block;
+    font-size: 0.72rem;
+    color: var(--text-light);
+    margin-top: 0.25rem;
+    line-height: 1.4;
+}
+.form-help code {
+    background: #f1f5f9;
+    padding: 1px 4px;
+    border-radius: 3px;
+    font-size: 0.7rem;
+    color: var(--primary-dark);
 }
 
-.device-type-icon {
-    font-size: 14px;
-}
-
-/* Footer do card com ações */
-.device-card-footer {
+.modal-footer {
+    padding: 0.85rem 1.25rem;
+    border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
-    padding-top: 12px;
-    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    gap: 0.5rem;
 }
-
-/* Botão de edição no card */
-.card-edit-btn {
+.btn-cancel, .btn-save, .btn-clear-data {
+    padding: 0.5rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    background: white;
+    font-family: inherit;
     display: inline-flex;
     align-items: center;
-    gap: 6px;
-    padding: 8px 16px;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
+    gap: 0.35rem;
+}
+.btn-save { background: var(--primary); color: white; border-color: var(--primary); }
+.btn-save:hover { background: var(--primary-dark); }
+.btn-cancel:hover { background: var(--bg); }
+.btn-clear-data {
+    background: #fff5f5;
+    color: #842029;
+    border-color: #f1aeb5;
+}
+.btn-clear-data:hover { background: #f1aeb5; color: white; border-color: #842029; }
+
+/* Botões genéricos (compartilhados com /dispositivos e modais) */
+.btn-primary, .btn-secondary, .btn-info, .btn-danger {
+    padding: 0.55rem 1.1rem;
     border: none;
-    border-radius: 8px;
-    font-size: 13px;
+    border-radius: 6px;
+    font-size: 0.88rem;
     font-weight: 600;
+    font-family: inherit;
     cursor: pointer;
-    transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    transition: all 0.25s ease;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+    color: white;
+    white-space: nowrap;
 }
+.btn-primary { background: var(--primary); }
+.btn-primary:hover { background: var(--primary-dark); transform: translateY(-1px); box-shadow: 0 4px 10px rgba(14, 109, 186, 0.3); }
+.btn-secondary { background: #6c757d; }
+.btn-secondary:hover { background: #5a6268; transform: translateY(-1px); }
+.btn-info { background: var(--info); }
+.btn-info:hover { background: #1976d2; transform: translateY(-1px); }
+.btn-danger { background: var(--danger); }
+.btn-danger:hover { background: #c62828; transform: translateY(-1px); }
 
-.card-edit-btn:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+.details-sql-table { width: 100%; border-collapse: collapse; font-size: 0.88rem; margin-top: 0.4rem; }
+.details-sql-table th { background: #f8f9fa; padding: 0.5rem 0.75rem; text-align: left; border-bottom: 1px solid var(--border); }
+.details-sql-table td { padding: 0.4rem 0.75rem; border-bottom: 1px solid #eee; }
+.modal-body h3 { font-size: 0.95rem; font-weight: 600; margin: 0.6rem 0 0.4rem; color: var(--text); }
+.chip-row { display: flex; flex-wrap: wrap; gap: 0.3rem; }
+.chip-row .badge small { display: block; font-weight: 400; opacity: 0.7; font-size: 0.65rem; margin-top: 1px; }
+
+/* ========================================
+   TOAST
+   ======================================== */
+.toast-notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: var(--success);
+    color: white;
+    padding: 0.7rem 1.2rem;
+    border-radius: 8px;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+    z-index: 2000;
+    font-size: 0.9rem;
+    animation: toastIn 0.25s ease;
 }
+@keyframes toastIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 
-.card-edit-btn:active {
-    transform: translateY(0);
-}
-
-/* Mensagem quando não há dispositivos */
-.no-devices {
-    grid-column: 1 / -1;
+/* ========================================
+   MENSAGEM PRELIMINAR
+   ======================================== */
+#mensagem_preliminar {
     text-align: center;
-    padding: 60px 20px;
-    color: #6c757d;
-    font-size: 18px;
+    padding: 0.6rem;
+    color: #856404;
+    font-size: 0.88rem;
+    background: #fff3cd;
+    border-bottom: 1px solid #ffeaa7;
 }
 
-/* Responsividade */
-@media (max-width: 1200px) {
-    .devices-grid {
-        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-        gap: 18px;
-        padding: 25px;
-    }
+.empty-state {
+    text-align: center;
+    padding: 2.5rem 1rem;
+    color: var(--text-light);
 }
+.empty-state i { font-size: 2.5rem; opacity: 0.25; display: block; margin-bottom: 0.5rem; }
 
+/* ========================================
+   RESPONSIVO
+   ======================================== */
+@media (max-width: 1100px) {
+    .col-tipo { display: none; }
+    th.col-tipo { display: none; }
+}
 @media (max-width: 768px) {
-    .devices-grid {
-        grid-template-columns: repeat(auto-fill, minmax(100%, 1fr));
-        gap: 15px;
-        padding: 15px;
-    }
-    
-    .device-card {
-        padding: 16px;
-    }
-    
-    .device-card-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .device-description {
-        font-size: 15px;
-        min-height: auto;
-    }
+    .header-content { flex-direction: column; align-items: center; gap: 0.75rem; padding: 0 1rem; }
+    .header-left    { flex-direction: column; align-items: center; gap: 0.75rem; width: 100%; }
+    .header-nav     { width: 100%; justify-content: center; flex-wrap: wrap; }
+    .header-badge   { display: none; }
+    .footer-content { flex-direction: column; gap: 0.5rem; }
+    .footer-separator { display: none; }
+    .container      { padding: 1rem; }
+    .filters input[type="text"] { min-width: 100%; }
 }
-
 @media (max-width: 480px) {
-    .devices-grid {
-        padding: 10px;
-        gap: 12px;
-    }
-    
-    .device-card {
-        padding: 14px;
-    }
+    .header-nav a { padding: 0.5rem 0.75rem; font-size: 0.78rem; min-width: auto; }
+    .header-nav a span { display: none; }
+    .header-nav a i { font-size: 1rem; }
+    .col-sensores, .col-sql { display: none; }
+    th.col-sensores, th.col-sql { display: none; }
 }

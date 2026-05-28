@@ -87,19 +87,25 @@ def verificar_ips(rede_base: str):
                 if item['ip'] == device['ip']:  # Se o IP do dispositivo corresponder ao IP verificado.
                     item['descricao'] = device['descricao']  # Adiciona a descrição associada ao IP.
                     item['tipo'] = device.get('tipo', '')  # Adiciona o tipo do dispositivo.
+                    item['sensores'] = device.get('sensores', [])
+                    item['tabelas_sql'] = device.get('tabelas_sql', [])
                     if item['tipo']:
                         dispositivos_com_tipo += 1
                     break
             else:
                 item['descricao'] = '-'  # Se não houver correspondência, adiciona "-" como descrição.
                 item['tipo'] = ''  # Se não houver correspondência, tipo vazio.
-        
+                item['sensores'] = []
+                item['tabelas_sql'] = []
+
         logging.info(f"[IP_OPERATIONS] Dispositivos com tipo definido: {dispositivos_com_tipo}")
     else:
         # Se não houver uma lista de dispositivos para a VLAN, adiciona "-" para todos os IPs.
         for item in ip_status_list:
             item['descricao'] = '-'
             item['tipo'] = ''
+            item['sensores'] = []
+            item['tabelas_sql'] = []
         logging.info(f"[IP_OPERATIONS] Nenhum dispositivo encontrado para VLAN {vlan}")
 
     # Log de algumas amostras do resultado final

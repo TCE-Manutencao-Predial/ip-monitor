@@ -5,6 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configurações - IP Monitor</title>
     <link rel="icon" href="data:,">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='config.css') }}">
     <script>
         // Configurações injetadas do settings.py
         const APP_CONFIG = {
@@ -12,24 +18,10 @@
             domainBase: '{{ DOMAIN_BASE }}',
             projectName: '{{ PROJECT_NAME }}'
         };
-        
-        // Função para detectar o caminho base dos estáticos
+
         function getStaticPath() {
-            const path = window.location.pathname;
-            return path.includes(APP_CONFIG.routesPrefix + '/') ? APP_CONFIG.routesPrefix + '/static/' : '/static/';
+            return '{{ url_for("static", filename="") }}';
         }
-        
-        // Carregar CSS dinamicamente
-        function loadCSS(filename) {
-            const link = document.createElement('link');
-            link.rel = 'stylesheet';
-            link.href = getStaticPath() + filename;
-            document.head.appendChild(link);
-        }
-        
-        // Carregar CSS
-        loadCSS('styles.css');
-        loadCSS('config.css');
     </script>
     <script>
         function getBasePath() {
@@ -48,34 +40,51 @@
 </head>
 <body>
 
-    <nav>
-        <!-- Controles principais -->
-        <div id="nav-controls">
-            <button id="botaoDashboard" onclick="window.location.href='https://automacao.tce.go.gov.br/zapdos/'">
-                Dashboard
-            </button>
-            <button id="botaoInicio" onclick="navigateTo('home')">
-                Início
-            </button>
-            <button id="botaoDispositivos" onclick="navigateTo('dispositivos')">
-                Dispositivos
-            </button>
-            <button id="botaoConfiguracoes" class="active" onclick="navigateTo('configuracoes')">
-                Configurações
-            </button>
+<header class="header">
+    <div class="header-content">
+        <div class="header-left">
+            <h1><i class="fas fa-network-wired"></i> Rede <span class="h1-sub">· Configurações</span></h1>
+            <nav class="header-nav">
+                <a href="javascript:navigateTo('home')">
+                    <i class="fas fa-home"></i><span>Início</span>
+                </a>
+                <div class="nav-item-dropdown">
+                    <a href="javascript:navigateTo('clps')" data-dropdown-toggle>
+                        <i class="fas fa-server"></i><span>CLPs</span>
+                        <i class="fas fa-chevron-down nav-chevron"></i>
+                    </a>
+                    <ul class="nav-submenu" id="clps-submenu" role="menu">
+                        <li class="nav-submenu-loading">Carregando…</li>
+                    </ul>
+                </div>
+                <div class="nav-item-dropdown">
+                    <a href="javascript:navigateTo('configuracoes')" data-dropdown-toggle class="active">
+                        <i class="fas fa-cog"></i><span>Configurações</span>
+                        <i class="fas fa-chevron-down nav-chevron"></i>
+                    </a>
+                    <ul class="nav-submenu" role="menu">
+                        <li><a href="javascript:navigateTo('configuracoes')" class="active">
+                            <i class="fas fa-sliders-h"></i> Geral</a></li>
+                        <li><a href="javascript:navigateTo('configuracoes/historico')">
+                            <i class="fas fa-history"></i> Histórico</a></li>
+                    </ul>
+                </div>
+            </nav>
         </div>
+        <a href="https://automacao.tce.go.gov.br/" class="header-badge" title="Voltar ao Dashboard Principal">
+            <i class="fas fa-shield-alt"></i> TCE-GO
+        </a>
+    </div>
+</header>
 
-        <!-- Informações de Rede -->
-        <div id="network-info">
-            <span class="network-info-item">
-                <strong>Versão:</strong> <span id="system-version">{{ config.system_info.version }}</span>
-            </span>
-        </div>
-    </nav>
-
+<main>
     <!-- Container Principal -->
     <div id="config-container">
-        <h1>⚙️ Configurações do Sistema</h1>
+        <div class="section-header" style="margin-bottom: 1.25rem;">
+            <h2 class="section-title">
+                <i class="fas fa-cog"></i> Configurações do Sistema
+            </h2>
+        </div>
         
         <!-- Mensagem de Status -->
         <div id="status-message" class="hidden"></div>
@@ -362,33 +371,24 @@
     </script>
 
     <!-- Script -->
-    <script>
-        // Carregar JavaScript dinamicamente com cache buster
-        const cacheBuster = '?v=' + Date.now();
-        const scriptSrc = getStaticPath() + 'config.js' + cacheBuster;
-        console.log('[MAIN] Carregando script de:', scriptSrc);
-        
-        const script = document.createElement('script');
-        script.src = scriptSrc;
-        
-        script.onload = () => {
-            console.log('[MAIN] ✅ Script config.js carregado com sucesso');
-        };
-        
-        script.onerror = (error) => {
-            console.error('[MAIN] ❌ ERRO ao carregar config.js:', error);
-            console.error('[MAIN] URL tentada:', scriptSrc);
-            alert('ERRO: Não foi possível carregar o script de configurações. Por favor, atualize a página.');
-        };
-        
-        document.head.appendChild(script);
-    </script>
+    <script src="{{ url_for('static', filename='config.js') }}"></script>
+</main>
 
-    <footer>
-        <div class="footer-content">
-            <p>@Sistema WEB desenvolvido por Wilson do Serv. Infraestrutura Predial.</p>
+<footer class="footer">
+    <div class="footer-content">
+        <div class="footer-info">
+            <i class="fas fa-network-wired"></i>
+            <span>IP Monitor - Monitoramento de Dispositivos de Rede</span>
+            <span class="footer-separator">|</span>
+            <span class="footer-year">2026</span>
         </div>
-    </footer>
+        <div class="footer-credits">
+            <i class="fas fa-code"></i>
+            <span>Desenvolvido por <strong>Eng. Pedro Henrique</strong></span>
+        </div>
+    </div>
+</footer>
 
+<script src="{{ url_for('static', filename='nav-clps.js') }}"></script>
 </body>
 </html>
