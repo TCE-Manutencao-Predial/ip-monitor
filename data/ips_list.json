@@ -1,972 +1,972 @@
 {
-    "vlans": {
-        "80": [
-            {
-                "ip": "172.17.80.100",
-                "descricao": "Alarme - Guarita Privativa"
-            },
-            {
-                "ip": "172.17.80.101",
-                "descricao": "Alarme - Guarita Servidores"
-            },
-            {
-                "ip": "172.17.80.102",
-                "descricao": "Alarme - Creche"
-            },
-            {
-                "ip": "172.17.80.103",
-                "descricao": "Alarme - Centro de Convivência"
-            },
-            {
-                "ip": "172.17.80.104",
-                "descricao": "Alarme - Auditório"
-            },
-            {
-                "ip": "172.17.80.105",
-                "descricao": "Alarme - Bloco A"
-            },
-            {
-                "ip": "172.17.80.106",
-                "descricao": "Alarme - Bloco B"
-            },
-            {
-                "ip": "172.17.80.107",
-                "descricao": "Alarme - Bloco C"
-            },
-            {
-                "ip": "172.17.80.110",
-                "descricao": "JFL SMART CLOUD 18 - Reservatório"
-            },
-            {
-                "ip": "172.17.80.111",
-                "descricao": "JFL SMART CLOUD 18 - CV"
-            },
-            {
-                "ip": "172.17.80.120",
-                "descricao": "Central Incêndio Skyfire"
-            }
-        ],
-        "85": [
-            {
-                "ip": "172.17.85.100",
-                "descricao": "Guarita Privativa - Poço Bombeamento"
-            },
-            {
-                "ip": "172.17.85.101",
-                "descricao": "Guarita Privativa"
-            },
-            {
-                "ip": "172.17.85.102",
-                "descricao": "Guarita Servidores"
-            },
-            {
-                "ip": "172.17.85.103",
-                "descricao": "Térreo - Bloco A"
-            },
-            {
-                "ip": "172.17.85.104",
-                "descricao": "Térreo - Bloco B1"
-            },
-            {
-                "ip": "172.17.85.105",
-                "descricao": "Térreo - Bloco B2"
-            },
-            {
-                "ip": "172.17.85.106",
-                "descricao": "Térreo - Bloco C"
-            },
-            {
-                "ip": "172.17.85.107",
-                "descricao": "Subsolo 01 - Bloco AC"
-            },
-            {
-                "ip": "172.17.85.108",
-                "descricao": "Subsolo 01 - Bloco B1"
-            },
-            {
-                "ip": "172.17.85.109",
-                "descricao": "Subsolo 01 - Bloco B2"
-            },
-            {
-                "ip": "172.17.85.110",
-                "descricao": "Refrigeração - Plenário"
-            },
-            {
-                "ip": "172.17.85.111",
-                "descricao": "Pátio de Serviços - Ilum. Externa"
-            },
-            {
-                "ip": "172.17.85.112",
-                "descricao": "Auditório - Passarela"
-            },
-            {
-                "ip": "172.17.85.113",
-                "descricao": "Adução"
-            },
-            {
-                "ip": "172.17.85.114",
-                "descricao": "Irrigação"
-            },
-            {
-                "ip": "172.17.85.115",
-                "descricao": "Centro de Convivência"
-            },
-            {
-                "ip": "172.17.85.116",
-                "descricao": "Creche"
-            },
-            {
-                "ip": "172.17.85.117",
-                "descricao": "Reservatório"
-            },
-            {
-                "ip": "172.17.85.118",
-                "descricao": "Espelhos D'Água"
-            },
-            {
-                "ip": "172.17.85.119",
-                "descricao": "C.A.G. - CompactLogix"
-            },
-            {
-                "ip": "172.17.85.120",
-                "descricao": "C.A.G."
-            },
-            {
-                "ip": "172.17.85.121",
-                "descricao": "Climatização átrio - Bloco A"
-            },
-            {
-                "ip": "172.17.85.122",
-                "descricao": "Climatização átrio - Bloco C"
-            },
-            {
-                "ip": "172.17.85.123",
-                "descricao": "Climatização Auditório"
-            },
-            {
-                "ip": "172.17.85.124",
-                "descricao": "Elevador Externo"
-            },
-            {
-                "ip": "172.17.85.125",
-                "descricao": "Cubículo Blindado"
-            },
-            {
-                "ip": "172.17.85.126",
-                "descricao": "Kinetix 300"
-            },
-            {
-                "ip": "172.17.85.127",
-                "descricao": "Point I/O - S2-B2"
-            },
-            {
-                "ip": "172.17.85.128",
-                "descricao": "Point I/O -"
-            },
-            {
-                "ip": "172.17.85.129",
-                "descricao": "Point I/O -"
-            },
-            {
-                "ip": "172.17.85.130",
-                "descricao": "Adução - Inversor 01"
-            },
-            {
-                "ip": "172.17.85.131",
-                "descricao": "Adução - Inversor 02"
-            },
-            {
-                "ip": "172.17.85.132",
-                "descricao": "Irrigação - Inversor 01"
-            },
-            {
-                "ip": "172.17.85.133",
-                "descricao": "Irrigação - Inversor 02"
-            },
-            {
-                "ip": "172.17.85.134",
-                "descricao": "Tanque Pressão - Inversor 01"
-            },
-            {
-                "ip": "172.17.85.135",
-                "descricao": "Tanque Pressão - Inversor 02"
-            },
-            {
-                "ip": "172.17.85.136",
-                "descricao": "Auditório - Inversor Fancoil 1"
-            },
-            {
-                "ip": "172.17.85.137",
-                "descricao": "Auditório - Inversor Fancoil 2"
-            },
-            {
-                "ip": "172.17.85.138",
-                "descricao": "Foyer - Inversor Fancoil 01"
-            },
-            {
-                "ip": "172.17.85.139",
-                "descricao": "Reservatório - Inversor 1"
-            },
-            {
-                "ip": "172.17.85.140",
-                "descricao": "Reservatório - Inversor 2"
-            },
-            {
-                "ip": "172.17.85.141",
-                "descricao": "Espelho - Inversor Filtro A"
-            },
-            {
-                "ip": "172.17.85.142",
-                "descricao": "Espelho - Inversor Filtro C"
-            },
-            {
-                "ip": "172.17.85.143",
-                "descricao": "Espelho - Inversor Geiser A"
-            },
-            {
-                "ip": "172.17.85.144",
-                "descricao": "Espelho - Inversor Geiser C"
-            },
-            {
-                "ip": "172.17.85.145",
-                "descricao": "IHM - CAG"
-            },
-            {
-                "ip": "172.17.85.146",
-                "descricao": "IHM - Térreo B1"
-            },
-            {
-                "ip": "172.17.85.147",
-                "descricao": "IHM - Espelhos d'água"
-            },
-            {
-                "ip": "172.17.85.148",
-                "descricao": "IHM - 2° subsolo"
-            },
-            {
-                "ip": "172.17.85.149",
-                "descricao": "IHM - Auditório"
-            },
-            {
-                "ip": "172.17.85.150",
-                "descricao": "CompactLogix - 2° subsolo"
-            },
-            {
-                "ip": "172.17.85.151",
-                "descricao": "Kinetix 1"
-            },
-            {
-                "ip": "172.17.85.152",
-                "descricao": "Kinetix 2"
-            },
-            {
-                "ip": "172.17.85.153",
-                "descricao": "Kinetix 3"
-            },
-            {
-                "ip": "172.17.85.154",
-                "descricao": "Kinetix 4"
-            },
-            {
-                "ip": "172.17.85.155",
-                "descricao": "Kinetix 5"
-            },
-            {
-                "ip": "172.17.85.156",
-                "descricao": "IHM - Reservatório"
-            },
-            {
-                "ip": "172.17.85.157",
-                "descricao": "CLP Micrologix S2-B2"
-            },
-            {
-                "ip": "172.17.85.158",
-                "descricao": "Controladora ViaOnda RFID M-ID40"
-            },
-            {
-                "ip": "172.17.85.159",
-                "descricao": "Controladora ViaOnda RFID M-ID40"
-            },
-            {
-                "ip": "172.17.85.160",
-                "descricao": "Controladora Portão Conselheiros - 2° subsolo"
-            },
-            {
-                "ip": "172.17.85.161",
-                "descricao": "Controladora Portão Guarita Privativa"
-            },
-            {
-                "ip": "172.17.85.162",
-                "descricao": "IHM - Mesa 2° subsolo PH"
-            },
-            {
-                "ip": "172.17.85.163",
-                "descricao": "Controladora Portão Auditores - 1° subsolo"
-            },
-            {
-                "ip": "172.17.85.164",
-                "descricao": "IHM - Mesa 1° subsolo Flex"
-            },
-            {
-                "ip": "172.17.85.200",
-                "descricao": "QTA GMGs"
-            },
-            {
-                "ip": "172.17.85.201",
-                "descricao": "GMG 1"
-            },
-            {
-                "ip": "172.17.85.202",
-                "descricao": "GMG 2"
-            },
-            {
-                "ip": "172.17.85.203",
-                "descricao": "UPS Bloco B"
-            },
-            {
-                "ip": "172.17.85.204",
-                "descricao": "UPS Bloco AC 1"
-            },
-            {
-                "ip": "172.17.85.205",
-                "descricao": "UPS Bloco AC 2"
-            },
-            {
-                "ip": "172.17.85.206",
-                "descricao": "Conversor LANTRONIX GMG"
-            },
-            {
-                "ip": "172.17.85.207",
-                "descricao": "Conversor IOT 1"
-            },
-            {
-                "ip": "172.17.85.208",
-                "descricao": "Conversor IOT 2"
-            },
-            {
-                "ip": "172.17.85.209",
-                "descricao": "Conversor IOT 3"
-            },
-            {
-                "ip": "172.17.85.210",
-                "descricao": "Conversor IOT 4"
-            },
-            {
-                "ip": "172.17.85.211",
-                "descricao": "Conversor IOT - Inversores estacionamento"
-            },
-            {
-                "ip": "172.17.85.212",
-                "descricao": "Conversor IOT - Medidor vazão CAG"
-            },
-            {
-                "ip": "172.17.85.213",
-                "descricao": "Conversor IOT - Medidor vazão 1° subsolo"
-            },
-            {
-                "ip": "172.17.85.215",
-                "descricao": "Meio Ambiente - Átrio A"
-            },
-            {
-                "ip": "172.17.85.216",
-                "descricao": "Meio Ambiente - Átrio B"
-            },
-            {
-                "ip": "172.17.85.217",
-                "descricao": "Meio Ambiente - Átrio C"
-            },
-            {
-                "ip": "172.17.85.218",
-                "descricao": "Guarita Privativa"
-            },
-            {
-                "ip": "172.17.85.219",
-                "descricao": "Meio Ambiente - Reservatório"
-            },
-            {
-                "ip": "172.17.85.220",
-                "descricao": "Estação Meteorológica"
-            },
-            {
-                "ip": "172.17.85.225",
-                "descricao": "RGB e UV - C.V."
-            },
-            {
-                "ip": "172.17.85.226",
-                "descricao": "Qualidade Ar - Térreo A"
-            },
-            {
-                "ip": "172.17.85.228",
-                "descricao": "Qualidade Ar - C.V"
-            }
-        ],
-        "90": [
-            {
-                "ip": "172.17.90.162",
-                "descricao": "Controladora Cancelas - 1° subsolo"
-            },
-            {
-                "ip": "172.17.90.164",
-                "descricao": "Controladora Cancelas - Guarita Servidores - Saída"
-            },
-            {
-                "ip": "172.17.90.165",
-                "descricao": "Controladora Cancelas - Guarita Servidores - Entrada"
-            }
-        ],
-        "86": [
-            {
-                "ip": "172.17.86.3",
-                "descricao": "Módulo DTU-W100 Hoymiles  - Estacionamento inferior"
-            },
-            {
-                "ip": "172.17.86.4",
-                "descricao": "Módulo DTU-W100 Hoymiles  - Estacionamento superior"
-            },
-            {
-                "ip": "172.17.86.5",
-                "descricao": "Via Onda MID10W 1"
-            },
-            {
-                "ip": "172.17.86.6",
-                "descricao": "Via Onda MID10W 2"
-            },
-            {
-                "ip": "172.17.86.8",
-                "descricao": "Sensor Plenário - Duto Saída"
-            },
-            {
-                "ip": "172.17.86.9",
-                "descricao": "Sensor Plenário - Duto Split"
-            },
-            {
-                "ip": "172.17.86.10",
-                "descricao": "Sensor Plenário - Qualidade Ar"
-            },
-            {
-                "ip": "172.17.86.11",
-                "descricao": "Sensor MPL3115A2 - Elevador Social B1"
-            },
-            {
-                "ip": "172.17.86.12",
-                "descricao": "Sala técnica S1-B1 - Umidade"
-            },
-            {
-                "ip": "172.17.86.13",
-                "descricao": "Sala técnica DG Telefonia - Umidade"
-            },
-            {
-                "ip": "172.17.86.14",
-                "descricao": "Sensor 2P-C - Luminosidade"
-            },
-            {
-                "ip": "172.17.86.15",
-                "descricao": "Sensor movimento microondas"
-            },
-            {
-                "ip": "172.17.86.16",
-                "descricao": "Sensor cor"
-            },
-            {
-                "ip": "172.17.86.17",
-                "descricao": "Sensor temperatura IR"
-            },
-            {
-                "ip": "172.17.86.18",
-                "descricao": "Sensor Auditório - Qualidade Ar"
-            },
-            {
-                "ip": "172.17.86.19",
-                "descricao": "Sensor 2P-C - Qualidade ar"
-            },
-            {
-                "ip": "172.17.86.20",
-                "descricao": "Sala técnica S01-AC - Qualidade Ar"
-            },
-            {
-                "ip": "172.17.86.21",
-                "descricao": "Sala técnica S01-B1 - Qualidade Ar"
-            },
-            {
-                "ip": "172.17.86.22",
-                "descricao": "Sala técnica DG Telefonia - Qualidade Ar"
-            },
-            {
-                "ip": "172.17.86.23",
-                "descricao": "Sensor gás MQ-2 - Galeria Técnica"
-            },
-            {
-                "ip": "172.17.86.24",
-                "descricao": "Sensor gás MQ-3 - Depósito Materiais"
-            },
-            {
-                "ip": "172.17.86.25",
-                "descricao": "Sensor gás MQ-4 - S01-B1 (acima forro)"
-            },
-            {
-                "ip": "172.17.86.26",
-                "descricao": "Sensor gás MQ-5 - Copa Térreo"
-            },
-            {
-                "ip": "172.17.86.27",
-                "descricao": "Sensor gás MQ-5 - Copa 2° pav."
-            },
-            {
-                "ip": "172.17.86.28",
-                "descricao": "Sensor gás MQ-6 - Copa 1° pav."
-            },
-            {
-                "ip": "172.17.86.29",
-                "descricao": "Sensor gás MQ-6 - Refeitório"
-            },
-            {
-                "ip": "172.17.86.30",
-                "descricao": "Sensor gás MQ-7 - Reservatório GMG"
-            },
-            {
-                "ip": "172.17.86.31",
-                "descricao": "Sensor gás MQ-8 - CAG"
-            },
-            {
-                "ip": "172.17.86.32",
-                "descricao": "Sensor gás MQ-9 - GMGs Edifício-sede"
-            },
-            {
-                "ip": "172.17.86.33",
-                "descricao": "Sensor gás MQ-135 - Laboratório Solos"
-            },
-            {
-                "ip": "172.17.86.34",
-                "descricao": "Sensor umidade e temperatura - Sala técnica S1-AC"
-            },
-            {
-                "ip": "172.17.86.35",
-                "descricao": "Sensor gás MQ-6 - Lanchonete"
-            },
-            {
-                "ip": "172.17.86.36",
-                "descricao": "Sensor gás MQ-6 - Garagem Conselheiros"
-            },
-            {
-                "ip": "172.17.86.37",
-                "descricao": "Sensor gás MQ-6 - Galeria Técnica"
-            },
-            {
-                "ip": "172.17.86.38",
-                "descricao": "Sensor cor - Frontal A"
-            },
-            {
-                "ip": "172.17.86.39",
-                "descricao": "Sensor de temperatura MLX"
-            },
-            {
-                "ip": "172.17.86.40",
-                "descricao": "Sensores temperatura - Chiller 1"
-            },
-            {
-                "ip": "172.17.86.41",
-                "descricao": "Sensores temperatura - Chiller 2"
-            },
-            {
-                "ip": "172.17.86.42",
-                "descricao": "Sensores temperatura - Chiller 3"
-            },
-            {
-                "ip": "172.17.86.43",
-                "descricao": "Sensor Temp. Pressão - Sala de Conferências"
-            },
-            {
-                "ip": "172.17.86.44",
-                "descricao": "Sensor luminosidade - C.V."
-            },
-            {
-                "ip": "172.17.86.45",
-                "descricao": "Sensor umidade temperatura - C.V."
-            },
-            {
-                "ip": "172.17.86.46",
-                "descricao": "Sensor cor - Creche"
-            },
-            {
-                "ip": "172.17.86.47",
-                "descricao": "Sensor temperatura - Fundos Plenário"
-            },
-            {
-                "ip": "172.17.86.49",
-                "descricao": "Sensor cor - Reservatório"
-            },
-            {
-                "ip": "172.17.86.50",
-                "descricao": "Sensor Temperatura e PIR - Laboratório"
-            },
-            {
-                "ip": "172.17.86.51",
-                "descricao": "Sensor umidade e temperatura - Laboratório"
-            },
-            {
-                "ip": "172.17.86.52",
-                "descricao": "Subestação - Qualidade Ar"
-            },
-            {
-                "ip": "172.17.86.53",
-                "descricao": "Sensor Geiser Counter"
-            },
-            {
-                "ip": "172.17.86.54",
-                "descricao": "Sensor Raios"
-            },
-            {
-                "ip": "172.17.86.55",
-                "descricao": "Tubulação refrigeração - 1° subsolo Retorno"
-            },
-            {
-                "ip": "172.17.86.56",
-                "descricao": "Sensor temperatura - Auditório Palco"
-            },
-            {
-                "ip": "172.17.86.57",
-                "descricao": "Sensor temperatura - Plenário"
-            },
-            {
-                "ip": "172.17.86.58",
-                "descricao": "Sensor Plenário - Duto Fancoil"
-            },
-            {
-                "ip": "172.17.86.59",
-                "descricao": "Sensores Elevador Social A"
-            },
-            {
-                "ip": "172.17.86.60",
-                "descricao": "Sensores Elevador Social B1"
-            },
-            {
-                "ip": "172.17.86.61",
-                "descricao": "Sensores Elevador Social B2"
-            },
-            {
-                "ip": "172.17.86.62",
-                "descricao": "Sensores Elevador Social C"
-            },
-            {
-                "ip": "172.17.86.63",
-                "descricao": "Sensores Elevador Social Privativo"
-            },
-            {
-                "ip": "172.17.86.64",
-                "descricao": "Sensores Elevador Externo"
-            },
-            {
-                "ip": "172.17.86.65",
-                "descricao": "Sensor umidade solo (resistivo inox)"
-            },
-            {
-                "ip": "172.17.86.66",
-                "descricao": "Decodificador Sistema Irrigação Hunter"
-            },
-            {
-                "ip": "172.17.86.67",
-                "descricao": "Sensor MS5837 - Pressão água"
-            },
-            {
-                "ip": "172.17.86.68",
-                "descricao": "Sensor MPXV7002DP - Pressão água"
-            },
-            {
-                "ip": "172.17.86.69",
-                "descricao": "Sensor MPS20N0040D - Pressão gases"
-            },
-            {
-                "ip": "172.17.86.70",
-                "descricao": "Sensor XGZP6847 - Pressão gases"
-            },
-            {
-                "ip": "172.17.86.71",
-                "descricao": "Sensor Vazão de Água - Reúso 1"
-            },
-            {
-                "ip": "172.17.86.72",
-                "descricao": "Sensor Vazão de Água - Reúso 2"
-            },
-            {
-                "ip": "172.17.86.73",
-                "descricao": "Sensor Vazão de Água - CAG - Cx. Compensação 3P"
-            },
-            {
-                "ip": "172.17.86.74",
-                "descricao": "Sensor Vazão de Água - CAG - Válvula Ventosa 3P"
-            },
-            {
-                "ip": "172.17.86.75",
-                "descricao": "Estação Meteorológica"
-            },
-            {
-                "ip": "172.17.86.76",
-                "descricao": "Sensor umidade solo 2 (capacitivo)"
-            },
-            {
-                "ip": "172.17.86.77",
-                "descricao": "Tubulação refrigeração - 1° subsolo"
-            },
-            {
-                "ip": "172.17.86.78",
-                "descricao": "Cancelas - 1 Subsolo - Saída"
-            },
-            {
-                "ip": "172.17.86.79",
-                "descricao": "Cancelas - 1 Subsolo - Entrada"
-            },
-            {
-                "ip": "172.17.86.80",
-                "descricao": "Cancelas - Guarita - Entrada"
-            },
-            {
-                "ip": "172.17.86.81",
-                "descricao": "Tubulação refrigeração - 2° subsolo B2"
-            },
-            {
-                "ip": "172.17.86.82",
-                "descricao": "Garra de Corrente 1 - Fieldpiece 1mV/A"
-            },
-            {
-                "ip": "172.17.86.83",
-                "descricao": "Garra de Corrente 2 - AEMC MN313  1mV/A"
-            },
-            {
-                "ip": "172.17.86.84",
-                "descricao": "Garra de Corrente 3"
-            },
-            {
-                "ip": "172.17.86.85",
-                "descricao": "Garra de Corrente 4"
-            },
-            {
-                "ip": "172.17.86.86",
-                "descricao": "Pressão Rede Hidráulica CAG - 2° subsolo"
-            },
-            {
-                "ip": "172.17.86.87",
-                "descricao": "Sanitário público"
-            },
-            {
-                "ip": "172.17.86.88",
-                "descricao": "Sanitário público"
-            },
-            {
-                "ip": "172.17.86.89",
-                "descricao": "Sanitário público"
-            },
-            {
-                "ip": "172.17.86.90",
-                "descricao": "Sanitário público"
-            },
-            {
-                "ip": "172.17.86.91",
-                "descricao": "Sanitário público - TE-B1"
-            },
-            {
-                "ip": "172.17.86.92",
-                "descricao": "Sanitário público"
-            },
-            {
-                "ip": "172.17.86.93",
-                "descricao": "Sensor luminosidade - C.V."
-            },
-            {
-                "ip": "172.17.86.94",
-                "descricao": "Sensor luminosidade - C.V."
-            },
-            {
-                "ip": "172.17.86.95",
-                "descricao": "Sensor som INMP441 - FFT"
-            },
-            {
-                "ip": "172.17.86.97",
-                "descricao": "Cancelas - Guarita - Saída Visitantes"
-            },
-            {
-                "ip": "172.17.86.98",
-                "descricao": "Cancelas - Guarita - Saída Servidores"
-            },
-            {
-                "ip": "172.17.86.99",
-                "descricao": "Cancelas - Guarita - Entrada Visitantes"
-            },
-            {
-                "ip": "172.17.86.100",
-                "descricao": "Sensor movimento - C.V."
-            },
-            {
-                "ip": "172.17.86.101",
-                "descricao": "Sensor movimento - Serv. Bem-Estar"
-            },
-            {
-                "ip": "172.17.86.102",
-                "descricao": "Sensor movimento - Corredor Camarins"
-            },
-            {
-                "ip": "172.17.86.103",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.104",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.105",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.106",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.107",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.108",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.109",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.110",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.111",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.112",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.113",
-                "descricao": "Sensor PIR + BH1750 + Relé"
-            },
-            {
-                "ip": "172.17.86.114",
-                "descricao": "Auditório - Sanitário Feminino"
-            },
-            {
-                "ip": "172.17.86.140",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.141",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.142",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.143",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.144",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.145",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.146",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.147",
-                "descricao": "Catraca"
-            },
-            {
-                "ip": "172.17.86.151",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.152",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.153",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.154",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.155",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.156",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.157",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.158",
-                "descricao": "Sensores fancoletes - Sensor Movimento"
-            },
-            {
-                "ip": "172.17.86.159",
-                "descricao": "Sensores fancoletes - Sensor Movimento"
-            },
-            {
-                "ip": "172.17.86.160",
-                "descricao": "Sensores fancoletes - Sensor Movimento"
-            },
-            {
-                "ip": "172.17.86.161",
-                "descricao": "Sensores fancoletes - Sensor Movimento"
-            },
-            {
-                "ip": "172.17.86.162",
-                "descricao": "Sensores fancoletes"
-            },
-            {
-                "ip": "172.17.86.163",
-                "descricao": "Sensores fancoletes"
-            },
-            {
-                "ip": "172.17.86.164",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.165",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.166",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.167",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.168",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.169",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.170",
-                "descricao": "Sensores fancoletes - Programação Horária"
-            },
-            {
-                "ip": "172.17.86.250",
-                "descricao": "Conversor MODBUS WiFi - Inversor solar"
-            }
-        ]
-    }
+  "vlans": {
+    "80": [
+      {
+        "ip": "172.17.80.100",
+        "descricao": "Alarme - Guarita Privativa"
+      },
+      {
+        "ip": "172.17.80.101",
+        "descricao": "Alarme - Guarita Servidores"
+      },
+      {
+        "ip": "172.17.80.102",
+        "descricao": "Alarme - Creche"
+      },
+      {
+        "ip": "172.17.80.103",
+        "descricao": "Alarme - Centro de Convivência"
+      },
+      {
+        "ip": "172.17.80.104",
+        "descricao": "Alarme - Auditório"
+      },
+      {
+        "ip": "172.17.80.105",
+        "descricao": "Alarme - Bloco A"
+      },
+      {
+        "ip": "172.17.80.106",
+        "descricao": "Alarme - Bloco B"
+      },
+      {
+        "ip": "172.17.80.107",
+        "descricao": "Alarme - Bloco C"
+      },
+      {
+        "ip": "172.17.80.110",
+        "descricao": "JFL SMART CLOUD 18 - Reservatório"
+      },
+      {
+        "ip": "172.17.80.111",
+        "descricao": "JFL SMART CLOUD 18 - CV"
+      },
+      {
+        "ip": "172.17.80.120",
+        "descricao": "Central Incêndio Skyfire"
+      }
+    ],
+    "85": [
+      {
+        "ip": "172.17.85.100",
+        "descricao": "Guarita Privativa - Poço Bombeamento"
+      },
+      {
+        "ip": "172.17.85.101",
+        "descricao": "Guarita Privativa"
+      },
+      {
+        "ip": "172.17.85.102",
+        "descricao": "Guarita Servidores"
+      },
+      {
+        "ip": "172.17.85.103",
+        "descricao": "Térreo - Bloco A"
+      },
+      {
+        "ip": "172.17.85.104",
+        "descricao": "Térreo - Bloco B1"
+      },
+      {
+        "ip": "172.17.85.105",
+        "descricao": "Térreo - Bloco B2"
+      },
+      {
+        "ip": "172.17.85.106",
+        "descricao": "Térreo - Bloco C"
+      },
+      {
+        "ip": "172.17.85.107",
+        "descricao": "Subsolo 01 - Bloco AC"
+      },
+      {
+        "ip": "172.17.85.108",
+        "descricao": "Subsolo 01 - Bloco B1"
+      },
+      {
+        "ip": "172.17.85.109",
+        "descricao": "Subsolo 01 - Bloco B2"
+      },
+      {
+        "ip": "172.17.85.110",
+        "descricao": "Refrigeração - Plenário"
+      },
+      {
+        "ip": "172.17.85.111",
+        "descricao": "Pátio de Serviços - Ilum. Externa"
+      },
+      {
+        "ip": "172.17.85.112",
+        "descricao": "Auditório - Passarela"
+      },
+      {
+        "ip": "172.17.85.113",
+        "descricao": "Adução"
+      },
+      {
+        "ip": "172.17.85.114",
+        "descricao": "Irrigação"
+      },
+      {
+        "ip": "172.17.85.115",
+        "descricao": "Centro de Convivência"
+      },
+      {
+        "ip": "172.17.85.116",
+        "descricao": "Creche"
+      },
+      {
+        "ip": "172.17.85.117",
+        "descricao": "Reservatório"
+      },
+      {
+        "ip": "172.17.85.118",
+        "descricao": "Espelhos D'Água"
+      },
+      {
+        "ip": "172.17.85.119",
+        "descricao": "C.A.G. - CompactLogix"
+      },
+      {
+        "ip": "172.17.85.120",
+        "descricao": "C.A.G."
+      },
+      {
+        "ip": "172.17.85.121",
+        "descricao": "Climatização átrio - Bloco A"
+      },
+      {
+        "ip": "172.17.85.122",
+        "descricao": "Climatização átrio - Bloco C"
+      },
+      {
+        "ip": "172.17.85.123",
+        "descricao": "Climatização Auditório"
+      },
+      {
+        "ip": "172.17.85.124",
+        "descricao": "Elevador Externo"
+      },
+      {
+        "ip": "172.17.85.125",
+        "descricao": "Cubículo Blindado"
+      },
+      {
+        "ip": "172.17.85.126",
+        "descricao": "Kinetix 300"
+      },
+      {
+        "ip": "172.17.85.127",
+        "descricao": "Point I/O - S2-B2"
+      },
+      {
+        "ip": "172.17.85.128",
+        "descricao": "Point I/O -"
+      },
+      {
+        "ip": "172.17.85.129",
+        "descricao": "Point I/O -"
+      },
+      {
+        "ip": "172.17.85.130",
+        "descricao": "Adução - Inversor 01"
+      },
+      {
+        "ip": "172.17.85.131",
+        "descricao": "Adução - Inversor 02"
+      },
+      {
+        "ip": "172.17.85.132",
+        "descricao": "Irrigação - Inversor 01"
+      },
+      {
+        "ip": "172.17.85.133",
+        "descricao": "Irrigação - Inversor 02"
+      },
+      {
+        "ip": "172.17.85.134",
+        "descricao": "Tanque Pressão - Inversor 01"
+      },
+      {
+        "ip": "172.17.85.135",
+        "descricao": "Tanque Pressão - Inversor 02"
+      },
+      {
+        "ip": "172.17.85.136",
+        "descricao": "Auditório - Inversor Fancoil 1"
+      },
+      {
+        "ip": "172.17.85.137",
+        "descricao": "Auditório - Inversor Fancoil 2"
+      },
+      {
+        "ip": "172.17.85.138",
+        "descricao": "Foyer - Inversor Fancoil 01"
+      },
+      {
+        "ip": "172.17.85.139",
+        "descricao": "Reservatório - Inversor 1"
+      },
+      {
+        "ip": "172.17.85.140",
+        "descricao": "Reservatório - Inversor 2"
+      },
+      {
+        "ip": "172.17.85.141",
+        "descricao": "Espelho - Inversor Filtro A"
+      },
+      {
+        "ip": "172.17.85.142",
+        "descricao": "Espelho - Inversor Filtro C"
+      },
+      {
+        "ip": "172.17.85.143",
+        "descricao": "Espelho - Inversor Geiser A"
+      },
+      {
+        "ip": "172.17.85.144",
+        "descricao": "Espelho - Inversor Geiser C"
+      },
+      {
+        "ip": "172.17.85.145",
+        "descricao": "IHM - CAG"
+      },
+      {
+        "ip": "172.17.85.146",
+        "descricao": "IHM - Térreo B1"
+      },
+      {
+        "ip": "172.17.85.147",
+        "descricao": "IHM - Espelhos d'água"
+      },
+      {
+        "ip": "172.17.85.148",
+        "descricao": "IHM - 2° subsolo"
+      },
+      {
+        "ip": "172.17.85.149",
+        "descricao": "IHM - Auditório"
+      },
+      {
+        "ip": "172.17.85.150",
+        "descricao": "CompactLogix - 2° subsolo"
+      },
+      {
+        "ip": "172.17.85.151",
+        "descricao": "Kinetix 1"
+      },
+      {
+        "ip": "172.17.85.152",
+        "descricao": "Kinetix 2"
+      },
+      {
+        "ip": "172.17.85.153",
+        "descricao": "Kinetix 3"
+      },
+      {
+        "ip": "172.17.85.154",
+        "descricao": "Kinetix 4"
+      },
+      {
+        "ip": "172.17.85.155",
+        "descricao": "Kinetix 5"
+      },
+      {
+        "ip": "172.17.85.156",
+        "descricao": "IHM - Reservatório"
+      },
+      {
+        "ip": "172.17.85.157",
+        "descricao": "CLP Micrologix S2-B2"
+      },
+      {
+        "ip": "172.17.85.158",
+        "descricao": "Controladora ViaOnda RFID M-ID40"
+      },
+      {
+        "ip": "172.17.85.159",
+        "descricao": "Controladora ViaOnda RFID M-ID40"
+      },
+      {
+        "ip": "172.17.85.160",
+        "descricao": "Controladora Portão Conselheiros - 2° subsolo"
+      },
+      {
+        "ip": "172.17.85.161",
+        "descricao": "Controladora Portão Guarita Privativa"
+      },
+      {
+        "ip": "172.17.85.162",
+        "descricao": "IHM - Mesa 2° subsolo PH"
+      },
+      {
+        "ip": "172.17.85.163",
+        "descricao": "Controladora Portão Auditores - 1° subsolo"
+      },
+      {
+        "ip": "172.17.85.164",
+        "descricao": "IHM - Mesa 1° subsolo Flex"
+      },
+      {
+        "ip": "172.17.85.200",
+        "descricao": "QTA GMGs"
+      },
+      {
+        "ip": "172.17.85.201",
+        "descricao": "GMG 1"
+      },
+      {
+        "ip": "172.17.85.202",
+        "descricao": "GMG 2"
+      },
+      {
+        "ip": "172.17.85.203",
+        "descricao": "UPS Bloco B"
+      },
+      {
+        "ip": "172.17.85.204",
+        "descricao": "UPS Bloco AC 1"
+      },
+      {
+        "ip": "172.17.85.205",
+        "descricao": "UPS Bloco AC 2"
+      },
+      {
+        "ip": "172.17.85.206",
+        "descricao": "Conversor LANTRONIX GMG"
+      },
+      {
+        "ip": "172.17.85.207",
+        "descricao": "Conversor IOT 1"
+      },
+      {
+        "ip": "172.17.85.208",
+        "descricao": "Conversor IOT 2"
+      },
+      {
+        "ip": "172.17.85.209",
+        "descricao": "Conversor IOT 3"
+      },
+      {
+        "ip": "172.17.85.210",
+        "descricao": "Conversor IOT 4"
+      },
+      {
+        "ip": "172.17.85.211",
+        "descricao": "Conversor IOT - Inversores estacionamento"
+      },
+      {
+        "ip": "172.17.85.212",
+        "descricao": "Conversor IOT - Medidor vazão CAG"
+      },
+      {
+        "ip": "172.17.85.213",
+        "descricao": "Conversor IOT - Medidor vazão 1° subsolo"
+      },
+      {
+        "ip": "172.17.85.215",
+        "descricao": "Meio Ambiente - Átrio A"
+      },
+      {
+        "ip": "172.17.85.216",
+        "descricao": "Meio Ambiente - Átrio B"
+      },
+      {
+        "ip": "172.17.85.217",
+        "descricao": "Meio Ambiente - Átrio C"
+      },
+      {
+        "ip": "172.17.85.218",
+        "descricao": "Guarita Privativa"
+      },
+      {
+        "ip": "172.17.85.219",
+        "descricao": "Meio Ambiente - Reservatório"
+      },
+      {
+        "ip": "172.17.85.220",
+        "descricao": "Estação Meteorológica"
+      },
+      {
+        "ip": "172.17.85.225",
+        "descricao": "RGB e UV - C.V."
+      },
+      {
+        "ip": "172.17.85.226",
+        "descricao": "Qualidade Ar - Térreo A"
+      },
+      {
+        "ip": "172.17.85.228",
+        "descricao": "Qualidade Ar - C.V"
+      }
+    ],
+    "90": [
+      {
+        "ip": "172.17.90.162",
+        "descricao": "Controladora Cancelas - 1° subsolo"
+      },
+      {
+        "ip": "172.17.90.164",
+        "descricao": "Controladora Cancelas - Guarita Servidores - Saída"
+      },
+      {
+        "ip": "172.17.90.165",
+        "descricao": "Controladora Cancelas - Guarita Servidores - Entrada"
+      }
+    ],
+    "86": [
+      {
+        "ip": "172.17.86.3",
+        "descricao": "Módulo DTU-W100 Hoymiles  - Estacionamento inferior"
+      },
+      {
+        "ip": "172.17.86.4",
+        "descricao": "Módulo DTU-W100 Hoymiles  - Estacionamento superior"
+      },
+      {
+        "ip": "172.17.86.5",
+        "descricao": "Via Onda MID10W 1"
+      },
+      {
+        "ip": "172.17.86.6",
+        "descricao": "Via Onda MID10W 2"
+      },
+      {
+        "ip": "172.17.86.8",
+        "descricao": "Sensor Plenário - Duto Saída"
+      },
+      {
+        "ip": "172.17.86.9",
+        "descricao": "Sensor Plenário - Duto Split"
+      },
+      {
+        "ip": "172.17.86.10",
+        "descricao": "Sensor Plenário - Qualidade Ar"
+      },
+      {
+        "ip": "172.17.86.11",
+        "descricao": "Sensor MPL3115A2 - Elevador Social B1"
+      },
+      {
+        "ip": "172.17.86.12",
+        "descricao": "Sensor SHT31 — Sala Técnica - S1-B1"
+      },
+      {
+        "ip": "172.17.86.13",
+        "descricao": "Sensor SHT31 — Serv. Infraestrutura - DG Telefônico"
+      },
+      {
+        "ip": "172.17.86.14",
+        "descricao": "Sensor OPT3001 — Lanchonete - 1º Subsolo"
+      },
+      {
+        "ip": "172.17.86.15",
+        "descricao": "Sensor MHET (Microondas) — 1º Subsolo - Garagem"
+      },
+      {
+        "ip": "172.17.86.16",
+        "descricao": "Sensor cor"
+      },
+      {
+        "ip": "172.17.86.17",
+        "descricao": "Sensor temperatura IR"
+      },
+      {
+        "ip": "172.17.86.18",
+        "descricao": "Sensor BME680 — Auditório - Qualidade do Ar"
+      },
+      {
+        "ip": "172.17.86.19",
+        "descricao": "Sensor 2P-C - Qualidade ar"
+      },
+      {
+        "ip": "172.17.86.20",
+        "descricao": "Sala técnica S01-AC - Qualidade Ar"
+      },
+      {
+        "ip": "172.17.86.21",
+        "descricao": "Sala técnica S01-B1 - Qualidade Ar"
+      },
+      {
+        "ip": "172.17.86.22",
+        "descricao": "Sensor CCS811 — Serv. Infraestrutura - DG Telefônico"
+      },
+      {
+        "ip": "172.17.86.23",
+        "descricao": "Sensor gás MQ-2 - Galeria Técnica"
+      },
+      {
+        "ip": "172.17.86.24",
+        "descricao": "Sensor gás MQ-3 - Depósito Materiais"
+      },
+      {
+        "ip": "172.17.86.25",
+        "descricao": "Sensor gás MQ-4 - S01-B1 (acima forro)"
+      },
+      {
+        "ip": "172.17.86.26",
+        "descricao": "Sensor MQ — Copa - Térreo"
+      },
+      {
+        "ip": "172.17.86.27",
+        "descricao": "Sensor MQ — Copa - 2º Pavimento"
+      },
+      {
+        "ip": "172.17.86.28",
+        "descricao": "Sensor MQ — Copa - 1º Pavimento"
+      },
+      {
+        "ip": "172.17.86.29",
+        "descricao": "Sensor gás MQ-6 - Refeitório"
+      },
+      {
+        "ip": "172.17.86.30",
+        "descricao": "MQ7 (CO) — Estacionamento 1º Subsolo"
+      },
+      {
+        "ip": "172.17.86.31",
+        "descricao": "Sensor gás MQ-8 - CAG"
+      },
+      {
+        "ip": "172.17.86.32",
+        "descricao": "Sensor gás MQ-9 - GMGs Edifício-sede"
+      },
+      {
+        "ip": "172.17.86.33",
+        "descricao": "Sensor gás MQ-135 - Laboratório Solos"
+      },
+      {
+        "ip": "172.17.86.34",
+        "descricao": "Sensor AM2315 — Sala Técnica - S1-AC"
+      },
+      {
+        "ip": "172.17.86.35",
+        "descricao": "Sensor MQ — Lanchonete - Salão"
+      },
+      {
+        "ip": "172.17.86.36",
+        "descricao": "Sensor gás MQ-6 - Garagem Conselheiros"
+      },
+      {
+        "ip": "172.17.86.37",
+        "descricao": "Sensor gás MQ-6 - Galeria Técnica"
+      },
+      {
+        "ip": "172.17.86.38",
+        "descricao": "TCS34725 (cor RGB) — Pele de Vidro"
+      },
+      {
+        "ip": "172.17.86.39",
+        "descricao": "Sensor BMP280 — Térreo - Bloco A"
+      },
+      {
+        "ip": "172.17.86.40",
+        "descricao": "Sensores temperatura - Chiller 1"
+      },
+      {
+        "ip": "172.17.86.41",
+        "descricao": "Sensores temperatura - Chiller 2"
+      },
+      {
+        "ip": "172.17.86.42",
+        "descricao": "Sensores temperatura - Chiller 3"
+      },
+      {
+        "ip": "172.17.86.43",
+        "descricao": "Sensor BMP280 — Sala de Conferências - Geral"
+      },
+      {
+        "ip": "172.17.86.44",
+        "descricao": "Sensor luminosidade - C.V."
+      },
+      {
+        "ip": "172.17.86.45",
+        "descricao": "Sensor umidade temperatura - C.V."
+      },
+      {
+        "ip": "172.17.86.46",
+        "descricao": "Sensor cor - Creche"
+      },
+      {
+        "ip": "172.17.86.47",
+        "descricao": "Sensor temperatura - Fundos Plenário"
+      },
+      {
+        "ip": "172.17.86.49",
+        "descricao": "Sensor cor - Reservatório"
+      },
+      {
+        "ip": "172.17.86.50",
+        "descricao": "Sensor Temperatura e PIR - Laboratório"
+      },
+      {
+        "ip": "172.17.86.51",
+        "descricao": "Sensor umidade e temperatura - Laboratório"
+      },
+      {
+        "ip": "172.17.86.52",
+        "descricao": "Sensor CCS811 — Serv. Infraestrutura - Subestação"
+      },
+      {
+        "ip": "172.17.86.53",
+        "descricao": "Sensor Geiser Counter"
+      },
+      {
+        "ip": "172.17.86.54",
+        "descricao": "Sensor Raios"
+      },
+      {
+        "ip": "172.17.86.55",
+        "descricao": "Tubulação refrigeração - 1° subsolo Retorno"
+      },
+      {
+        "ip": "172.17.86.56",
+        "descricao": "Sensor LM75A — Auditório - Plateia"
+      },
+      {
+        "ip": "172.17.86.57",
+        "descricao": "Sensor BMP280 — Plenário - Palco"
+      },
+      {
+        "ip": "172.17.86.58",
+        "descricao": "Sensor Plenário - Duto Fancoil"
+      },
+      {
+        "ip": "172.17.86.59",
+        "descricao": "Sensores Elevador Social A"
+      },
+      {
+        "ip": "172.17.86.60",
+        "descricao": "Sensores Elevador Social B1"
+      },
+      {
+        "ip": "172.17.86.61",
+        "descricao": "Sensores Elevador Social B2"
+      },
+      {
+        "ip": "172.17.86.62",
+        "descricao": "Sensores Elevador Social C"
+      },
+      {
+        "ip": "172.17.86.63",
+        "descricao": "Sensores Elevador Social Privativo"
+      },
+      {
+        "ip": "172.17.86.64",
+        "descricao": "Sensores Elevador Externo"
+      },
+      {
+        "ip": "172.17.86.65",
+        "descricao": "Sensor umidade solo (resistivo inox)"
+      },
+      {
+        "ip": "172.17.86.66",
+        "descricao": "Decodificador Sistema Irrigação Hunter"
+      },
+      {
+        "ip": "172.17.86.67",
+        "descricao": "Sensor MS5837 - Pressão água"
+      },
+      {
+        "ip": "172.17.86.68",
+        "descricao": "Sensor MPXV7002DP - Pressão água"
+      },
+      {
+        "ip": "172.17.86.69",
+        "descricao": "Sensor MPS20N0040D - Pressão gases"
+      },
+      {
+        "ip": "172.17.86.70",
+        "descricao": "Sensor XGZP6847 - Pressão gases"
+      },
+      {
+        "ip": "172.17.86.71",
+        "descricao": "Sensor Vazão de Água - Reúso 1"
+      },
+      {
+        "ip": "172.17.86.72",
+        "descricao": "Sensor Vazão de Água - Reúso 2"
+      },
+      {
+        "ip": "172.17.86.73",
+        "descricao": "Sensor Vazão de Água - CAG - Cx. Compensação 3P"
+      },
+      {
+        "ip": "172.17.86.74",
+        "descricao": "Sensor Vazão de Água - CAG - Válvula Ventosa 3P"
+      },
+      {
+        "ip": "172.17.86.75",
+        "descricao": "Estação Meteorológica"
+      },
+      {
+        "ip": "172.17.86.76",
+        "descricao": "Sensor umidade solo 2 (capacitivo)"
+      },
+      {
+        "ip": "172.17.86.77",
+        "descricao": "Tubulação refrigeração - 1° subsolo"
+      },
+      {
+        "ip": "172.17.86.78",
+        "descricao": "Cancelas - 1 Subsolo - Saída — Cancela - 1º Subsolo (Saída)"
+      },
+      {
+        "ip": "172.17.86.79",
+        "descricao": "Cancelas - 1 Subsolo - Entrada — Cancela - 1º Subsolo (Entrada)"
+      },
+      {
+        "ip": "172.17.86.80",
+        "descricao": "Cancelas - Guarita - Entrada — Cancela - Guarita (Saída Servidores)"
+      },
+      {
+        "ip": "172.17.86.81",
+        "descricao": "Tubulação refrigeração - 2° subsolo B2"
+      },
+      {
+        "ip": "172.17.86.82",
+        "descricao": "Garra de corrente FieldPiece (ADS1115-TC) — Iluminação Externa - Garra Corrente"
+      },
+      {
+        "ip": "172.17.86.83",
+        "descricao": "Garra de Corrente 2 - AEMC MN313  1mV/A"
+      },
+      {
+        "ip": "172.17.86.84",
+        "descricao": "Garra de Corrente 3"
+      },
+      {
+        "ip": "172.17.86.85",
+        "descricao": "Garra de Corrente 4"
+      },
+      {
+        "ip": "172.17.86.86",
+        "descricao": "Pressão Rede Hidráulica CAG - 2° subsolo"
+      },
+      {
+        "ip": "172.17.86.87",
+        "descricao": "Sensor de cor TCS34725 + TEMT6000 — Térreo - Recepção"
+      },
+      {
+        "ip": "172.17.86.88",
+        "descricao": "Sensor de cor TCS34725 + TEMT6000 — Térreo - Bloco C"
+      },
+      {
+        "ip": "172.17.86.89",
+        "descricao": "Sensor de cor TCS34725 + TEMT6000 — Térreo - Bloco A"
+      },
+      {
+        "ip": "172.17.86.90",
+        "descricao": "Sensor LM75 — Térreo - Bloco C"
+      },
+      {
+        "ip": "172.17.86.91",
+        "descricao": "Sanitário público - TE-B1"
+      },
+      {
+        "ip": "172.17.86.92",
+        "descricao": "Sanitário público"
+      },
+      {
+        "ip": "172.17.86.93",
+        "descricao": "Sensor luminosidade - C.V."
+      },
+      {
+        "ip": "172.17.86.94",
+        "descricao": "Sensor BH1750 — Serv. Infraestrutura - Galeria Técnica"
+      },
+      {
+        "ip": "172.17.86.95",
+        "descricao": "Sensor som INMP441 - FFT"
+      },
+      {
+        "ip": "172.17.86.97",
+        "descricao": "Cancelas - Guarita - Saída Visitantes — Cancela - Guarita (Saída Visitantes)"
+      },
+      {
+        "ip": "172.17.86.98",
+        "descricao": "Cancelas - Guarita - Saída Servidores — Cancela - Guarita (Entrada Visitantes)"
+      },
+      {
+        "ip": "172.17.86.99",
+        "descricao": "Cancelas - Guarita - Entrada Visitantes — Cancela - Guarita (Entrada Servidores)"
+      },
+      {
+        "ip": "172.17.86.100",
+        "descricao": "Sensor DS18B20 — Centro de Convivência - Salão"
+      },
+      {
+        "ip": "172.17.86.101",
+        "descricao": "Sensor DS18B20 — Plenário - Palco"
+      },
+      {
+        "ip": "172.17.86.102",
+        "descricao": "Sensor movimento - Corredor Camarins"
+      },
+      {
+        "ip": "172.17.86.103",
+        "descricao": "Sensor MCP9808 — Plenário - Fundos"
+      },
+      {
+        "ip": "172.17.86.104",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.105",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.106",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.107",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.108",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.109",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.110",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.111",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.112",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.113",
+        "descricao": "Sensor PIR + BH1750 + Relé"
+      },
+      {
+        "ip": "172.17.86.114",
+        "descricao": "Auditório - Sanitário Feminino"
+      },
+      {
+        "ip": "172.17.86.140",
+        "descricao": "Sensor AHT21B — Lanchonete - Salão"
+      },
+      {
+        "ip": "172.17.86.141",
+        "descricao": "Sensor BME680 — Mini-Auditório - Geral"
+      },
+      {
+        "ip": "172.17.86.142",
+        "descricao": "Sensor AHT10 — Auditório - Foyer"
+      },
+      {
+        "ip": "172.17.86.143",
+        "descricao": "Catraca"
+      },
+      {
+        "ip": "172.17.86.144",
+        "descricao": "Catraca"
+      },
+      {
+        "ip": "172.17.86.145",
+        "descricao": "Catraca"
+      },
+      {
+        "ip": "172.17.86.146",
+        "descricao": "Catraca"
+      },
+      {
+        "ip": "172.17.86.147",
+        "descricao": "Catraca"
+      },
+      {
+        "ip": "172.17.86.151",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.152",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.153",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.154",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.155",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.156",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.157",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.158",
+        "descricao": "Sensores fancoletes - Sensor Movimento"
+      },
+      {
+        "ip": "172.17.86.159",
+        "descricao": "Sensores fancoletes - Sensor Movimento"
+      },
+      {
+        "ip": "172.17.86.160",
+        "descricao": "Sensores fancoletes - Sensor Movimento"
+      },
+      {
+        "ip": "172.17.86.161",
+        "descricao": "Sensores fancoletes - Sensor Movimento"
+      },
+      {
+        "ip": "172.17.86.162",
+        "descricao": "Sensores fancoletes"
+      },
+      {
+        "ip": "172.17.86.163",
+        "descricao": "Sensores fancoletes"
+      },
+      {
+        "ip": "172.17.86.164",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.165",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.166",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.167",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.168",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.169",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.170",
+        "descricao": "Sensores fancoletes - Programação Horária"
+      },
+      {
+        "ip": "172.17.86.250",
+        "descricao": "Conversor MODBUS WiFi - Inversor solar"
+      }
+    ]
+  }
 }

@@ -9,3 +9,5 @@ ping3==4.0.8
 python-dotenv==1.0.0
 waitress==3.0.0
 Werkzeug==3.0.3
+Pillow==11.1.0
+pillow-heif

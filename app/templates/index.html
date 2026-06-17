@@ -227,14 +227,24 @@
                 <datalist id="device-types"></datalist>
             </div>
             <div class="form-group">
-                <label for="edit-sensores">Sensores <small style="font-weight:400; opacity:0.7;">(um por linha)</small></label>
-                <textarea id="edit-sensores" placeholder="DS18B20 | temperatura&#10;PIR | movimento_pir"></textarea>
-                <span class="form-help">Formato: <code>CÓDIGO | categoria</code> — categoria opcional. Ex.: <code>BME680 | temp_umid_pressao_gas</code></span>
+                <label>Sensores <small style="font-weight:400; opacity:0.7;">(código + categoria)</small></label>
+                <div id="edit-sensores-rows" class="rows-editor"></div>
+                <button type="button" class="btn-row-add" onclick="addSensorRow()"><i class="fas fa-plus"></i> Adicionar sensor</button>
+                <datalist id="dl-sensor-cod"></datalist>
+                <datalist id="dl-sensor-cat"></datalist>
             </div>
             <div class="form-group">
-                <label for="edit-tabelas-sql">Tabelas SQL <small style="font-weight:400; opacity:0.7;">(uma coluna por linha)</small></label>
-                <textarea id="edit-tabelas-sql" placeholder="ILUMINACAO.TEMT6000_3P_A&#10;ILUMINACAO.BH1750_3P_A&#10;REFRIGERACAO_ATRIO.DS18B20_3P_A"></textarea>
-                <span class="form-help">Formato: <code>TABELA.COLUNA</code> (uma por linha). Para tabela sem coluna específica, use só <code>TABELA</code>.</span>
+                <label>Tabelas SQL <small style="font-weight:400; opacity:0.7;">(tabela + coluna)</small></label>
+                <div id="edit-tabelas-rows" class="rows-editor"></div>
+                <button type="button" class="btn-row-add" onclick="addTabelaRow()"><i class="fas fa-plus"></i> Adicionar tabela</button>
+                <datalist id="dl-tabela"></datalist>
+                <datalist id="dl-coluna"></datalist>
+            </div>
+            <div class="form-group">
+                <label>Fotos do local de instalação <small style="font-weight:400; opacity:0.7;">(até 5 — salvas no servidor)</small></label>
+                <div id="edit-fotos-galeria" class="fotos-galeria"><span class="muted">—</span></div>
+                <input type="file" id="edit-foto-file" accept="image/*,.heic,.heif" style="display:none" onchange="uploadFotoDispositivo(this)">
+                <button type="button" id="edit-foto-add" class="btn-foto-add" onclick="document.getElementById('edit-foto-file').click()"><i class="fas fa-camera"></i> Adicionar foto</button>
             </div>
         </div>
         <div class="modal-footer">
@@ -451,5 +461,10 @@
 </footer>
 
 <script src="{{ url_for('static', filename='nav-clps.js') }}"></script>
+
+<!-- Lightbox para ampliar fotos do local de instalação -->
+<div id="fotoLightbox" class="foto-lightbox" onclick="this.style.display='none'">
+    <img id="fotoLightboxImg" alt="foto ampliada">
+</div>
 </body>
 </html>

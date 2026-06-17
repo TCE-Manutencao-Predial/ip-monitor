@@ -1,7 +1,11 @@
-from flask import Flask, render_template, jsonify, make_response, request  # Importa as funções necessárias do Flask.
+from flask import Flask, render_template, jsonify, make_response, request, send_file, abort  # Importa as funções necessárias do Flask.
 from app import ip_operations  # Importa o módulo 'ip_operations' da aplicação, que contém a função 'verificar_ips'.
 import time  # Módulo para manipulação de tempo (usado para pausas e delays).
 import threading  # Módulo para rodar threads em paralelo (execução simultânea).
+import os  # Sistema de arquivos (fotos dos locais de instalação).
+import re  # Validação de IP/id (segurança de path).
+import glob  # Busca de arquivos de foto.
+import uuid  # IDs de foto.
 from app import app  # Importa a instância 'app' da aplicação Flask.
 import concurrent.futures  # Para execução concorrente de múltiplas tarefas.
 import logging  # Adicionar logging
@@ -10,7 +14,7 @@ from app.config_manager import config_manager  # Importa o gerenciador de config
 from app.device_manager import device_manager  # Importa o gerenciador de dispositivos.
 from app.clp_manager import clp_manager  # Importa o gerenciador de dados CLP.
 from app import audit as audit_mod  # Trilha de auditoria (SQLite local).
-from app.settings import ROUTES_PREFIX, NETWORK_BASE  # Importa configurações centralizadas
+from app.settings import ROUTES_PREFIX, NETWORK_BASE, DATA_ROOT  # Importa configurações centralizadas
 
 # Configurar logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
@@ -283,6 +287,119 @@ def update_device(vlan, ip):
     except Exception as e:
         print(f"Erro ao atualizar dispositivo: {e}")
         return jsonify({'error': str(e)}), 500
+
+
+# =====================================================================
+# Fotos do LOCAL DE INSTALAÇÃO do dispositivo (até 5 por IP).
+# Armazenadas no volume: DATA_ROOT/fotos/<ip>/<id>.<ext> (persiste em rebuild).
+# =====================================================================
+_FOTOS_ROOT = os.path.join(DATA_ROOT, 'fotos')
+_IP_RE = re.compile(r'^\d{1,3}(?:\.\d{1,3}){3}$')   # evita path traversal
+_ID_RE = re.compile(r'^[A-Za-z0-9]{1,32}$')
+_FOTO_MAX = 5
+_FOTO_EXT = {'jpg', 'jpeg', 'png', 'webp', 'gif', 'heic', 'heif'}
+_FOTO_CT = {'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp',
+            'image/gif': 'gif', 'image/heic': 'heic', 'image/heif': 'heif'}
+
+
+def _heic_para_jpeg(data, ext):
+    """HEIC/HEIF do iPhone → JPEG (navegadores não exibem HEIC). Outros: inalterado."""
+    if ext not in ('heic', 'heif'):
+        return data, ext
+    try:
+        import io as _io
+        from PIL import Image
+        try:
+            from pillow_heif import register_heif_opener
+            register_heif_opener()
+        except Exception:
+            pass
+        im = Image.open(_io.BytesIO(data)).convert('RGB')
+        out = _io.BytesIO()
+        im.save(out, 'JPEG', quality=90)
+        return out.getvalue(), 'jpg'
+    except Exception as e:
+        logging.warning(f"[fotos] conversão HEIC→JPEG falhou: {e}")
+        return data, ext
+
+
+def _foto_dir(ip):
+    if not _IP_RE.match(ip or ''):
+        return None
+    return os.path.join(_FOTOS_ROOT, ip)
+
+
+def _foto_listar(ip):
+    d = _foto_dir(ip)
+    if not d or not os.path.isdir(d):
+        return []
+    ids = []
+    for fn in sorted(os.listdir(d)):
+        stem, _, ext = fn.partition('.')
+        if ext.lower() in _FOTO_EXT:
+            ids.append(stem)
+    return ids
+
+
+@app.route('/api/devices/<string:ip>/fotos', methods=['GET'])
+@app.route(RAIZ + '/api/devices/<string:ip>/fotos', methods=['GET'])
+def listar_fotos(ip):
+    if not _foto_dir(ip):
+        return jsonify({'error': 'IP inválido'}), 400
+    return jsonify({'success': True, 'fotos': _foto_listar(ip), 'max': _FOTO_MAX})
+
+
+@app.route('/api/devices/<string:ip>/fotos', methods=['POST'])
+@app.route(RAIZ + '/api/devices/<string:ip>/fotos', methods=['POST'])
+def upload_foto(ip):
+    d = _foto_dir(ip)
+    if not d:
+        return jsonify({'error': 'IP inválido'}), 400
+    if len(_foto_listar(ip)) >= _FOTO_MAX:
+        return jsonify({'error': f'Limite de {_FOTO_MAX} fotos por dispositivo atingido'}), 400
+    f = request.files.get('foto')
+    if not f or not f.filename:
+        return jsonify({'error': 'Nenhuma imagem enviada'}), 400
+    ext = f.filename.rsplit('.', 1)[-1].lower() if '.' in f.filename else ''
+    if ext == 'jpeg':
+        ext = 'jpg'
+    if ext not in _FOTO_EXT:
+        ext = _FOTO_CT.get((f.mimetype or '').lower())
+        if not ext:
+            return jsonify({'error': 'Envie uma imagem (jpg, png, webp, gif)'}), 400
+    os.makedirs(d, exist_ok=True)
+    data = f.read()
+    data, ext = _heic_para_jpeg(data, ext)
+    fid = uuid.uuid4().hex[:10]
+    with open(os.path.join(d, f'{fid}.{ext}'), 'wb') as fh:
+        fh.write(data)
+    return jsonify({'success': True, 'id': fid})
+
+
+@app.route('/api/devices/<string:ip>/fotos/<string:foto_id>', methods=['GET'])
+@app.route(RAIZ + '/api/devices/<string:ip>/fotos/<string:foto_id>', methods=['GET'])
+def obter_foto(ip, foto_id):
+    d = _foto_dir(ip)
+    if not d or not _ID_RE.match(foto_id):
+        abort(404)
+    matches = glob.glob(os.path.join(d, foto_id + '.*'))
+    if not matches:
+        abort(404)
+    return send_file(matches[0])
+
+
+@app.route('/api/devices/<string:ip>/fotos/<string:foto_id>', methods=['DELETE'])
+@app.route(RAIZ + '/api/devices/<string:ip>/fotos/<string:foto_id>', methods=['DELETE'])
+def excluir_foto(ip, foto_id):
+    d = _foto_dir(ip)
+    if not d or not _ID_RE.match(foto_id):
+        return jsonify({'error': 'parâmetro inválido'}), 400
+    removidos = 0
+    for m in glob.glob(os.path.join(d, foto_id + '.*')):
+        os.remove(m)
+        removidos += 1
+    return jsonify({'success': removidos > 0})
+
 
 @app.route('/api/devices/<int:vlan>', methods=['DELETE'])
 @app.route(RAIZ + '/api/devices/<int:vlan>', methods=['DELETE'])

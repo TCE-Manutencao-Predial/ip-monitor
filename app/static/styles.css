@@ -798,3 +798,53 @@ td.col-acoes  { width: 80px; text-align: right; white-space: nowrap; }
     .col-sensores, .col-sql { display: none; }
     th.col-sensores, th.col-sql { display: none; }
 }
+
+/* ---- Descrição clicável (abre o modal Editar) ---- */
+.desc-edit { cursor: pointer; }
+.desc-edit:hover { text-decoration: underline; color: var(--primary); }
+
+/* ---- Editor de linhas (sensores / tabelas SQL) ---- */
+.rows-editor { display: flex; flex-direction: column; gap: 6px; margin-bottom: 8px; }
+.editor-row { display: flex; gap: 6px; align-items: center; }
+.editor-row input { width: auto; flex: 1 1 0; min-width: 0; }
+.editor-row .row-cod, .editor-row .row-tab { flex: 0 0 42%; }
+.row-del {
+    flex: 0 0 auto; width: 32px; height: 32px; border: 1px solid var(--border);
+    background: #fafafa; color: var(--danger); border-radius: 6px; cursor: pointer;
+}
+.row-del:hover { background: var(--danger); color: #fff; }
+.btn-row-add {
+    background: #eaf3fb; border: 1px dashed var(--primary); color: var(--primary);
+    padding: 6px 10px; border-radius: 6px; cursor: pointer; font: inherit;
+}
+.btn-row-add:hover { background: #d8e9f7; }
+
+/* ---- Fotos do local de instalação (modal Editar) ---- */
+.fotos-galeria { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; min-height: 1.2em; }
+.foto-thumb-wrap { position: relative; }
+.foto-thumb {
+    width: 84px; height: 84px; object-fit: cover; border-radius: 8px;
+    border: 1px solid var(--border); cursor: zoom-in; background: #f0f0f0; display: block;
+}
+.foto-del {
+    position: absolute; top: -6px; right: -6px; width: 20px; height: 20px;
+    border-radius: 50%; border: none; background: var(--danger); color: #fff;
+    cursor: pointer; font-size: 11px; line-height: 1;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+.foto-del:hover { background: #c62828; }
+.btn-foto-add {
+    background: #eaf3fb; border: 1px dashed var(--primary); color: var(--primary);
+    padding: 8px 12px; border-radius: 8px; cursor: pointer; font: inherit;
+}
+.btn-foto-add:hover { background: #d8e9f7; }
+.foto-lightbox {
+    display: none; position: fixed; inset: 0; z-index: 10000;
+    background: rgba(0, 0, 0, 0.85); align-items: center; justify-content: center;
+    cursor: zoom-out; padding: 24px;
+}
+.foto-lightbox img {
+    max-width: 92vw; max-height: 92vh; object-fit: contain;
+    border-radius: 10px; background: #fff; box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
+}

@@ -243,9 +243,10 @@ function renderTable(devices) {
         const tipo = d.tipo ? `<span class="badge ${tipoColorClass(d.tipo)}">${esc(d.tipo)}</span>` : '<span class="muted">—</span>';
         const arduinosBadge = renderArduinosBadge(d.ip);
         const devUrl = `http://${esc(d.ip)}/`;
-        const descCell = hasCadastro
-            ? `<a href="${devUrl}" target="_blank" class="link-plain" title="Abrir página web do dispositivo">${esc(desc)}</a>`
-            : desc;
+        // Clicar na descrição abre o modal Editar (antes abria o IP em nova aba).
+        const editArgs = `'${esc(d.ip)}','${escAttr(d.descricao===' -' ? '' : (d.descricao||''))}','${escAttr(d.tipo||'')}','${currentVlan}'`;
+        const descInner = hasCadastro ? esc(desc) : desc;
+        const descCell = `<span class="desc-edit" title="Clique para editar este dispositivo" onclick="openEditModal(${editArgs})">${descInner}</span>`;
 
         html += `<tr class="${isOn ? 'row-on' : 'row-off'}" data-ip="${esc(d.ip)}">
             <td class="col-status"><span class="dot ${isOn ? 'dot-on' : 'dot-off'}" title="${isOn ? 'Online' : 'Offline'}"></span></td>
@@ -345,18 +346,83 @@ function openEditModal(ip, descricao, tipo, vlan) {
     const sensores = (dev && dev.sensores) ? dev.sensores : [];
     const tabelas = (dev && dev.tabelas_sql) ? dev.tabelas_sql : [];
 
-    document.getElementById('edit-sensores').value = sensores
-        .map(s => s.categoria ? `${s.codigo} | ${s.categoria}` : s.codigo)
-        .join('\n');
-
-    document.getElementById('edit-tabelas-sql').value = tabelas
-        .map(t => t.coluna ? `${t.tabela}.${t.coluna}` : t.tabela)
-        .join('\n');
+    // Editor estruturado (uma linha por sensor/tabela) — substitui os textareas
+    popularDatalistsEditor();
+    const sCont = document.getElementById('edit-sensores-rows');
+    sCont.innerHTML = '';
+    sensores.forEach(s => addSensorRow(s.codigo, s.categoria));
+    const tCont = document.getElementById('edit-tabelas-rows');
+    tCont.innerHTML = '';
+    tabelas.forEach(t => addTabelaRow(t.tabela, t.coluna));
 
     currentEditDevice = { ip, vlan };
     loadDeviceTypes(vlan);
+    carregarFotosDispositivo(ip);
     document.getElementById('editModal').style.display = 'block';
     setTimeout(() => document.getElementById('edit-descricao').focus(), 100);
+}
+
+// ---- Fotos do local de instalação (até 5 por dispositivo, salvas no servidor) ----
+async function carregarFotosDispositivo(ip) {
+    const galeria = document.getElementById('edit-fotos-galeria');
+    const addBtn = document.getElementById('edit-foto-add');
+    if (!galeria) return;
+    galeria.innerHTML = '<span class="muted">carregando…</span>';
+    try {
+        const baseUrl = getApiBaseUrl();
+        const r = await fetch(`${baseUrl}/api/devices/${ip}/fotos`);
+        const d = await r.json();
+        const fotos = (d && d.fotos) || [];
+        const max = (d && d.max) || 5;
+        if (!fotos.length) {
+            galeria.innerHTML = '<span class="muted">Nenhuma foto ainda.</span>';
+        } else {
+            galeria.innerHTML = fotos.map(id => {
+                const url = `${baseUrl}/api/devices/${ip}/fotos/${id}`;
+                return `<div class="foto-thumb-wrap">
+                    <img class="foto-thumb" src="${url}" alt="foto do local" title="Clique para ampliar" onclick="abrirFotoLightbox('${url}')">
+                    <button type="button" class="foto-del" title="Remover foto" onclick="removerFotoDispositivo('${esc(ip)}','${esc(id)}')"><i class="fas fa-times"></i></button>
+                </div>`;
+            }).join('');
+        }
+        if (addBtn) addBtn.style.display = (fotos.length >= max) ? 'none' : '';
+    } catch (e) {
+        galeria.innerHTML = '<span class="muted">Falha ao carregar fotos.</span>';
+    }
+}
+
+async function uploadFotoDispositivo(input) {
+    const file = input.files && input.files[0];
+    input.value = '';
+    if (!file || !currentEditDevice) return;
+    try {
+        const baseUrl = getApiBaseUrl();
+        const fd = new FormData();
+        fd.append('foto', file);
+        const r = await fetch(`${baseUrl}/api/devices/${currentEditDevice.ip}/fotos`, { method: 'POST', body: fd });
+        const d = await r.json();
+        if (!r.ok || !d.success) alert(d.error || 'Não foi possível enviar a foto.');
+    } catch (e) {
+        alert('Falha de conexão ao enviar a foto.');
+    }
+    carregarFotosDispositivo(currentEditDevice.ip);
+}
+
+async function removerFotoDispositivo(ip, id) {
+    if (!confirm('Remover esta foto?')) return;
+    try {
+        const baseUrl = getApiBaseUrl();
+        await fetch(`${baseUrl}/api/devices/${ip}/fotos/${id}`, { method: 'DELETE' });
+    } catch (e) { /* ignora */ }
+    carregarFotosDispositivo(ip);
+}
+
+function abrirFotoLightbox(url) {
+    const lb = document.getElementById('fotoLightbox');
+    const img = document.getElementById('fotoLightboxImg');
+    if (!lb || !img) return;
+    img.src = url;
+    lb.style.display = 'flex';
 }
 
 // Parser dos textareas → arrays estruturados
@@ -381,6 +447,60 @@ function parseTabelasSqlText(text) {
             return { tabela: line.slice(0, dot).trim(), coluna: line.slice(dot + 1).trim() };
         })
         .filter(t => t.tabela);
+}
+
+// ---- Editor estruturado de sensores e tabelas SQL (linhas com campos) ----
+function addSensorRow(codigo, categoria) {
+    const cont = document.getElementById('edit-sensores-rows');
+    const div = document.createElement('div');
+    div.className = 'editor-row';
+    div.innerHTML =
+        `<input class="row-cod" list="dl-sensor-cod" placeholder="Código (ex.: BME680)" value="${escAttr(codigo || '')}">` +
+        `<input class="row-cat" list="dl-sensor-cat" placeholder="categoria (opcional)" value="${escAttr(categoria || '')}">` +
+        `<button type="button" class="row-del" title="Remover" onclick="this.closest('.editor-row').remove()"><i class="fas fa-times"></i></button>`;
+    cont.appendChild(div);
+}
+
+function addTabelaRow(tabela, coluna) {
+    const cont = document.getElementById('edit-tabelas-rows');
+    const div = document.createElement('div');
+    div.className = 'editor-row';
+    div.innerHTML =
+        `<input class="row-tab" list="dl-tabela" placeholder="Tabela (ex.: ILUMINACAO)" value="${escAttr(tabela || '')}">` +
+        `<input class="row-col" list="dl-coluna" placeholder="Coluna (ex.: BH1750_3P_A)" value="${escAttr(coluna || '')}">` +
+        `<button type="button" class="row-del" title="Remover" onclick="this.closest('.editor-row').remove()"><i class="fas fa-times"></i></button>`;
+    cont.appendChild(div);
+}
+
+function coletarSensores() {
+    return Array.from(document.querySelectorAll('#edit-sensores-rows .editor-row')).map(r => ({
+        codigo: r.querySelector('.row-cod').value.trim(),
+        categoria: r.querySelector('.row-cat').value.trim()
+    })).filter(s => s.codigo);
+}
+
+function coletarTabelas() {
+    return Array.from(document.querySelectorAll('#edit-tabelas-rows .editor-row')).map(r => ({
+        tabela: r.querySelector('.row-tab').value.trim(),
+        coluna: r.querySelector('.row-col').value.trim()
+    })).filter(t => t.tabela);
+}
+
+// Autocomplete: sugere códigos/categorias/tabelas/colunas já usados (sem inventar)
+function popularDatalistsEditor() {
+    const cods = new Set(), cats = new Set(), tabs = new Set(), cols = new Set();
+    (currentDevicesData || []).forEach(d => {
+        (d.sensores || []).forEach(s => { if (s.codigo) cods.add(s.codigo); if (s.categoria) cats.add(s.categoria); });
+        (d.tabelas_sql || []).forEach(t => { if (t.tabela) tabs.add(t.tabela); if (t.coluna) cols.add(t.coluna); });
+    });
+    const fill = (id, set) => {
+        const dl = document.getElementById(id);
+        if (!dl) return;
+        dl.innerHTML = '';
+        Array.from(set).sort().forEach(v => { const o = document.createElement('option'); o.value = v; dl.appendChild(o); });
+    };
+    fill('dl-sensor-cod', cods); fill('dl-sensor-cat', cats);
+    fill('dl-tabela', tabs); fill('dl-coluna', cols);
 }
 
 function closeEditModal() {
@@ -447,8 +567,8 @@ async function saveDevice() {
     if (!currentEditDevice) return;
     const descricao = document.getElementById('edit-descricao').value.trim();
     const tipo = document.getElementById('edit-tipo').value.trim();
-    const sensores = parseSensoresText(document.getElementById('edit-sensores').value);
-    const tabelas_sql = parseTabelasSqlText(document.getElementById('edit-tabelas-sql').value);
+    const sensores = coletarSensores();
+    const tabelas_sql = coletarTabelas();
     if (!descricao) { alert('Descrição obrigatória'); return; }
 
     const btn = document.querySelector('.btn-save');
