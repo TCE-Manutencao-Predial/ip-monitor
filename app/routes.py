@@ -6,6 +6,8 @@ import os  # Sistema de arquivos (fotos dos locais de instalação).
 import re  # Validação de IP/id (segurança de path).
 import glob  # Busca de arquivos de foto.
 import uuid  # IDs de foto.
+import io  # Buffers em memória (zip).
+import zipfile  # Upload de .zip de fotos.
 from app import app  # Importa a instância 'app' da aplicação Flask.
 import concurrent.futures  # Para execução concorrente de múltiplas tarefas.
 import logging  # Adicionar logging
@@ -349,31 +351,83 @@ def listar_fotos(ip):
     return jsonify({'success': True, 'fotos': _foto_listar(ip), 'max': _FOTO_MAX})
 
 
+def _img_ext(nome):
+    ext = nome.rsplit('.', 1)[-1].lower() if '.' in (nome or '') else ''
+    return 'jpg' if ext == 'jpeg' else ext
+
+
+def _imagens_do_zip(data):
+    """(nome, bytes) das imagens dentro do zip; ignora o resto e entradas perigosas."""
+    out = []
+    try:
+        with zipfile.ZipFile(io.BytesIO(data)) as z:
+            for zi in z.infolist():
+                if zi.is_dir():
+                    continue
+                nome = zi.filename
+                if '..' in nome or nome.startswith('/') or nome.startswith('\\'):
+                    continue
+                if zi.file_size > 25 * 1024 * 1024:        # 25 MB por imagem (anti zip-bomb)
+                    continue
+                if _img_ext(nome) not in _FOTO_EXT:
+                    continue
+                with z.open(zi) as fh:
+                    out.append((os.path.basename(nome), fh.read()))
+                if len(out) >= 50:                          # teto de segurança
+                    break
+    except Exception as e:
+        logging.warning(f"[fotos] zip inválido: {e}")
+    return out
+
+
 @app.route('/api/devices/<string:ip>/fotos', methods=['POST'])
 @app.route(RAIZ + '/api/devices/<string:ip>/fotos', methods=['POST'])
 def upload_foto(ip):
+    """Aceita VÁRIAS imagens (multi-seleção) e/ou um .zip de fotos. Salva até o
+    limite por dispositivo; converte HEIC→JPEG. Resposta inclui quantas entraram
+    e quantas foram ignoradas (limite/formato)."""
     d = _foto_dir(ip)
     if not d:
         return jsonify({'error': 'IP inválido'}), 400
-    if len(_foto_listar(ip)) >= _FOTO_MAX:
-        return jsonify({'error': f'Limite de {_FOTO_MAX} fotos por dispositivo atingido'}), 400
-    f = request.files.get('foto')
-    if not f or not f.filename:
+
+    arquivos = [a for a in request.files.getlist('foto') if a and a.filename]
+    if not arquivos:
         return jsonify({'error': 'Nenhuma imagem enviada'}), 400
-    ext = f.filename.rsplit('.', 1)[-1].lower() if '.' in f.filename else ''
-    if ext == 'jpeg':
-        ext = 'jpg'
-    if ext not in _FOTO_EXT:
-        ext = _FOTO_CT.get((f.mimetype or '').lower())
-        if not ext:
-            return jsonify({'error': 'Envie uma imagem (jpg, png, webp, gif)'}), 400
+
+    # Monta candidatos (nome, bytes) a partir de imagens soltas e de zips
+    candidatos = []
+    for a in arquivos:
+        raw = a.read()
+        if a.filename.lower().endswith('.zip') or (a.mimetype or '') in (
+                'application/zip', 'application/x-zip-compressed', 'multipart/x-zip'):
+            candidatos.extend(_imagens_do_zip(raw))
+        else:
+            candidatos.append((a.filename, raw))
+
+    existentes = len(_foto_listar(ip))
+    livres = _FOTO_MAX - existentes
+    if livres <= 0:
+        return jsonify({'error': f'Limite de {_FOTO_MAX} fotos por dispositivo atingido',
+                        'adicionadas': 0, 'ignoradas': len(candidatos), 'total': existentes,
+                        'max': _FOTO_MAX}), 400
+
     os.makedirs(d, exist_ok=True)
-    data = f.read()
-    data, ext = _heic_para_jpeg(data, ext)
-    fid = uuid.uuid4().hex[:10]
-    with open(os.path.join(d, f'{fid}.{ext}'), 'wb') as fh:
-        fh.write(data)
-    return jsonify({'success': True, 'id': fid})
+    adicionadas, ignoradas = 0, 0
+    for nome, raw in candidatos:
+        if adicionadas >= livres:
+            ignoradas += 1
+            continue
+        ext = _img_ext(nome)
+        if ext not in _FOTO_EXT:
+            ignoradas += 1
+            continue
+        data, ext = _heic_para_jpeg(raw, ext)
+        fid = uuid.uuid4().hex[:10]
+        with open(os.path.join(d, f'{fid}.{ext}'), 'wb') as fh:
+            fh.write(data)
+        adicionadas += 1
+    return jsonify({'success': True, 'adicionadas': adicionadas, 'ignoradas': ignoradas,
+                    'total': existentes + adicionadas, 'max': _FOTO_MAX})
 
 
 @app.route('/api/devices/<string:ip>/fotos/<string:foto_id>', methods=['GET'])

@@ -392,18 +392,27 @@ async function carregarFotosDispositivo(ip) {
 }
 
 async function uploadFotoDispositivo(input) {
-    const file = input.files && input.files[0];
+    const files = input.files;
     input.value = '';
-    if (!file || !currentEditDevice) return;
+    if (!files || !files.length || !currentEditDevice) return;
+    const addBtn = document.getElementById('edit-foto-add');
+    const htmlBtn = addBtn ? addBtn.innerHTML : '';
+    if (addBtn) { addBtn.disabled = true; addBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Enviando…'; }
     try {
         const baseUrl = getApiBaseUrl();
         const fd = new FormData();
-        fd.append('foto', file);
+        for (const f of files) fd.append('foto', f);   // várias imagens e/ou um .zip
         const r = await fetch(`${baseUrl}/api/devices/${currentEditDevice.ip}/fotos`, { method: 'POST', body: fd });
         const d = await r.json();
-        if (!r.ok || !d.success) alert(d.error || 'Não foi possível enviar a foto.');
+        if (!r.ok || !d.success) {
+            alert(d.error || 'Não foi possível enviar.');
+        } else if (d.ignoradas) {
+            alert(`${d.adicionadas} foto(s) adicionada(s). ${d.ignoradas} ignorada(s) (limite de ${d.max} por dispositivo ou formato inválido).`);
+        }
     } catch (e) {
-        alert('Falha de conexão ao enviar a foto.');
+        alert('Falha de conexão ao enviar.');
+    } finally {
+        if (addBtn) { addBtn.disabled = false; addBtn.innerHTML = htmlBtn; }
     }
     carregarFotosDispositivo(currentEditDevice.ip);
 }
