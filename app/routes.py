@@ -16,6 +16,7 @@ from app.config_manager import config_manager  # Importa o gerenciador de config
 from app.device_manager import device_manager  # Importa o gerenciador de dispositivos.
 from app.clp_manager import clp_manager  # Importa o gerenciador de dados CLP.
 from app import audit as audit_mod  # Trilha de auditoria (SQLite local).
+from app import monitor_transicoes  # Detecção de transições UP↔DOWN + notificações (Onda 3).
 from app.settings import ROUTES_PREFIX, NETWORK_BASE, DATA_ROOT  # Importa configurações centralizadas
 
 # Configurar logging
@@ -45,7 +46,12 @@ def background_ip_check(vlan):
     # Log dos resultados antes de armazenar
     items_com_tipo = [item for item in result if item.get('tipo') and item['tipo'].strip()]
     logging.info(f"[BACKGROUND] VLAN {vlan} - Resultado: {len(result)} itens, {len(items_com_tipo)} com tipo")
-    
+
+    # Atualiza o estado de offline (status + offline_desde) por host. NÃO
+    # notifica aqui — o digest semanal é disparado 1× por ciclo no check_loop.
+    # Best-effort: nunca derruba o monitoramento.
+    monitor_transicoes.processar_resultado_vlan(vlan, result)
+
     check_ip[vlan] = result
 
 
@@ -722,7 +728,15 @@ def start_background_service():
             # Usar um pool de threads para verificar VLANs simultaneamente
             with concurrent.futures.ThreadPoolExecutor(max_workers=max_workers) as executor:
                 executor.map(background_ip_check, vlan_list)
-            
+
+            # Depois de atualizar o estado de todas as VLANs deste ciclo,
+            # tenta o digest semanal de hosts offline >24h (rate-limit semanal
+            # interno). Best-effort: nunca derruba o loop.
+            try:
+                monitor_transicoes.talvez_enviar_digest()
+            except Exception as e:  # noqa: BLE001
+                logging.warning(f"[BACKGROUND] digest offline falhou: {e}")
+
             # Aguardar intervalo configurado (usar o menor intervalo como base)
             ping_intervals = config_manager.get_config('ping_intervals')
             min_interval = min(ping_intervals.values()) if ping_intervals else 10
