@@ -93,11 +93,17 @@ def _carregar_estado() -> Dict[str, dict]:
                             "status": str(v.get("status", "on")),
                             "offline_desde": v.get("offline_desde") or None,
                             "label": v.get("label") or "",
+                            # `offline_desde` que já entrou num digest. Enquanto
+                            # igual ao offline_desde atual, o host NÃO é re-notificado
+                            # (supressão de permanentemente-offline). Só volta a
+                            # notificar se recuperar e cair de novo (offline_desde muda).
+                            "notificado_desde": v.get("notificado_desde") or None,
                         }
                     else:
                         # Esquema antigo: só o status. offline_desde desconhecido.
                         out[str(k)] = {"status": str(v), "offline_desde": None,
-                                       "label": ""}
+                                       "label": "", "notificado_desde": None}
+                _seed_notificados_uma_vez(out)
                 return out
     except Exception as e:  # noqa: BLE001
         logger.warning(f"[offline] falha ao carregar estado: {e}")
@@ -173,6 +179,62 @@ def _fmt_duracao(delta: timedelta) -> str:
     return " ".join(partes) or "0min"
 
 
+# VLAN (3º octeto do IP) → descrição amigável p/ agrupar o digest.
+_VLAN_DESC = {
+    70: "Câmeras", 80: "Alarme", 85: "Automação Ethernet",
+    86: "Automação WiFi", 200: "Telefonia IP Fixa", 204: "Telefonia IP Móvel",
+}
+
+
+def _vlan_de_ip(ip: str):
+    """3º octeto do IP (= número da VLAN no padrão 172.17.<vlan>.x). None se não casar."""
+    try:
+        p = ip.split(".")
+        return int(p[2]) if len(p) >= 3 else None
+    except (ValueError, IndexError, AttributeError):
+        return None
+
+
+def _vlan_rotulo(ip: str) -> str:
+    v = _vlan_de_ip(ip)
+    if v is None:
+        return "Outros"
+    desc = _VLAN_DESC.get(v)
+    return f"VLAN {v} — {desc}" if desc else f"VLAN {v}"
+
+
+def _seed_notificados_uma_vez(estado: Dict[str, dict]) -> None:
+    """Migração ÚNICA: marca como já-notificados os hosts que JÁ entraram no
+    último digest (offline >24h no momento daquele envio). Sem isto, hosts que
+    estão permanentemente offline desde antes desta feature seriam re-notificados
+    uma última vez. Guarda flag em digest_meta p/ rodar só 1×; assim restarts
+    futuros NÃO suprimem hosts que caíram e ainda não foram avisados."""
+    try:
+        meta = _carregar_digest_meta()
+        if meta.get("seed_notificados_v1"):
+            return
+        ult = meta.get("ultimo_envio_iso")
+        if ult:  # só semeia se já houve um digest (esses hosts já foram avisados)
+            ult_dt = datetime.strptime(ult, _ISO)
+            limiar = timedelta(hours=LIMIAR_HORAS)
+            for reg in estado.values():
+                od = reg.get("offline_desde")
+                if reg.get("status") == "off" and od and not reg.get("notificado_desde"):
+                    try:
+                        if ult_dt - datetime.strptime(od, _ISO) > limiar:
+                            reg["notificado_desde"] = od
+                    except (ValueError, TypeError):
+                        pass
+        # Persiste o estado JÁ com notificado_desde (não espera o próximo scan):
+        # garante que a marcação sobreviva a um restart imediato.
+        _salvar_estado(estado)
+        meta["seed_notificados_v1"] = True
+        _salvar_digest_meta(meta)
+        logger.info("[offline] seed único de notificados aplicado (supressão de permanentes)")
+    except Exception as e:  # noqa: BLE001
+        logger.warning(f"[offline] falha no seed de notificados: {e}")
+
+
 def processar_resultado_vlan(vlan, ip_status_list: List[dict]) -> None:
     """Atualiza o estado (status + offline_desde) para uma VLAN. NÃO envia
     nada — o disparo do digest é feito por `talvez_enviar_digest()`, 1× por
@@ -207,6 +269,7 @@ def processar_resultado_vlan(vlan, ip_status_list: List[dict]) -> None:
                         "status": novo,
                         "offline_desde": agora_iso if novo == "off" else None,
                         "label": rotulo,
+                        "notificado_desde": None,
                     }
                     mudou = True
                     continue
@@ -286,6 +349,21 @@ def talvez_enviar_digest() -> Optional[dict]:
             if not hosts:
                 return None  # nada offline >24h → não envia
 
+            # Reportáveis: hosts cujo `offline_desde` ainda NÃO foi notificado —
+            # caíram agora pela 1ª vez, OU recuperaram e voltaram a cair (o
+            # offline_desde muda). Hosts permanentemente offline desde um aviso
+            # anterior têm offline_desde == notificado_desde → suprimidos.
+            reportaveis = []
+            for ip, od_dt, dur in hosts:
+                reg = (_estado or {}).get(ip) or {}
+                if reg.get("offline_desde") != reg.get("notificado_desde"):
+                    reportaveis.append((ip, od_dt, dur))
+            if not reportaveis:
+                logger.info(
+                    f"[offline] digest suprimido: {len(hosts)} offline >{LIMIAR_HORAS}h, "
+                    f"nenhum novo/reincidente (todos já notificados)")
+                return None
+
             meta = _carregar_digest_meta()
             ultimo = meta.get("ultimo_envio_iso")
             if ultimo:
@@ -299,20 +377,31 @@ def talvez_enviar_digest() -> Optional[dict]:
                 except (ValueError, TypeError):
                     pass
 
-            # Monta o corpo do digest.
+            # Monta o corpo do digest, agrupado por VLAN.
             iso_semana = agora.isocalendar()
             dedup_key = f"offline-weekly:ip-monitor:{iso_semana[0]}-W{iso_semana[1]:02d}"
-            linhas = []
-            for ip, od_dt, dur in hosts:
-                linhas.append(
-                    f"- {_descricao_por_ip(ip)} — offline há {_fmt_duracao(dur)} "
-                    f"(desde {od_dt.strftime('%d/%m/%Y %H:%M')})")
+            grupos: Dict[str, list] = {}
+            for ip, od_dt, dur in reportaveis:
+                grupos.setdefault(_vlan_rotulo(ip), []).append((ip, od_dt, dur))
+            blocos = []
+            for vlan_lbl in sorted(grupos):
+                itens = sorted(grupos[vlan_lbl], key=lambda t: t[1])  # mais antigo 1º
+                linhas = [
+                    f"   • {_descricao_por_ip(ip)} — offline há {_fmt_duracao(dur)} "
+                    f"(desde {od_dt.strftime('%d/%m %H:%M')})"
+                    for ip, od_dt, dur in itens
+                ]
+                blocos.append(f"▸ {vlan_lbl}  ({len(itens)})\n" + "\n".join(linhas))
             corpo = (
-                f"Hosts de rede offline há mais de {LIMIAR_HORAS}h "
-                f"(total: {len(hosts)}):\n\n" + "\n".join(linhas) +
-                "\n\nDigest semanal automático do monitor de IPs.")
-            titulo = (f"[Rede] {len(hosts)} host(s) offline há +{LIMIAR_HORAS}h "
-                      f"— digest semanal")
+                f"{len(reportaveis)} host(s) entraram em offline prolongado "
+                f"(> {LIMIAR_HORAS}h) desde o último aviso.\n"
+                f"Hosts que seguem offline desde um aviso anterior NÃO são repetidos — "
+                f"só reaparecem se recuperarem e caírem de novo.\n\n"
+                + "\n\n".join(blocos)
+                + "\n\n— Monitor de IPs · digest semanal automático."
+            )
+            titulo = (f"[Rede] {len(reportaveis)} host(s) em offline prolongado "
+                      f"(+{LIMIAR_HORAS}h) — digest semanal")
 
             res = notif.enviar_notificacao(
                 titulo=titulo,
@@ -322,23 +411,32 @@ def talvez_enviar_digest() -> Optional[dict]:
                 canais=["email"],
                 destinos=DESTINOS_PADRAO,
                 dedup_key=dedup_key,
-                dados={"total": len(hosts),
-                       "ips": [ip for ip, _, _ in hosts],
+                dados={"total": len(reportaveis),
+                       "total_offline_24h": len(hosts),
+                       "ips": [ip for ip, _, _ in reportaveis],
                        "limiar_horas": LIMIAR_HORAS,
                        "evento": "digest_semanal_offline"},
             )
-            # Só grava o rate-limit se o núcleo aceitou (ok). Se falhou, tenta
-            # de novo no próximo ciclo (não perde o digest da semana por um
-            # blip de rede).
+            # Só grava (rate-limit + marca notificados) se o núcleo aceitou. Se
+            # falhou, tenta de novo no próximo ciclo (não perde o digest da semana).
             if res.get("ok"):
-                _salvar_digest_meta({
+                meta.update({
                     "ultimo_envio_iso": agora.strftime(_ISO),
                     "ultimo_dedup_key": dedup_key,
-                    "ultimo_total": len(hosts),
+                    "ultimo_total": len(reportaveis),
                 })
+                _salvar_digest_meta(meta)   # preserva seed_notificados_v1
+                # Registra os IPs notificados: enquanto seguirem offline (mesmo
+                # offline_desde) não voltam ao digest; só reaparecem se recaírem.
+                for ip, _od, _dur in reportaveis:
+                    reg = (_estado or {}).get(ip)
+                    if reg:
+                        reg["notificado_desde"] = reg.get("offline_desde")
+                _salvar_estado(_estado)
             logger.info(
-                f"[offline] digest semanal: {len(hosts)} host(s) >+{LIMIAR_HORAS}h "
-                f"ok={res.get('ok')} entregas={res.get('entregas')} dedup={dedup_key}")
+                f"[offline] digest semanal: {len(reportaveis)} reportável(is) de "
+                f"{len(hosts)} offline >{LIMIAR_HORAS}h ok={res.get('ok')} "
+                f"entregas={res.get('entregas')} dedup={dedup_key}")
             return res
     except Exception as e:  # noqa: BLE001 — blindagem total
         logger.error(f"[offline] erro ao montar/enviar digest: {e}")
