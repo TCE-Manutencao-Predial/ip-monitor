@@ -28,6 +28,16 @@ check_ip = {}
 # Constante que define o caminho raiz para os endpoints da API.
 RAIZ = ROUTES_PREFIX  # Usa configuração centralizada do settings.py
 
+# Autorização central (grupo `automacao` da matriz do helpdesk). Movido de
+# público → protegido em 2026-06-19. Whitelist preserva healthcheck + os GETs
+# inter-container consumidos por infra-docs/tcego-ia (ver app/autz.py).
+from app import autz as _autz  # noqa: E402
+
+
+@app.before_request
+def _autz_guard():
+    return _autz.guard()
+
 # Variável global para controlar o loop de verificação
 background_thread = None
 should_stop = False
