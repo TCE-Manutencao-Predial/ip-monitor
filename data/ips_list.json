@@ -612,10 +612,6 @@
         "descricao": "Sensor Geiser Counter"
       },
       {
-        "ip": "172.17.86.54",
-        "descricao": "Sensor Raios"
-      },
-      {
         "ip": "172.17.86.55",
         "descricao": "Tubulação refrigeração - 1° subsolo Retorno"
       },
@@ -712,7 +708,7 @@
         "descricao": "Cancelas - 1 Subsolo - Saída — Cancela - 1º Subsolo (Saída)"
       },
       {
-        "ip": "172.17.86.79",
+        "ip": "172.17.86.54",
         "descricao": "Cancelas - 1 Subsolo - Entrada — Cancela - 1º Subsolo (Entrada)"
       },
       {
