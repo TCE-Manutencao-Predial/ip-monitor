@@ -1707,10 +1707,10 @@
       },
       {
         "ip": "172.17.86.33",
-        "descricao": "Sensor gás MQ-135 - Laboratório Solos",
+        "descricao": "Sensor gás MQ-135 — Pátio de Serviços - Depósito Serv. Infraestrutura",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714515",
-        "updated_at": "2025-12-12T09:56:26.714516",
+        "updated_at": "2026-08-20T00:00:00",
         "sensores": [
           {
             "codigo": "MQ-135",
@@ -2059,37 +2059,33 @@
       },
       {
         "ip": "172.17.86.50",
-        "descricao": "Sensor Temperatura e PIR - Laboratório",
-        "tipo": "Sensor IoT",
+        "descricao": "Sensor HTU21 — Pátio de Serviços - Depósito Serv. Infraestrutura",
+        "tipo": "ESP32 + HTU21",
         "created_at": "2025-12-12T09:56:26.714555",
-        "updated_at": "2025-12-12T09:56:26.714556",
+        "updated_at": "2026-08-20T00:00:00",
         "sensores": [
           {
-            "codigo": "DS18B20",
-            "categoria": "temperatura"
-          },
-          {
-            "codigo": "PIR",
-            "categoria": "movimento_pir"
+            "codigo": "HTU21",
+            "categoria": "temp_umid"
           }
         ],
         "tabelas_sql": [
           {
             "tabela": "REFRIGERACAO_SPLITS",
-            "coluna": "DS18B20_TEMP_LAB_SOLOS"
+            "coluna": "HTU21_TEMP_LAB_SOLOS"
           },
           {
             "tabela": "REFRIGERACAO_SPLITS",
-            "coluna": "PIR_LAB_SOLOS"
+            "coluna": "HTU21_UMID_LAB_SOLOS"
           }
         ]
       },
       {
         "ip": "172.17.86.51",
-        "descricao": "Sensor umidade e temperatura - Laboratório",
+        "descricao": "Sensor HDC1080 — Pátio de Serviços - Depósito Serv. Infraestrutura",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714557",
-        "updated_at": "2025-12-12T09:56:26.714558",
+        "updated_at": "2026-08-20T00:00:00",
         "sensores": [
           {
             "codigo": "HDC1080",

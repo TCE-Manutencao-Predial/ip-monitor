@@ -533,7 +533,7 @@
       },
       {
         "ip": "172.17.86.33",
-        "descricao": "Sensor gás MQ-135 - Laboratório Solos"
+        "descricao": "Sensor gás MQ-135 — Pátio de Serviços - Depósito Serv. Infraestrutura"
       },
       {
         "ip": "172.17.86.34",
@@ -597,11 +597,11 @@
       },
       {
         "ip": "172.17.86.50",
-        "descricao": "Sensor Temperatura e PIR - Laboratório"
+        "descricao": "Sensor HTU21 — Pátio de Serviços - Depósito Serv. Infraestrutura"
       },
       {
         "ip": "172.17.86.51",
-        "descricao": "Sensor umidade e temperatura - Laboratório"
+        "descricao": "Sensor HDC1080 — Pátio de Serviços - Depósito Serv. Infraestrutura"
       },
       {
         "ip": "172.17.86.52",
