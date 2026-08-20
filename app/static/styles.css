@@ -607,11 +607,19 @@ td.col-acoes  { width: 80px; text-align: right; white-space: nowrap; }
     border-radius: 10px;
     box-shadow: 0 10px 30px rgba(0,0,0,0.25);
     animation: modalIn 0.2s ease;
+    /* Cabecalho e rodape fixos; so o corpo rola.
+       Garante que os botoes Cancelar/Salvar nunca saiam da viewport. */
+    display: flex;
+    flex-direction: column;
+    max-height: calc(100vh - 80px);
 }
 .modal-content.modal-wide { max-width: 780px; }
+/* Modal de edicao de dispositivo: mais largo (form com sensores, tabelas e fotos) */
+.modal-content.modal-edit { max-width: 900px; }
 @keyframes modalIn { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
 
 .modal-header {
+    flex: 0 0 auto;
     padding: 1rem 1.25rem;
     border-bottom: 1px solid var(--border);
     display: flex;
@@ -631,7 +639,11 @@ td.col-acoes  { width: 80px; text-align: right; white-space: nowrap; }
 .close { font-size: 1.5rem; cursor: pointer; color: var(--text-light); border: none; background: transparent; }
 .close:hover { color: var(--danger); }
 
-.modal-body { padding: 1.25rem; }
+.modal-body { padding: 1.25rem; flex: 1 1 auto; min-height: 0; overflow-y: auto; }
+/* Duas colunas dentro do formulario (aproveita a largura maior e reduz a altura) */
+.form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 1rem; }
+.form-row > .form-group { min-width: 0; }
+@media (max-width: 640px) { .form-row { grid-template-columns: 1fr; } }
 .form-group { margin-bottom: 0.85rem; }
 .form-group label {
     display: block;
@@ -676,11 +688,14 @@ td.col-acoes  { width: 80px; text-align: right; white-space: nowrap; }
 }
 
 .modal-footer {
+    flex: 0 0 auto;
     padding: 0.85rem 1.25rem;
     border-top: 1px solid var(--border);
     display: flex;
     justify-content: flex-end;
     gap: 0.5rem;
+    background: #fff;
+    border-radius: 0 0 10px 10px;
 }
 .btn-cancel, .btn-save, .btn-clear-data {
     padding: 0.5rem 1rem;

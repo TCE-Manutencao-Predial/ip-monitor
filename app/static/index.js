@@ -619,7 +619,20 @@ window.onload = function() {
     searchByVlan();
 };
 
-setInterval(searchByVlan, 20000);
+// Auto-refresh da lista a cada 20s — PAUSADO enquanto houver modal aberto,
+// pra não re-renderizar a tabela nem trocar currentDevicesData debaixo de um
+// formulário que o usuário está preenchendo (risco de gravar dado velho).
+function algumModalAberto() {
+    return ['editModal', 'addDeviceModal', 'typesModal', 'detailsModal'].some(id => {
+        const m = document.getElementById(id);
+        return m && m.style.display === 'block';
+    });
+}
+
+setInterval(() => {
+    if (algumModalAberto()) return;
+    searchByVlan();
+}, 20000);
 
 document.addEventListener('DOMContentLoaded', function() {
     const editClose = document.querySelector('#editModal .close');
@@ -629,21 +642,27 @@ document.addEventListener('DOMContentLoaded', function() {
         const detM = document.getElementById('detailsModal');
         const addM = document.getElementById('addDeviceModal');
         const typesM = document.getElementById('typesModal');
-        if (e.target === editM) closeEditModal();
+        // editModal NÃO fecha por clique no fundo: o formulário é alto, o usuário
+        // rola pra alcançar os botões e acaba clicando na faixa lateral do overlay,
+        // perdendo o que digitou. Só fecha por X / Cancelar / Salvar.
         if (e.target === detM) closeDetailsModal();
         if (e.target === addM) closeAddDeviceModal();
         if (e.target === typesM) closeTypesModal();
     };
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
-            closeEditModal();
+            // ESC não fecha o modal de edição (mesma razão do clique no fundo).
             closeDetailsModal();
             closeAddDeviceModal();
             closeTypesModal();
         }
         if (e.key === 'Enter') {
             const m = document.getElementById('editModal');
-            if (m.style.display === 'block' && document.activeElement.id !== 'edit-tipo') saveDevice();
+            // Enter só salva a partir dos campos simples do topo. Dentro dos
+            // editores de sensores/tabelas ele salvava e fechava o modal sem
+            // o usuário pedir — parecia que o modal "fechava sozinho".
+            const focoSimples = ['edit-ip', 'edit-descricao'].includes(document.activeElement.id);
+            if (m.style.display === 'block' && focoSimples) saveDevice();
             const addM = document.getElementById('addDeviceModal');
             if (addM && addM.style.display === 'block') addDevice();
         }
