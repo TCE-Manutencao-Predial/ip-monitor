@@ -1559,20 +1559,20 @@
       },
       {
         "ip": "172.17.86.25",
-        "descricao": "Sensor gás MQ — S01-B1 (acima do forro)",
+        "descricao": "Sensor gás MQ — Hall do Elevador - 1º Subsolo B1",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714494",
-        "updated_at": "2026-08-25T10:01:26.876279",
+        "updated_at": "2026-08-25T10:09:36.376494",
         "sensores": [
           {
-            "categoria": "gas",
-            "codigo": "MQ"
+            "codigo": "MQ",
+            "categoria": "gas"
           }
         ],
         "tabelas_sql": [
           {
-            "coluna": "MQ4_S1_B1",
-            "tabela": "MEIO_AMBIENTE"
+            "tabela": "MEIO_AMBIENTE",
+            "coluna": "MQ_HALL_ELEVADOR_S1_B1"
           }
         ]
       },
@@ -1629,25 +1629,6 @@
         "tabelas_sql": [
           {
             "coluna": "MQ_COPAS_1P",
-            "tabela": "MEIO_AMBIENTE"
-          }
-        ]
-      },
-      {
-        "ip": "172.17.86.29",
-        "descricao": "Sensor gás MQ — Refeitório",
-        "tipo": "Sensor IoT",
-        "created_at": "2025-12-12T09:56:26.714504",
-        "updated_at": "2026-08-25T10:01:26.923554",
-        "sensores": [
-          {
-            "categoria": "gas",
-            "codigo": "MQ"
-          }
-        ],
-        "tabelas_sql": [
-          {
-            "coluna": "MQ6_REFEITORIO",
             "tabela": "MEIO_AMBIENTE"
           }
         ]
