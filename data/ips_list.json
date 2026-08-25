@@ -829,7 +829,7 @@
       },
       {
         "ip": "172.17.86.110",
-        "descricao": "Sensor PIR + BH1750 + Relé"
+        "descricao": "Sensor som INMP441 (FFT) — Átrio - Máquinas de Refrigeração"
       },
       {
         "ip": "172.17.86.111",
