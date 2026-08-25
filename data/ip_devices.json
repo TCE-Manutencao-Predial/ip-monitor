@@ -1521,205 +1521,205 @@
       },
       {
         "ip": "172.17.86.23",
-        "descricao": "Sensor gás MQ-2 - Galeria Técnica",
+        "descricao": "Sensor gás MQ — Galeria Técnica",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714489",
-        "updated_at": "2025-12-12T09:56:26.714490",
+        "updated_at": "2026-08-25T10:01:26.853251",
         "sensores": [
           {
-            "codigo": "MQ-2",
-            "categoria": "gas_glp"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ2_GALERIA_TEC"
+            "coluna": "MQ2_GALERIA_TEC",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.24",
-        "descricao": "Sensor gás MQ-3 - Depósito Materiais",
+        "descricao": "Sensor gás MQ — Depósito de Materiais - 2º Subsolo",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714492",
-        "updated_at": "2025-12-12T09:56:26.714493",
+        "updated_at": "2026-08-25T10:01:26.864741",
         "sensores": [
           {
-            "codigo": "MQ-3",
-            "categoria": "gas_alcool"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ3_DEPOSITO_S2_B"
+            "coluna": "MQ3_DEPOSITO_S2_B",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.25",
-        "descricao": "Sensor gás MQ-4 - S01-B1 (acima forro)",
+        "descricao": "Sensor gás MQ — S01-B1 (acima do forro)",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714494",
-        "updated_at": "2025-12-12T09:56:26.714495",
+        "updated_at": "2026-08-25T10:01:26.876279",
         "sensores": [
           {
-            "codigo": "MQ-4",
-            "categoria": "gas_metano"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ4_S1_B1"
+            "coluna": "MQ4_S1_B1",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.26",
-        "descricao": "Sensor MQ — Copa - Térreo",
+        "descricao": "Sensor gás MQ — Copa - Térreo",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714497",
-        "updated_at": "2026-08-25T08:49:47.120019",
+        "updated_at": "2026-08-25T10:01:26.888035",
         "sensores": [
           {
-            "categoria": "gas_glp_metano",
-            "codigo": "MQ-5"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ_COPAS_TE"
+            "coluna": "MQ_COPAS_TE",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.27",
-        "descricao": "Sensor MQ — Copa - 2º Pavimento",
+        "descricao": "Sensor gás MQ — Copa - 2º Pavimento",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714499",
-        "updated_at": "2026-08-25T08:49:47.131418",
+        "updated_at": "2026-08-25T10:01:26.899399",
         "sensores": [
           {
-            "categoria": "gas_glp_metano",
-            "codigo": "MQ-5"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ_COPAS_2P"
+            "coluna": "MQ_COPAS_2P",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.28",
-        "descricao": "Sensor MQ — Copa - 1º Pavimento",
+        "descricao": "Sensor gás MQ — Copa - 1º Pavimento",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714502",
-        "updated_at": "2026-08-25T08:49:47.142723",
+        "updated_at": "2026-08-25T10:01:26.910714",
         "sensores": [
           {
-            "categoria": "gas_glp",
-            "codigo": "MQ-6"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ_COPAS_1P"
+            "coluna": "MQ_COPAS_1P",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.29",
-        "descricao": "Sensor gás MQ-6 - Refeitório",
+        "descricao": "Sensor gás MQ — Refeitório",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714504",
-        "updated_at": "2025-12-12T09:56:26.714506",
+        "updated_at": "2026-08-25T10:01:26.923554",
         "sensores": [
           {
-            "codigo": "MQ-6",
-            "categoria": "gas_glp"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ6_REFEITORIO"
+            "coluna": "MQ6_REFEITORIO",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.30",
-        "descricao": "MQ7 (CO) — Estacionamento 1º Subsolo",
+        "descricao": "Sensor gás MQ — Estacionamento - 1º Subsolo (Bloco A)",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714507",
-        "updated_at": "2026-08-25T08:49:47.154120",
+        "updated_at": "2026-08-25T10:01:26.946886",
         "sensores": [
           {
-            "categoria": "gas_co",
-            "codigo": "MQ-7"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ7_GMGS"
+            "coluna": "MQ_ESTACIONAMENTO_S1_A",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.31",
-        "descricao": "Sensor gás MQ-8 — Garagem dos Conselheiros",
+        "descricao": "Sensor gás MQ — local a definir (troca de IP)",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714509",
-        "updated_at": "2026-08-25T09:54:49.953293",
+        "updated_at": "2026-08-25T10:01:06.411743",
         "sensores": [
           {
-            "categoria": "gas_h2",
-            "codigo": "MQ-8"
+            "codigo": "MQ",
+            "categoria": "gas"
           }
         ],
         "tabelas_sql": []
       },
       {
         "ip": "172.17.86.32",
-        "descricao": "Sensor gás MQ-9 - GMGs Edifício-sede",
+        "descricao": "Sensor gás MQ — GMGs - Edifício-sede",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714512",
-        "updated_at": "2025-12-12T09:56:26.714513",
+        "updated_at": "2026-08-25T10:01:26.958233",
         "sensores": [
           {
-            "codigo": "MQ-9",
-            "categoria": "gas_combustiveis"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ9_GMGS"
+            "coluna": "MQ9_GMGS",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.33",
-        "descricao": "Sensor gás MQ-135 — Pátio de Serviços - Depósito Serv. Infraestrutura",
+        "descricao": "Sensor gás MQ — Pátio de Serviços - Depósito Serv. Infraestrutura",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714515",
-        "updated_at": "2026-08-20T00:00:00",
+        "updated_at": "2026-08-25T10:01:26.970255",
         "sensores": [
           {
-            "codigo": "MQ-135",
-            "categoria": "gas_qualidade_ar"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ135_DEPOSITO_INFRA"
+            "coluna": "MQ135_DEPOSITO_INFRA",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
@@ -1748,58 +1748,58 @@
       },
       {
         "ip": "172.17.86.35",
-        "descricao": "Sensor MQ — Lanchonete - Salão",
+        "descricao": "Sensor gás MQ — Lanchonete - Salão",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714520",
-        "updated_at": "2026-08-25T08:49:47.165939",
+        "updated_at": "2026-08-25T10:01:26.982015",
         "sensores": [
           {
-            "categoria": "gas_glp",
-            "codigo": "MQ-6"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ_COPAS_LANCHONETE"
+            "coluna": "MQ_COPAS_LANCHONETE",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
       {
         "ip": "172.17.86.36",
-        "descricao": "Sensor gás MQ-6 - Garagem Conselheiros",
+        "descricao": "Sensor gás MQ — Garagem dos Conselheiros",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714522",
-        "updated_at": "2025-12-12T09:56:26.714523",
+        "updated_at": "2026-08-25T10:01:06.458264",
         "sensores": [
           {
-            "codigo": "MQ-6",
-            "categoria": "gas_glp"
+            "codigo": "MQ",
+            "categoria": "gas"
           }
         ],
         "tabelas_sql": [
           {
             "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ6_GARAGEM_CONSELHEIROS"
+            "coluna": "MQ_GARAGEM_CONSELHEIROS"
           }
         ]
       },
       {
         "ip": "172.17.86.37",
-        "descricao": "Sensor gás MQ-6 - Galeria Técnica",
+        "descricao": "Sensor gás MQ — Galeria Técnica",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714525",
-        "updated_at": "2025-12-12T09:56:26.714526",
+        "updated_at": "2026-08-25T10:01:26.993601",
         "sensores": [
           {
-            "codigo": "MQ-6",
-            "categoria": "gas_glp"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
         "tabelas_sql": [
           {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ6_GALERIA_TECNCIA"
+            "coluna": "MQ6_GALERIA_TECNCIA",
+            "tabela": "MEIO_AMBIENTE"
           }
         ]
       },
