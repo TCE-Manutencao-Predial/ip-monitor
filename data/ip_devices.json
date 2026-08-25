@@ -1673,22 +1673,17 @@
       },
       {
         "ip": "172.17.86.31",
-        "descricao": "Sensor gás MQ-8 - CAG",
-        "tipo": "Sensor IoT",
+        "descricao": "Sensor gás MQ-8 — Garagem dos Conselheiros",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714509",
-        "updated_at": "2025-12-12T09:56:26.714511",
+        "updated_at": "2026-08-25T09:54:49.953293",
         "sensores": [
           {
-            "codigo": "MQ-8",
-            "categoria": "gas_h2"
+            "categoria": "gas_h2",
+            "codigo": "MQ-8"
           }
         ],
-        "tabelas_sql": [
-          {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ8_CAG"
-          }
-        ]
+        "tabelas_sql": []
       },
       {
         "ip": "172.17.86.32",
