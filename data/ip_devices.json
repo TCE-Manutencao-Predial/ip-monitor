@@ -3140,6 +3140,37 @@
         ]
       },
       {
+        "ip": "172.17.86.110",
+        "descricao": "Sensor som INMP441 (FFT) — Átrio - Máquinas de Refrigeração",
+        "tipo": "Sensor IoT",
+        "sensores": [
+          {
+            "codigo": "INMP441",
+            "categoria": "som_i2s"
+          }
+        ],
+        "tabelas_sql": [
+          {
+            "tabela": "REFRIGERACAO_ATRIO",
+            "coluna": "INMP441_LEQ_ATRIO"
+          },
+          {
+            "tabela": "REFRIGERACAO_ATRIO",
+            "coluna": "INMP441_PISO_ATRIO"
+          },
+          {
+            "tabela": "REFRIGERACAO_ATRIO",
+            "coluna": "INMP441_FREQUENCIA_ATRIO"
+          },
+          {
+            "tabela": "REFRIGERACAO_ATRIO",
+            "coluna": "INMP441_NIVEL_ATRIO"
+          }
+        ],
+        "created_at": "2026-08-24T23:09:34.454843",
+        "updated_at": "2026-08-24T23:09:34.454848"
+      },
+      {
         "ip": "172.17.86.114",
         "descricao": "Sensor BH1750 — Espelho dágua - Bloco A",
         "tipo": "Sensor IoT",
@@ -3155,6 +3186,29 @@
           {
             "tabela": "ILUMINACAO",
             "coluna": "BH1750_ESPELHO_AGUA_A"
+          }
+        ]
+      },
+      {
+        "ip": "172.17.86.115",
+        "descricao": "Sensor HTU21 — Pátio de Serviços - Quadro CAG",
+        "tipo": "ESP32",
+        "created_at": "2026-08-25T10:30:23.647502",
+        "updated_at": "2026-08-25T10:30:41.013287",
+        "sensores": [
+          {
+            "codigo": "HTU21",
+            "categoria": "temp_umid"
+          }
+        ],
+        "tabelas_sql": [
+          {
+            "tabela": "REFRIGERACAO_CAG",
+            "coluna": "HTU21_TEMP_QUADRO_CAG"
+          },
+          {
+            "tabela": "REFRIGERACAO_CAG",
+            "coluna": "HTU21_UMID_QUADRO_CAG"
           }
         ]
       },
@@ -3454,37 +3508,6 @@
         "updated_at": "2025-12-12T09:56:26.714792",
         "sensores": [],
         "tabelas_sql": []
-      },
-      {
-        "ip": "172.17.86.110",
-        "descricao": "Sensor som INMP441 (FFT) — Átrio - Máquinas de Refrigeração",
-        "tipo": "Sensor IoT",
-        "sensores": [
-          {
-            "codigo": "INMP441",
-            "categoria": "som_i2s"
-          }
-        ],
-        "tabelas_sql": [
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "INMP441_LEQ_ATRIO"
-          },
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "INMP441_PISO_ATRIO"
-          },
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "INMP441_FREQUENCIA_ATRIO"
-          },
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "INMP441_NIVEL_ATRIO"
-          }
-        ],
-        "created_at": "2026-08-24T23:09:34.454843",
-        "updated_at": "2026-08-24T23:09:34.454848"
       }
     ],
     "90": [
