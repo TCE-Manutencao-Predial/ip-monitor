@@ -858,3 +858,24 @@ td.col-acoes  { width: 80px; text-align: right; white-space: nowrap; }
     max-width: 92vw; max-height: 92vh; object-fit: contain;
     border-radius: 10px; background: #fff; box-shadow: 0 8px 40px rgba(0, 0, 0, 0.5);
 }
+
+/* Coluna SQL que existe no banco vira link para o gráfico. A que não existe
+   fica apagada e riscada: o cadastro tem notação de atalho
+   ("MPU6250_[AX,AY,AZ]_A") e ponteiros que envelheceram, e prometer gráfico
+   para eles abriria uma tela vazia. */
+a.badge-sql-link {
+    text-decoration: none;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+}
+a.badge-sql-link:hover,
+a.badge-sql-link:focus-visible {
+    filter: brightness(0.94);
+    outline: 1px solid currentColor;
+    outline-offset: 1px;
+}
+a.badge-sql-link i { font-size: 0.78em; opacity: .8; }
+.badge-sql-morta { opacity: .55; }
+.badge-sql-morta .sql-col { text-decoration: line-through; }

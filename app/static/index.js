@@ -4,13 +4,45 @@ let currentVlan = '85';
 let sortKey = 'ip';
 let sortAsc = true;
 let arduinosByIp = {};  // { '172.17.86.x': {rssi, uptime, heap, ...} }
+// { '172.17.86.x': [{tabela, coluna}] } — o que o coletor GRAVA de fato, que
+// não é o mesmo que o `tabelas_sql` do cadastro: em 25/08/2026, das 90
+// declarações daqui, 37 apontavam coluna que ninguém escreve e 12 divergiam.
+let colunasReaisPorIp = {};
+// { TABELA: [colunas] } do banco, para só criar link do que existe mesmo.
+let schemaBanco = {};
+
+async function loadColunasReais() {
+    try {
+        const r = await fetch('/ipmonitor/api/arduinos/mapeamento-colunas');
+        if (r.ok) colunasReaisPorIp = (await r.json()).dados || {};
+    } catch (e) { console.warn('mapeamento de colunas indisponível', e); }
+    try {
+        const r = await fetch('/ipmonitor/api/schema-banco');
+        if (r.ok) schemaBanco = (await r.json()).dados || {};
+    } catch (e) { console.warn('schema do banco indisponível', e); }
+}
+
+/** A coluna existe mesmo no banco? Só então vale oferecer o gráfico. */
+function colunaExiste(tabela, coluna) {
+    const cols = schemaBanco[tabela];
+    return !!(cols && coluna && cols.includes(coluna));
+}
+
+/** URL do gráfico dessa coluna no Gráficos SCADA. */
+function urlGrafico(tabela, coluna) {
+    const p = new URLSearchParams({ tabela: tabela, colunas: coluna, horas: '24' });
+    return `/graficos_scada/?${p.toString()}`;
+}
 
 // Carrega diagnóstico do arduinos (status online + uptime por IP)
 async function loadArduinosDiag() {
     try {
-        const r = await fetch('/arduinos/api/diagnostico');
+        // Pelo ip-monitor, e não direto no /arduinos/: aquele prefixo devolve
+        // 401 no nginx e o catch abaixo engolia o erro — a coluna ARDUINOS
+        // ficava "—" para todo mundo, sem nada no console.
+        const r = await fetch('/ipmonitor/api/arduinos/diagnostico');
         if (!r.ok) return;
-        const data = await r.json();
+        const data = (await r.json()).dados || [];
         arduinosByIp = {};
         data.forEach(d => {
             if (d.ip) arduinosByIp[d.ip] = {
@@ -66,6 +98,7 @@ async function searchByVlan() {
 
     populateFilters(data);
     await loadArduinosDiag();
+    await loadColunasReais();
     sortAndRender();
 }
 
@@ -245,7 +278,16 @@ function renderTable(devices) {
         const sqlBadges = sqls.length
             ? sqls.slice(0, MAX_SQL_VISIBLE).map(t => {
                 const fullPath = (t.tabela || '') + (t.coluna ? '.' + t.coluna : '');
-                return `<span class="badge badge-sql" title="${esc(fullPath)}" onclick="showSqlDetails('${esc(d.ip)}')"><span class="sql-tab">${esc(t.tabela||'')}.</span><span class="sql-col">${esc(t.coluna||'—')}</span></span>`;
+                const existe = colunaExiste(t.tabela, t.coluna);
+                const corpo = `<span class="sql-tab">${esc(t.tabela||'')}.</span><span class="sql-col">${esc(t.coluna||'—')}</span>`;
+                // Só vira link o que existe no banco. O cadastro tem notação de
+                // atalho ("MPU6250_[AX,AY,AZ]_A") e ponteiros que envelheceram;
+                // um link para coluna inexistente abriria um gráfico vazio e
+                // faria o usuário procurar defeito onde não há.
+                if (existe) {
+                    return `<a class="badge badge-sql badge-sql-link" href="${urlGrafico(t.tabela, t.coluna)}" target="_blank" rel="noopener" title="Ver o histórico de ${esc(fullPath)} no Gráficos SCADA"><i class="fas fa-chart-line"></i>${corpo}</a>`;
+                }
+                return `<span class="badge badge-sql badge-sql-morta" title="${esc(fullPath)} — não existe no banco (cadastro desatualizado ou notação de atalho)" onclick="showSqlDetails('${esc(d.ip)}')">${corpo}</span>`;
               }).join('') +
               (sqls.length > MAX_SQL_VISIBLE ? `<span class="badge badge-more" title="Ver todas (${sqls.length})" onclick="showSqlDetails('${esc(d.ip)}')">+${sqls.length - MAX_SQL_VISIBLE}</span>` : '')
             : '<span class="muted">—</span>';

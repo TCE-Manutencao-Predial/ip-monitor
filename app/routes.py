@@ -5,6 +5,8 @@ import threading  # Módulo para rodar threads em paralelo (execução simultân
 import os  # Sistema de arquivos (fotos dos locais de instalação).
 import re  # Validação de IP/id (segurança de path).
 import glob  # Busca de arquivos de foto.
+import json
+import urllib.request  # Ponte server-side com o servico arduinos.
 import uuid  # IDs de foto.
 import io  # Buffers em memória (zip).
 import zipfile  # Upload de .zip de fotos.
@@ -491,6 +493,73 @@ def delete_device(vlan):
     except Exception as e:
         print(f"Erro ao remover dispositivo: {e}")
         return jsonify({'error': str(e)}), 500
+
+# ---------------------------------------------------------------------------
+# Ponte com o serviço `arduinos` (server-side, não pelo navegador)
+# ---------------------------------------------------------------------------
+# O JS chamava `/arduinos/api/...` direto e levava 401: aquele prefixo não está
+# na whitelist do nginx, e o `catch` do fetch engolia o erro. A coluna ARDUINOS
+# mostrava "—" para todo mundo e ninguém percebia — o mesmo tipo de falha muda
+# que escondeu os atalhos do scada-web.
+#
+# Buscar daqui resolve sem abrir nada novo para a internet: a chamada é
+# container-a-container pela rede interna, e quem responde ao navegador é uma
+# rota do próprio ip-monitor, que já passa pela autenticação da página.
+_ARDUINOS_URL = os.environ.get('ARDUINOS_URL', 'http://arduinos:5000/arduinos/api')
+_GRAFICOS_URL = os.environ.get('GRAFICOS_SCADA_URL',
+                               'http://graficos-scada:5000/graficos_scada/api')
+_opener_interno = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+
+
+def _get_interno(url, timeout=8):
+    """GET inter-container, sem proxy. Devolve (dado, erro)."""
+    try:
+        with _opener_interno.open(url, timeout=timeout) as r:
+            return json.loads(r.read().decode('utf-8')), None
+    except Exception as e:                                       # noqa: BLE001
+        return None, str(e)
+
+
+def _arduinos_get(caminho, timeout=8):
+    return _get_interno(f'{_ARDUINOS_URL}/{caminho}', timeout)
+
+
+@app.route('/api/arduinos/<path:recurso>')
+@app.route(RAIZ + '/api/arduinos/<path:recurso>')
+def proxy_arduinos(recurso):
+    """Repassa `diagnostico` e `mapeamento-colunas` do serviço arduinos.
+
+    Lista fechada de propósito: isto é uma ponte para dois dados que a tela
+    usa, não um proxy aberto para outro serviço.
+    """
+    if recurso not in ('diagnostico', 'mapeamento-colunas'):
+        return jsonify({'erro': 'recurso não repassado'}), 404
+    dado, erro = _arduinos_get(recurso)
+    if erro:
+        # 200 com corpo vazio, e não 502: a tela funciona sem o arduinos — ela
+        # só perde a coluna de diagnóstico e os atalhos.
+        return jsonify({'erro': erro, 'dados': None}), 200
+    return jsonify({'dados': dado})
+
+
+@app.route('/api/schema-banco')
+@app.route(RAIZ + '/api/schema-banco')
+def proxy_schema_banco():
+    """`{TABELA: [colunas]}` do banco `automacao`, via graficos-scada.
+
+    Buscado aqui e nao pelo navegador: uma pagina do ip-monitor pedindo
+    `/graficos_scada/...` depende de as duas rotas estarem no mesmo host e de a
+    outra ponta nao exigir credencial — dois acoplamentos que quebram calados.
+    Server-side e uma chamada pela rede interna e pronto.
+
+    Serve para decidir quais colunas do cadastro viram link para o grafico: so
+    as que existem de fato.
+    """
+    dado, erro = _get_interno(f'{_GRAFICOS_URL}/catalogo-schema', timeout=15)
+    if erro:
+        return jsonify({'erro': erro, 'dados': None}), 200
+    return jsonify({'dados': dado})
+
 
 # Endpoints para gerenciar tipos de dispositivos
 @app.route('/api/device-types/<int:vlan>', methods=['GET'])
