@@ -164,10 +164,12 @@
                 <select id="filter-tabela" onchange="filtrarDispositivos()">
                     <option value="">Todas as tabelas</option>
                 </select>
-                <label class="toggle-hide-empty" title="Ocultar IPs que não estão cadastrados como dispositivo">
-                    <input type="checkbox" id="hide-empty" checked onchange="filtrarDispositivos()">
-                    Ocultar sem dados
-                </label>
+                <select id="filter-ocupacao" onchange="filtrarDispositivos()"
+                        title="IP livre é o que não tem cadastro nenhum — nem descrição, nem tipo, nem sensor">
+                    <option value="cadastrados" selected>Só cadastrados</option>
+                    <option value="livres">Só IPs livres</option>
+                    <option value="">Cadastrados e livres</option>
+                </select>
                 <button class="btn-clear-filter" onclick="limparFiltros()" title="Limpar filtros">
                     <i class="fas fa-undo"></i> Limpar
                 </button>

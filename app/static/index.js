@@ -110,18 +110,26 @@ function getActiveFilters() {
         tipo: document.getElementById('filter-tipo').value,
         sensor: document.getElementById('filter-sensor').value,
         tabela: document.getElementById('filter-tabela').value,
-        hideEmpty: document.getElementById('hide-empty').checked,
+        ocupacao: document.getElementById('filter-ocupacao').value,
     };
 }
 
-// Considera "sem dados" quando descricao é '-' ou vazia (IP não cadastrado)
+// "IP livre" é o que não tem cadastro NENHUM. Antes bastava a descrição vazia,
+// mas há entradas sem descrição que já têm tipo ou sensor cadastrado — chamá-las
+// de livres faria alguém reaproveitar um IP em uso.
 function isEmpty(d) {
     const desc = (d.descricao || '').trim();
-    return !desc || desc === '-';
+    const temDesc = desc && desc !== '-';
+    const temTipo = (d.tipo || '').trim();
+    const temSensor = (d.sensores || []).length > 0;
+    const temTabela = (d.tabelas_sql || []).length > 0;
+    return !(temDesc || temTipo || temSensor || temTabela);
 }
 
 function matchDevice(d, f) {
-    if (f.hideEmpty && isEmpty(d)) return false;
+    // '' = mostra os dois; 'cadastrados' = esconde os livres; 'livres' = só eles
+    if (f.ocupacao === 'cadastrados' && isEmpty(d)) return false;
+    if (f.ocupacao === 'livres' && !isEmpty(d)) return false;
     if (f.status === 'online' && d.status !== 'on') return false;
     if (f.status === 'offline' && d.status !== 'off') return false;
     if (f.tipo && d.tipo !== f.tipo) return false;
@@ -154,7 +162,7 @@ function limparFiltros() {
     document.getElementById('filter-tipo').value = '';
     document.getElementById('filter-sensor').value = '';
     document.getElementById('filter-tabela').value = '';
-    document.getElementById('hide-empty').checked = true;
+    document.getElementById('filter-ocupacao').value = 'cadastrados';
     sortAndRender();
 }
 
@@ -180,13 +188,18 @@ function sortAndRender() {
 
     renderTable(filtered);
 
-    // Sumário (online/offline considera só os com dados se hide-empty estiver ativo)
-    const base = f.hideEmpty ? currentDevicesData.filter(d => !isEmpty(d)) : currentDevicesData;
+    // Sumário: online/offline só faz sentido sobre IPs cadastrados — um IP livre
+    // que não responde ao ping não é um equipamento fora do ar.
+    const base = f.ocupacao === 'livres'
+        ? currentDevicesData.filter(d => isEmpty(d))
+        : currentDevicesData.filter(d => !isEmpty(d));
     const online = base.filter(d => d.status === 'on').length;
     const offline = base.length - online;
     setText('total-online', online);
     setText('total-offline', offline);
-    setText('total-devices', base.length);
+    // "Total na VLAN" é a VLAN inteira, cadastrados e livres — o card antes
+    // mostrava só a base do filtro e dizia 115 com 254 linhas na tela.
+    setText('total-devices', currentDevicesData.length);
     setText('total-visible', filtered.length);
 
     // Indicador de ordenação nos headers

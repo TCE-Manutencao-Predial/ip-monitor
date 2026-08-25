@@ -1302,12 +1302,14 @@
       {
         "ip": "172.17.86.13",
         "descricao": "Sensor SHT31 — Serv. Infraestrutura - DG Telefônico",
-        "tipo": "ESP32 + SHT31",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714464",
-        "updated_at": "2026-05-20T16:55:53.704963",
+        "updated_at": "2026-08-25T08:49:47.096367",
         "sensores": [
-          "Temperatura",
-          "Umidade"
+          {
+            "codigo": "SHT31",
+            "categoria": "temp_umid"
+          }
         ],
         "tabelas_sql": [
           {
@@ -1493,12 +1495,14 @@
       {
         "ip": "172.17.86.22",
         "descricao": "Sensor CCS811 — Serv. Infraestrutura - DG Telefônico",
-        "tipo": "ESP32 + CCS811",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714487",
-        "updated_at": "2026-05-20T16:55:53.704963",
+        "updated_at": "2026-08-25T08:49:47.108502",
         "sensores": [
-          "eCO₂",
-          "TVOC"
+          {
+            "codigo": "CCS811",
+            "categoria": "qualidade_ar"
+          }
         ],
         "tabelas_sql": [
           {
@@ -1575,13 +1579,13 @@
       {
         "ip": "172.17.86.26",
         "descricao": "Sensor MQ — Copa - Térreo",
-        "tipo": "ESP32 + MQ",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714497",
-        "updated_at": "2026-05-30T11:39:57.922351",
+        "updated_at": "2026-08-25T08:49:47.120019",
         "sensores": [
           {
-            "codigo": "MQ-5",
-            "categoria": "gas_glp_metano"
+            "categoria": "gas_glp_metano",
+            "codigo": "MQ-5"
           }
         ],
         "tabelas_sql": [
@@ -1594,13 +1598,13 @@
       {
         "ip": "172.17.86.27",
         "descricao": "Sensor MQ — Copa - 2º Pavimento",
-        "tipo": "ESP32 + MQ",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714499",
-        "updated_at": "2026-05-30T11:39:57.922351",
+        "updated_at": "2026-08-25T08:49:47.131418",
         "sensores": [
           {
-            "codigo": "MQ-5",
-            "categoria": "gas_glp_metano"
+            "categoria": "gas_glp_metano",
+            "codigo": "MQ-5"
           }
         ],
         "tabelas_sql": [
@@ -1613,13 +1617,13 @@
       {
         "ip": "172.17.86.28",
         "descricao": "Sensor MQ — Copa - 1º Pavimento",
-        "tipo": "ESP32 + MQ",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714502",
-        "updated_at": "2026-06-17T17:05:44.420847",
+        "updated_at": "2026-08-25T08:49:47.142723",
         "sensores": [
           {
-            "codigo": "MQ-6",
-            "categoria": "gas_glp"
+            "categoria": "gas_glp",
+            "codigo": "MQ-6"
           }
         ],
         "tabelas_sql": [
@@ -1651,13 +1655,13 @@
       {
         "ip": "172.17.86.30",
         "descricao": "MQ7 (CO) — Estacionamento 1º Subsolo",
-        "tipo": "ESP32 + MQ",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714507",
-        "updated_at": "2026-06-17T17:02:16.339025",
+        "updated_at": "2026-08-25T08:49:47.154120",
         "sensores": [
           {
-            "codigo": "MQ-7",
-            "categoria": "gas_co"
+            "categoria": "gas_co",
+            "codigo": "MQ-7"
           }
         ],
         "tabelas_sql": [
@@ -1750,13 +1754,13 @@
       {
         "ip": "172.17.86.35",
         "descricao": "Sensor MQ — Lanchonete - Salão",
-        "tipo": "ESP32 + MQ",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714520",
-        "updated_at": "2026-05-30T11:39:57.922351",
+        "updated_at": "2026-08-25T08:49:47.165939",
         "sensores": [
           {
-            "codigo": "MQ-6",
-            "categoria": "gas_glp"
+            "categoria": "gas_glp",
+            "codigo": "MQ-6"
           }
         ],
         "tabelas_sql": [
@@ -1807,13 +1811,13 @@
       {
         "ip": "172.17.86.38",
         "descricao": "TCS34725 (cor RGB) — Pele de Vidro",
-        "tipo": "ESP32 + TCS34725",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714527",
-        "updated_at": "2026-06-09T14:12:24.333701",
+        "updated_at": "2026-08-25T08:49:47.177730",
         "sensores": [
           {
-            "codigo": "TCS34725",
-            "categoria": "cor"
+            "categoria": "cor",
+            "codigo": "TCS34725"
           }
         ],
         "tabelas_sql": [
@@ -1966,10 +1970,10 @@
         "descricao": "Sensor umidade temperatura - C.V.",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714545",
-        "updated_at": "2025-12-12T09:56:26.714546",
+        "updated_at": "2026-08-25T08:49:47.237090",
         "sensores": [
           {
-            "codigo": "HTU21D",
+            "codigo": "HTU21",
             "categoria": "temp_umid"
           }
         ],
@@ -2060,13 +2064,13 @@
       {
         "ip": "172.17.86.50",
         "descricao": "Sensor HTU21 — Pátio de Serviços - Depósito Serv. Infraestrutura",
-        "tipo": "ESP32 + HTU21",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714555",
-        "updated_at": "2026-08-20T00:00:00",
+        "updated_at": "2026-08-25T08:49:47.190007",
         "sensores": [
           {
-            "codigo": "HTU21",
-            "categoria": "temp_umid"
+            "categoria": "temp_umid",
+            "codigo": "HTU21"
           }
         ],
         "tabelas_sql": [
@@ -2101,13 +2105,13 @@
       {
         "ip": "172.17.86.52",
         "descricao": "Sensor CCS811 — Serv. Infraestrutura - Subestação",
-        "tipo": "ESP32 + CCS811",
+        "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714560",
-        "updated_at": "2026-06-17T17:09:44.229546",
+        "updated_at": "2026-08-25T08:49:47.202051",
         "sensores": [
           {
-            "codigo": "CCS811",
-            "categoria": "qualidade_ar"
+            "categoria": "qualidade_ar",
+            "codigo": "CCS811"
           }
         ],
         "tabelas_sql": [
@@ -2145,11 +2149,20 @@
         "descricao": "Cancelas - 1 Subsolo - Entrada — Cancela - 1º Subsolo (Entrada)",
         "tipo": "KINCONY KC868-A4",
         "created_at": "2025-12-12T09:56:26.714627",
-        "updated_at": "2026-05-20T14:57:11.646297",
+        "updated_at": "2026-08-25T08:50:22.596269",
         "sensores": [
-          "Comando",
-          "Posição",
-          "Laço FIEG"
+          {
+            "codigo": "Comando",
+            "categoria": "saida_digital"
+          },
+          {
+            "codigo": "Posição",
+            "categoria": "entrada_digital"
+          },
+          {
+            "codigo": "Laço FIEG",
+            "categoria": "laco_indutivo"
+          }
         ],
         "tabelas_sql": [
           {
@@ -2198,10 +2211,10 @@
         "descricao": "Sensor LM75A — Auditório - Plateia",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714570",
-        "updated_at": "2026-06-17T17:01:14.830210",
+        "updated_at": "2026-08-25T08:49:47.248911",
         "sensores": [
           {
-            "codigo": "LM75A",
+            "codigo": "LM75",
             "categoria": "temperatura"
           }
         ],
@@ -2708,11 +2721,20 @@
         "descricao": "Cancelas - 1 Subsolo - Saída — Cancela - 1º Subsolo (Saída)",
         "tipo": "KINCONY KC868-A4",
         "created_at": "2025-12-12T09:56:26.714625",
-        "updated_at": "2026-05-20T14:57:11.646297",
+        "updated_at": "2026-08-25T08:50:22.584134",
         "sensores": [
-          "Comando",
-          "Posição",
-          "Laço FIEG"
+          {
+            "codigo": "Comando",
+            "categoria": "saida_digital"
+          },
+          {
+            "codigo": "Posição",
+            "categoria": "entrada_digital"
+          },
+          {
+            "codigo": "Laço FIEG",
+            "categoria": "laco_indutivo"
+          }
         ],
         "tabelas_sql": [
           {
@@ -2742,11 +2764,20 @@
         "descricao": "Cancelas - Guarita - Entrada — Cancela - Guarita (Saída Servidores)",
         "tipo": "KINCONY KC868-A4",
         "created_at": "2025-12-12T09:56:26.714630",
-        "updated_at": "2026-05-20T14:57:11.646297",
+        "updated_at": "2026-08-25T08:50:22.607564",
         "sensores": [
-          "Comando",
-          "Posição",
-          "Laço FIEG"
+          {
+            "codigo": "Comando",
+            "categoria": "saida_digital"
+          },
+          {
+            "codigo": "Posição",
+            "categoria": "entrada_digital"
+          },
+          {
+            "codigo": "Laço FIEG",
+            "categoria": "laco_indutivo"
+          }
         ],
         "tabelas_sql": [
           {
@@ -3142,11 +3173,20 @@
         "descricao": "Cancelas - Guarita - Saída Visitantes — Cancela - Guarita (Saída Visitantes)",
         "tipo": "KINCONY KC868-A4",
         "created_at": "2025-12-12T09:56:26.714670",
-        "updated_at": "2026-05-20T14:57:11.646297",
+        "updated_at": "2026-08-25T08:50:22.618521",
         "sensores": [
-          "Comando",
-          "Posição",
-          "Laço FIEG"
+          {
+            "codigo": "Comando",
+            "categoria": "saida_digital"
+          },
+          {
+            "codigo": "Posição",
+            "categoria": "entrada_digital"
+          },
+          {
+            "codigo": "Laço FIEG",
+            "categoria": "laco_indutivo"
+          }
         ],
         "tabelas_sql": [
           {
@@ -3176,11 +3216,20 @@
         "descricao": "Cancelas - Guarita - Saída Servidores — Cancela - Guarita (Entrada Visitantes)",
         "tipo": "KINCONY KC868-A4",
         "created_at": "2025-12-12T09:56:26.714673",
-        "updated_at": "2026-05-20T14:57:11.646297",
+        "updated_at": "2026-08-25T08:50:22.636991",
         "sensores": [
-          "Comando",
-          "Posição",
-          "Laço FIEG"
+          {
+            "codigo": "Comando",
+            "categoria": "saida_digital"
+          },
+          {
+            "codigo": "Posição",
+            "categoria": "entrada_digital"
+          },
+          {
+            "codigo": "Laço FIEG",
+            "categoria": "laco_indutivo"
+          }
         ],
         "tabelas_sql": [
           {
@@ -3210,11 +3259,20 @@
         "descricao": "Cancelas - Guarita - Entrada Visitantes — Cancela - Guarita (Entrada Servidores)",
         "tipo": "KINCONY KC868-A4",
         "created_at": "2025-12-12T09:56:26.714675",
-        "updated_at": "2026-05-20T14:57:11.646297",
+        "updated_at": "2026-08-25T08:50:22.653247",
         "sensores": [
-          "Comando",
-          "Posição",
-          "Laço FIEG"
+          {
+            "codigo": "Comando",
+            "categoria": "saida_digital"
+          },
+          {
+            "codigo": "Posição",
+            "categoria": "entrada_digital"
+          },
+          {
+            "codigo": "Laço FIEG",
+            "categoria": "laco_indutivo"
+          }
         ],
         "tabelas_sql": [
           {

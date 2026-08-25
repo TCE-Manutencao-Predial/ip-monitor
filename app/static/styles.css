@@ -354,23 +354,30 @@ a.header-badge:hover {
     flex-wrap: wrap;
     align-items: center;
 }
-.filters input[type="text"] {
-    padding: 0.5rem 0.75rem;
+/* Uma altura só para a barra inteira. Medido no navegador antes: o campo de
+   busca dava 34 px, os selects 36, o antigo rótulo de "ocultar" 38,1 e os
+   botões 33 — quatro alturas na mesma linha, porque cada regra tinha seu
+   próprio par de padding e font-size. Fixar a altura resolve na origem, em vez
+   de sair calibrando padding um a um. */
+.filters > input[type="text"],
+.filters > select,
+.filters > button {
+    height: 36px;
+    box-sizing: border-box;
+    padding: 0 0.75rem;
     border: 1px solid var(--border);
     border-radius: 6px;
     font-size: 0.9rem;
     font-family: inherit;
+    line-height: normal;
+}
+.filters input[type="text"] {
     min-width: 240px;
     flex: 1;
 }
 .filters select {
-    padding: 0.5rem 0.75rem;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.9rem;
     background: white;
     cursor: pointer;
-    font-family: inherit;
 }
 
 /* VLAN selector — cor por VLAN selecionada */
@@ -394,30 +401,18 @@ a.header-badge:hover {
 }
 
 /* Toggle "exibir vazios" */
-.toggle-hide-empty {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.4rem;
-    padding: 0.45rem 0.7rem;
-    background: #f8f9fa;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.85rem;
-    color: var(--text);
-    cursor: pointer;
-    user-select: none;
-}
-.toggle-hide-empty input { cursor: pointer; }
-.toggle-hide-empty:hover { background: #e9ecef; }
 
 .btn-clear-filter {
-    padding: 0.5rem 0.75rem;
+    /* Altura, padding e corpo vêm da regra da barra acima — aqui fica só o que
+       é próprio do botão. Ter font-size menor com o mesmo padding era o que
+       deixava Limpar e Adicionar 3 px mais baixos que os selects. */
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
     background: #f8f9fa;
-    border: 1px solid var(--border);
-    border-radius: 6px;
-    font-size: 0.85rem;
     cursor: pointer;
     color: var(--text);
+    white-space: nowrap;
 }
 .btn-clear-filter:hover { background: #e9ecef; }
 
