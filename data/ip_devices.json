@@ -1654,17 +1654,22 @@
       },
       {
         "ip": "172.17.86.31",
-        "descricao": "Sensor gás MQ — local a definir (troca de IP)",
+        "descricao": "Sensor gás MQ — Garagem dos Conselheiros",
         "tipo": "ESP32",
         "created_at": "2025-12-12T09:56:26.714509",
-        "updated_at": "2026-08-25T10:01:06.411743",
+        "updated_at": "2026-08-25T10:20:01.180077",
         "sensores": [
           {
-            "codigo": "MQ",
-            "categoria": "gas"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
-        "tabelas_sql": []
+        "tabelas_sql": [
+          {
+            "tabela": "MEIO_AMBIENTE",
+            "coluna": "MQ_GARAGEM_CONSELHEIROS"
+          }
+        ]
       },
       {
         "ip": "172.17.86.32",
@@ -1748,22 +1753,17 @@
       },
       {
         "ip": "172.17.86.36",
-        "descricao": "Sensor gás MQ — Garagem dos Conselheiros",
+        "descricao": "Sensor gás MQ — local a definir (troca de IP)",
         "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714522",
-        "updated_at": "2026-08-25T10:01:06.458264",
+        "updated_at": "2026-08-25T10:20:01.193536",
         "sensores": [
           {
-            "codigo": "MQ",
-            "categoria": "gas"
+            "categoria": "gas",
+            "codigo": "MQ"
           }
         ],
-        "tabelas_sql": [
-          {
-            "tabela": "MEIO_AMBIENTE",
-            "coluna": "MQ_GARAGEM_CONSELHEIROS"
-          }
-        ]
+        "tabelas_sql": []
       },
       {
         "ip": "172.17.86.37",
