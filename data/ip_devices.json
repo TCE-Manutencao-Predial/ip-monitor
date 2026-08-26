@@ -878,10 +878,6 @@
           {
             "tabela": "ILUMINACAO",
             "coluna": "BH1750_3P_A"
-          },
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "DS18B20_3P_A"
           }
         ]
       },
@@ -913,10 +909,6 @@
           {
             "tabela": "ILUMINACAO",
             "coluna": "BH1750_3P_B"
-          },
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "DS18B20_3P_B"
           }
         ]
       },
@@ -948,10 +940,6 @@
           {
             "tabela": "ILUMINACAO",
             "coluna": "BH1750_3P_C"
-          },
-          {
-            "tabela": "REFRIGERACAO_ATRIO",
-            "coluna": "DS18B20_3P_C"
           }
         ]
       },
