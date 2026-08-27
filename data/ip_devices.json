@@ -1515,7 +1515,7 @@
         ],
         "tabelas_sql": [
           {
-            "coluna": "MQ2_GALERIA_TEC",
+            "coluna": "MQ_GALERIA_TECNICA_1",
             "tabela": "MEIO_AMBIENTE"
           }
         ]
@@ -1648,7 +1648,7 @@
         ],
         "tabelas_sql": [
           {
-            "coluna": "MQ9_GMGS",
+            "coluna": "MQ_GMGS_EDIFICIO_SEDE",
             "tabela": "MEIO_AMBIENTE"
           }
         ]
@@ -1747,7 +1747,7 @@
         ],
         "tabelas_sql": [
           {
-            "coluna": "MQ6_GALERIA_TECNCIA",
+            "coluna": "MQ_GALERIA_TECNICA_2",
             "tabela": "MEIO_AMBIENTE"
           }
         ]
