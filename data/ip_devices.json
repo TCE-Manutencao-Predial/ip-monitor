@@ -3410,7 +3410,7 @@
       },
       {
         "ip": "172.17.86.110",
-        "descricao": "Sensor som INMP441 (FFT) — Átrio - Máquinas de Refrigeração",
+        "descricao": "Sensor som INMP441 — Átrio, Térreo, Bloco B1 (ruído das máquinas de refrigeração)",
         "tipo": "Sensor IoT",
         "sensores": [
           {
@@ -3437,7 +3437,7 @@
           }
         ],
         "created_at": "2026-08-24T23:09:34.454843",
-        "updated_at": "2026-08-24T23:09:34.454848"
+        "updated_at": "2026-08-27T21:30:00"
       },
       {
         "ip": "172.17.86.115",
