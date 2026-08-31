@@ -1697,14 +1697,14 @@
       },
       {
         "ip": "172.17.86.35",
-        "descricao": "Sensor gás MQ — Lanchonete - Salão",
-        "tipo": "ESP32",
+        "descricao": "Sensor gás MQ6 — Lanchonete - Salão",
+        "tipo": "Sensor IoT",
         "created_at": "2025-12-12T09:56:26.714520",
-        "updated_at": "2026-08-25T10:01:26.982015",
+        "updated_at": "2026-08-31T14:51:31.245515",
         "sensores": [
           {
             "categoria": "gas",
-            "codigo": "MQ"
+            "codigo": "MQ6"
           }
         ],
         "tabelas_sql": [
