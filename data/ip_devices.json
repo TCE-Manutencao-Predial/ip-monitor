@@ -3064,11 +3064,17 @@
       },
       {
         "ip": "172.17.86.170",
-        "descricao": "Relé 6 canais ESP32-S3 — LOCAL A DEFINIR",
-        "tipo": "Waveshare ESP32-S3-Relay-6CH",
+        "descricao": "Leitor de 8 sondas PT100 PTA8D08 — LOCAL A DEFINIR",
+        "tipo": "Leitor PT100 (PTA8D08-ESP32S3)",
         "created_at": "2025-12-12T09:56:26.714789",
-        "updated_at": "2026-09-08T15:21:08.808653",
-        "sensores": [],
+        "updated_at": "2026-09-08T15:59:15.748302",
+        "sensores": [
+          {
+            "codigo": "PT100",
+            "categoria": "temperatura",
+            "canais": 8
+          }
+        ],
         "tabelas_sql": []
       },
       {
