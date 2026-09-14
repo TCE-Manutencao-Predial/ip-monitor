@@ -36,6 +36,7 @@ técnico responsável de infra/rede (`pedro`).
 
 import os
 import json
+import urllib.request
 import logging
 import threading
 from datetime import datetime, timedelta
@@ -324,6 +325,122 @@ def _hosts_offline_24h(agora: datetime):
     return out
 
 
+# Idade máxima do último dado gravado para o sensor contar como PRODUZINDO.
+# Generoso de propósito: há sensores de baixa cadência, e o objetivo é separar
+# "mudo" de "vivo", não policiar atraso de minutos.
+ARDUINOS_DEVICES_URL = os.getenv(
+    'IPMON_ARDUINOS_DEVICES_URL', 'http://arduinos:5000/arduinos/api/devices')
+FRESCOR_TTL_S = float(os.getenv('IPMON_FRESCOR_TTL_S', '120'))
+_cache_frescor: dict = {'dados': {}, 'quando': None}
+_avisos_dado: Dict[str, str] = {}
+
+
+def _hoje_str() -> str:
+    return _agora().strftime('%Y-%m-%d')
+
+
+def _frescor_dos_devices() -> Dict[str, bool]:
+    """{ip: está chegando dado?} — perguntado ao `arduinos`, cacheado.
+
+    POR QUE NÃO CONSULTAR O MySQL DAQUI
+    -----------------------------------
+    O ip-monitor não tem — e não deveria ter — credencial do banco. Copiar a
+    senha para cá espalharia o segredo por mais um serviço só para responder
+    uma pergunta que OUTRO serviço já responde: o `arduinos` é o dono da relação
+    dispositivo↔coluna e mantém `is_online` por device, que significa
+    "chegou dado recentemente" — não "respondeu ping". É esse o sinal que falta.
+
+    `trust_env=False` equivalente (ProxyHandler vazio): chamada entre
+    containers não passa pelo proxy-hub.
+    """
+    agora = _agora()
+    if _cache_frescor['quando'] and \
+            (agora - _cache_frescor['quando']).total_seconds() < FRESCOR_TTL_S:
+        return _cache_frescor['dados']
+    try:
+        op = urllib.request.build_opener(urllib.request.ProxyHandler({}))
+        with op.open(ARDUINOS_DEVICES_URL, timeout=10) as r:
+            devs = json.loads(r.read().decode('utf-8'))
+        dados = {str(d.get('ip')): bool(d.get('is_online'))
+                 for d in devs if d.get('ip')}
+        _cache_frescor['dados'] = dados
+        _cache_frescor['quando'] = agora
+        return dados
+    except Exception as e:                                    # noqa: BLE001
+        # UMA vez por motivo por dia, não por dispositivo: com ~60 hosts, o
+        # arduinos fora do ar encheria o log com 60 linhas iguais por ciclo — e
+        # log cheio de repetição é onde a linha que importa se esconde.
+        motivo = type(e).__name__ + ':' + str(e)[:60]
+        if _avisos_dado.get(motivo) != _hoje_str():
+            _avisos_dado[motivo] = _hoje_str()
+            logger.warning('[transicoes] não consigo consultar o frescor dos sensores '
+                           '(%s) — a distinção "host fora × sensor mudo" fica '
+                           'indisponível neste ciclo', e)
+        # Devolve o cache VELHO se houver: dado de 10 min atrás ainda separa
+        # host fora de sensor mudo melhor do que não separar nada.
+        return _cache_frescor['dados'] or {}
+
+
+def _sensor_produzindo(ip: str):
+    """True/False/None — chega dado deste dispositivo?
+
+    `None` = não dá para saber (não é device do arduinos, ou a consulta falhou).
+    É diferente de False, e a mensagem precisa dizer qual dos dois: afirmar
+    "sensor mudo" sem ter conseguido olhar seria inventar diagnóstico.
+    """
+    return _frescor_dos_devices().get(ip)
+
+
+def _classificar(ip: str) -> tuple:
+    """(rotulo, explicacao) a partir de PING × DADO.
+
+    O digest dizia "offline" para tudo que não responde ping, e ficava calado
+    sobre o sensor que morreu com o host no ar — que é justamente o caso em que
+    alguém precisa subir no quadro. Dois sinais independentes, quatro
+    desfechos, e cada um pede uma ação diferente:
+
+        ping ok  + dado ok    saudável (não entra no digest)
+        ping ok  + sem dado   HOST NO AR, SENSOR MUDO -> trocar/reassentar sensor
+        ping off + sem dado   offline de verdade -> energia, rede, IP trocado
+        ping off + dado ok    não responde ICMP mas grava (power-save) -> ignorar
+    """
+    frescor = _frescor_dos_devices()
+    prod = frescor.get(ip)
+    if prod is None:
+        # Distinção que evita 19 linhas de ruído por digest: a maioria dos
+        # offline (câmera, CLP, telefone) NÃO é dispositivo do arduinos e nunca
+        # teve dado a conferir. Dizer "não foi possível conferir" sobre eles
+        # sugere uma pendência que não existe. Só quando a CONSULTA falhou —
+        # dicionário vazio — é que a ressalva é verdadeira.
+        if frescor:
+            return ('offline', 'sem ping (não é sensor do arduinos).')
+        return ('offline-sem-conferir',
+                'sem ping; não foi possível conferir se ainda envia dado.')
+    if prod is True:
+        return ('grava-sem-ping',
+                'não responde ao ping, mas CONTINUA GRAVANDO dado — típico de '
+                'ESP32 em power-save. Não é queda.')
+    return ('offline', 'sem ping e sem dado chegando.')
+
+
+def _sensores_mudos():
+    """[(ip, rotulo)] de hosts ONLINE cujo sensor parou de gravar.
+
+    Este é o caso que não existia no digest e é o que manda alguém subir no
+    quadro: o host responde, a rede está boa, a energia está boa — e o sensor
+    morreu. Dizer "offline" sobre ele mandaria o técnico procurar a coisa
+    errada; não dizer nada o deixa invisível até alguém sentir falta do dado.
+    """
+    out = []
+    for ip, reg in (_estado or {}).items():
+        if reg.get('status') != 'on':
+            continue
+        if _sensor_produzindo(ip) is False:
+            out.append((ip, reg.get('label') or ip))
+    out.sort(key=lambda t: t[0])
+    return out
+
+
 def _descricao_por_ip(ip: str) -> str:
     """Rótulo amigável do host (descrição (ip)) gravado no estado; só o ip se
     não houver descrição cadastrada."""
@@ -346,8 +463,9 @@ def talvez_enviar_digest() -> Optional[dict]:
                 _estado = _carregar_estado()
             agora = _agora()
             hosts = _hosts_offline_24h(agora)
-            if not hosts:
-                return None  # nada offline >24h → não envia
+            mudos = _sensores_mudos()
+            if not hosts and not mudos:
+                return None  # nada offline >24h e nenhum sensor mudo → não envia
 
             # Reportáveis: hosts cujo `offline_desde` ainda NÃO foi notificado —
             # caíram agora pela 1ª vez, OU recuperaram e voltaram a cair (o
@@ -358,10 +476,10 @@ def talvez_enviar_digest() -> Optional[dict]:
                 reg = (_estado or {}).get(ip) or {}
                 if reg.get("offline_desde") != reg.get("notificado_desde"):
                     reportaveis.append((ip, od_dt, dur))
-            if not reportaveis:
+            if not reportaveis and not mudos:
                 logger.info(
                     f"[offline] digest suprimido: {len(hosts)} offline >{LIMIAR_HORAS}h, "
-                    f"nenhum novo/reincidente (todos já notificados)")
+                    f"nenhum novo/reincidente e nenhum sensor mudo")
                 return None
 
             meta = _carregar_digest_meta()
@@ -386,22 +504,56 @@ def talvez_enviar_digest() -> Optional[dict]:
             blocos = []
             for vlan_lbl in sorted(grupos):
                 itens = sorted(grupos[vlan_lbl], key=lambda t: t[1])  # mais antigo 1º
-                linhas = [
-                    f"   • {_descricao_por_ip(ip)} — offline há {_fmt_duracao(dur)} "
-                    f"(desde {od_dt.strftime('%d/%m %H:%M')})"
-                    for ip, od_dt, dur in itens
-                ]
+                linhas = []
+                for ip, od_dt, dur in itens:
+                    rotulo, expl = _classificar(ip)
+                    if rotulo == 'grava-sem-ping':
+                        # Não é queda: some do bloco de offline para não mandar
+                        # o técnico atrás de um aparelho que está trabalhando.
+                        linhas.append(
+                            f"   • {_descricao_por_ip(ip)} — sem ping há "
+                            f"{_fmt_duracao(dur)}, MAS continua gravando dado "
+                            f"(power-save; não é queda)")
+                        continue
+                    sufixo = ('' if rotulo == 'offline'
+                              else '  [não foi possível conferir o dado]')
+                    linhas.append(
+                        f"   • {_descricao_por_ip(ip)} — offline há {_fmt_duracao(dur)} "
+                        f"(desde {od_dt.strftime('%d/%m %H:%M')}){sufixo}")
                 blocos.append(f"▸ {vlan_lbl}  ({len(itens)})\n" + "\n".join(linhas))
+            if mudos:
+                # Bloco SEPARADO, e não mais uma linha de "offline": a ação é
+                # outra. Host no ar com sensor morto é sensor/fiação; host fora
+                # é energia, rede ou IP trocado.
+                linhas = [f"   • {rot} — responde ao ping, mas parou de ENVIAR DADO"
+                          for _, rot in mudos]
+                blocos.append("▸ HOST NO AR, SENSOR MUDO  (%d)\n" % len(mudos)
+                              + "\n".join(linhas))
+            partes = []
+            if reportaveis:
+                partes.append(
+                    f"{len(reportaveis)} host(s) entraram em offline prolongado "
+                    f"(> {LIMIAR_HORAS}h) desde o último aviso.")
+            if mudos:
+                partes.append(
+                    f"{len(mudos)} dispositivo(s) RESPONDEM ao ping mas pararam de "
+                    f"gravar dado — o host está no ar e o sensor, não.")
             corpo = (
-                f"{len(reportaveis)} host(s) entraram em offline prolongado "
-                f"(> {LIMIAR_HORAS}h) desde o último aviso.\n"
+                "\n".join(partes) + "\n"
                 f"Hosts que seguem offline desde um aviso anterior NÃO são repetidos — "
                 f"só reaparecem se recuperarem e caírem de novo.\n\n"
                 + "\n\n".join(blocos)
                 + "\n\n— Monitor de IPs · digest semanal automático."
             )
-            titulo = (f"[Rede] {len(reportaveis)} host(s) em offline prolongado "
-                      f"(+{LIMIAR_HORAS}h) — digest semanal")
+            # O título diz os DOIS casos. "N host(s) offline" com o digest
+            # cheio de sensor mudo faria quem lê o assunto procurar problema de
+            # rede — e o problema é de sensor.
+            pedacos = []
+            if reportaveis:
+                pedacos.append(f"{len(reportaveis)} offline +{LIMIAR_HORAS}h")
+            if mudos:
+                pedacos.append(f"{len(mudos)} com sensor mudo")
+            titulo = "[Rede] " + " · ".join(pedacos) + " — digest semanal"
 
             res = notif.enviar_notificacao(
                 titulo=titulo,
