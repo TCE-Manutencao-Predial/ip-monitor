@@ -3354,29 +3354,6 @@
         "updated_at": "2026-08-10T16:40:13.440182"
       },
       {
-        "ip": "172.17.86.92",
-        "descricao": "Sensor HTU21 — Pátio de Serviços - Quadro CAG",
-        "tipo": "ESP32",
-        "created_at": "2026-07-24T10:41:07.995766",
-        "updated_at": "2026-08-25T08:49:47.213661",
-        "sensores": [
-          {
-            "codigo": "HTU21",
-            "categoria": "temp_umid"
-          }
-        ],
-        "tabelas_sql": [
-          {
-            "coluna": "HTU21_TEMP_QUADRO_CAG",
-            "tabela": "REFRIGERACAO_CAG"
-          },
-          {
-            "coluna": "HTU21_UMID_QUADRO_CAG",
-            "tabela": "REFRIGERACAO_CAG"
-          }
-        ]
-      },
-      {
         "ip": "172.17.86.96",
         "descricao": "Sensor Termopar Tipo K (MAX6675) — Pátio de Serviços - Quadro CAG",
         "tipo": "ESP32",
