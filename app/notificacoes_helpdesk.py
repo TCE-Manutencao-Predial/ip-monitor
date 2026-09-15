@@ -45,6 +45,34 @@ PRIORIDADES_VALIDAS = ("info", "aviso", "alarme", "emergencia")
 ORIGEM = "ip-monitor"
 
 
+# 6 s nao dava: o helpdesk leva ~10 s para criar+entregar com 2
+# destinos, e o cliente desistia antes da resposta. A mensagem ia
+# assim mesmo, mas o log dizia 'falha de rede' -- 37 falsos alarmes
+# em 30 dias no eventos-feriados.
+TIMEOUT_NOTIF_SEG = float(os.getenv('NOTIF_TIMEOUT_SEG', '30'))
+def _seguro(v):
+    """Fallback do json.dumps para tipo que ele não conhece.
+
+    Em 15/09/2026 o analise-processos apareceu com DOIS MESES de avisos de
+    trâmite perdidos: o scraper passava `datetime.date` em `dados`, e o dumps
+    (do requests/httpx, que não aceita `default=`) levantava antes do POST,
+    dentro do except best-effort. Este módulo é cópia irmã daquele — a mesma
+    mina estava armada aqui. Nenhum chamador atual passa date, mas o custo de
+    perder um alarme por causa disso é alto demais para depender de disciplina.
+    """
+    if hasattr(v, "isoformat"):                 # date, datetime, time
+        return v.isoformat()
+    if isinstance(v, (set, frozenset)):
+        return sorted(v)
+    return str(v)
+
+
+def _corpo_json(payload):
+    """Serializa o payload sem nunca levantar por causa do tipo."""
+    return json.dumps(payload, default=_seguro,
+                           ensure_ascii=False).encode("utf-8")
+
+
 def _resolver_url() -> Optional[str]:
     """URL completa de POST /notificacoes (best-effort, sem exceção)."""
     url = os.getenv("HELPDESK_NOTIF_URL")
@@ -79,7 +107,7 @@ def enviar_notificacao(
     dados: Optional[Dict[str, Any]] = None,
     emergencial: bool = False,
     ttl_seg: Optional[int] = None,
-    timeout: float = 6.0,
+    timeout: float = TIMEOUT_NOTIF_SEG,
 ) -> Dict[str, Any]:
     """Emite uma notificação no núcleo unificado. Best-effort.
 
@@ -143,7 +171,7 @@ def enviar_notificacao(
     if dados:
         payload["dados"] = dados
 
-    body_bytes = json.dumps(payload).encode("utf-8")
+    body_bytes = json.dumps(payload, default=_seguro, ensure_ascii=False).encode("utf-8")
     req = urllib.request.Request(url, data=body_bytes, method="POST")
     req.add_header("Authorization", f"Bearer {token}")
     req.add_header("Content-Type", "application/json")
