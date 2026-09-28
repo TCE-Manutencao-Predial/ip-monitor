@@ -489,7 +489,7 @@
       },
       {
         "ip": "172.17.86.22",
-        "descricao": "Sensor CCS811 — Serv. Infraestrutura - DG Telefônico"
+        "descricao": "Sensor HTU21D — Serv. Infraestrutura - DG Telefônico"
       },
       {
         "ip": "172.17.86.23",
