@@ -2991,10 +2991,10 @@
             },
             {
                 "ip": "172.17.86.170",
-                "descricao": "Leitor de 8 sondas PT100 PTA8D08 — LOCAL A DEFINIR",
+                "descricao": "Leitor de 8 sondas PT100 PTA8D08 — CAG, Chiller 1",
                 "tipo": "Leitor PT100 (PTA8D08-ESP32S3)",
                 "created_at": "2025-12-12T09:56:26.714789",
-                "updated_at": "2026-09-08T15:59:15.748302",
+                "updated_at": "2026-09-30T11:50:10.283427",
                 "sensores": [
                     {
                         "codigo": "PT100",
@@ -3002,7 +3002,136 @@
                         "canais": 8
                     }
                 ],
-                "tabelas_sql": []
+                "tabelas_sql": [
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_SUCCAO_CHILLER1_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_LIQUIDO_CHILLER1_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_DESCARGA_CHILLER1_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_SUCCAO_CHILLER1_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_LIQUIDO_CHILLER1_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_DESCARGA_CHILLER1_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_AGUA_ENTRADA_CHILLER1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_AGUA_SAIDA_CHILLER1"
+                    }
+                ]
+            },
+            {
+                "ip": "172.17.86.171",
+                "descricao": "Leitor de 8 sondas PT100 PTA8D08 — CAG, Chiller 2",
+                "tipo": "Leitor PT100 (PTA8D08-ESP32S3)",
+                "created_at": "2026-09-30T11:50:10.283427",
+                "updated_at": "2026-09-30T11:50:10.283427",
+                "sensores": [
+                    {
+                        "codigo": "PT100",
+                        "categoria": "temperatura",
+                        "canais": 8
+                    }
+                ],
+                "tabelas_sql": [
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_SUCCAO_CHILLER2_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_LIQUIDO_CHILLER2_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_DESCARGA_CHILLER2_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_SUCCAO_CHILLER2_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_LIQUIDO_CHILLER2_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_DESCARGA_CHILLER2_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_AGUA_ENTRADA_CHILLER2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_AGUA_SAIDA_CHILLER2"
+                    }
+                ]
+            },
+            {
+                "ip": "172.17.86.172",
+                "descricao": "Leitor de 8 sondas PT100 PTA8D08 — CAG, Chiller 3",
+                "tipo": "Leitor PT100 (PTA8D08-ESP32S3)",
+                "created_at": "2026-09-30T11:50:10.283427",
+                "updated_at": "2026-09-30T11:50:10.283427",
+                "sensores": [
+                    {
+                        "codigo": "PT100",
+                        "categoria": "temperatura",
+                        "canais": 8
+                    }
+                ],
+                "tabelas_sql": [
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_SUCCAO_CHILLER3_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_LIQUIDO_CHILLER3_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_DESCARGA_CHILLER3_C1"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_SUCCAO_CHILLER3_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_LIQUIDO_CHILLER3_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_DESCARGA_CHILLER3_C2"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_AGUA_ENTRADA_CHILLER3"
+                    },
+                    {
+                        "tabela": "REFRIGERACAO_CAG",
+                        "coluna": "PT100_AGUA_SAIDA_CHILLER3"
+                    }
+                ]
             },
             {
                 "ip": "172.17.86.200",

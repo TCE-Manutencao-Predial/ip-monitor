@@ -945,7 +945,15 @@
       },
       {
         "ip": "172.17.86.170",
-        "descricao": "Sensores fancoletes - Programação Horária"
+        "descricao": "Leitor PT100 PTA8D08 — CAG, Chiller 1"
+      },
+      {
+        "ip": "172.17.86.171",
+        "descricao": "Leitor PT100 PTA8D08 — CAG, Chiller 2"
+      },
+      {
+        "ip": "172.17.86.172",
+        "descricao": "Leitor PT100 PTA8D08 — CAG, Chiller 3"
       },
       {
         "ip": "172.17.86.250",
