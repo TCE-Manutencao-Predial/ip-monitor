@@ -560,18 +560,6 @@
         "descricao": "Sensor BMP280 — Térreo - Bloco A"
       },
       {
-        "ip": "172.17.86.40",
-        "descricao": "Sensores temperatura - Chiller 1"
-      },
-      {
-        "ip": "172.17.86.41",
-        "descricao": "Sensores temperatura - Chiller 2"
-      },
-      {
-        "ip": "172.17.86.42",
-        "descricao": "Sensores temperatura - Chiller 3"
-      },
-      {
         "ip": "172.17.86.43",
         "descricao": "Sensor BMP280 — Sala de Conferências - Geral"
       },
